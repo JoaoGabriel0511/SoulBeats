@@ -14,14 +14,14 @@ class State {
     public:
         virtual weak_ptr<GameObject> AddObject(GameObject *go);
         virtual weak_ptr<GameObject> GetObjectPtr(GameObject *go);
-        virtual void Start() = 0;
+        virtual void Start();
         virtual void Pause() = 0;
         virtual void Resume() = 0;
         State();
-        virtual ~State() = 0;
+        virtual ~State();
         virtual void LoadAssets() = 0;
         virtual void Update(float dt);
-        virtual void Render() = 0;
+        virtual void Render();
         bool PopRequested();
         bool QuitRequested();
     protected:

@@ -9,7 +9,7 @@ void TileMap::Load(string file){
     int row = 0;
     ifstream myFile;
     string line;
-    myFile.open("assets/map/tileMap.txt");
+    myFile.open(file);
     cout<<"Lendo o tileMap: "<<endl;
     while(getline(myFile,line)){
         if(row == 0){

@@ -2,6 +2,7 @@
 using namespace std;
 
 Component::Component(GameObject &associated) : associated(associated) {
+    associated.AddComponent(shared_ptr<Component> (this));
 }
 
 void Component::Update(float dt){}

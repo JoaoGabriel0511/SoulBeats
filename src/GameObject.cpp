@@ -16,24 +16,6 @@ GameObject::~GameObject(){
         if(components[i]->Is("Sound")){
             cout<<"Deletando Sound"<<endl;
         }
-        if(components[i]->Is("Face")){
-            cout<<"Deletando Face"<<endl;
-        }
-        if(components[i]->Is("PenguinBody")){
-            cout<<"Deletando PenguinBody"<<endl;
-        }
-        if(components[i]->Is("Alien")){
-            cout<<"Deletando Alien"<<endl;
-        }
-        if(components[i]->Is("PenguinCannon")){
-            cout<<"Deletando PenguinCannon"<<endl;
-        }
-        if(components[i]->Is("Bullet")){
-            cout<<"Deletando Bullet"<<endl;
-        }
-        if(components[i]->Is("Minion")){
-            cout<<"Deletando Minion"<<endl;
-        }
         components.erase(components.begin() + i);
     }
     cout<<"Terminou com sucesso de deletar components"<<endl;

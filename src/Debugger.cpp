@@ -1,19 +1,13 @@
 #include "../include/Debugger.h"
 bool Debugger::lookLoopGame;
 bool Debugger::lookInputManager;
-bool Debugger::lookUpdateStageState;
+bool Debugger::lookUpdateLevelState;
 bool Debugger::lookUpdateState;
-bool Debugger::lookUpdateAlien;
-bool Debugger::lookUpdateBullet;
-bool Debugger::lookUpdatePenguinBody;
 Debugger::Debugger() {
     lookLoopGame = false;
-    lookUpdateStageState = false;
+    lookUpdateLevelState = false;
     lookUpdateState = false;
     lookInputManager = false;
-    lookUpdateAlien = false;
-    lookUpdateBullet = false;
-    lookUpdatePenguinBody = false;
 }
 
 Debugger::~Debugger(){}

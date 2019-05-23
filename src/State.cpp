@@ -3,6 +3,7 @@
 #include "unistd.h"
 #define PI 3.149
 using namespace std;
+
 State::State() {
     popRequested = false;
 	quitRequested = false;
@@ -34,11 +35,22 @@ weak_ptr<GameObject> State::GetObjectPtr(GameObject *go) {
 	return weak_GO;
 }
 
-void State::Start() {}
+void State::Start() {
+	started = true;
+	StartArray();
+	LoadAssets();
+}
+
 void State::Pause() {}
 void State::Resume() {}
-void State::Update(float dt) {}
-void State::Render() {}
+
+void State::Update(float dt) {
+	UpdateArray(dt);
+}
+
+void State::Render() {
+	RenderArray();
+}
 
 bool State::QuitRequested() {
     return quitRequested;
