@@ -4,6 +4,7 @@ unordered_map<string, shared_ptr<SDL_Texture>> Resources::imageTable;
 unordered_map<string, shared_ptr<Mix_Music>> Resources::musicTable;
 unordered_map<string, shared_ptr<Mix_Chunk>> Resources::soundTable;
 unordered_map<string, shared_ptr<TTF_Font>> Resources::fontTable;
+
 shared_ptr<SDL_Texture> Resources::GetImage(string file) {
     shared_ptr<SDL_Texture> texture;
     if(imageTable.find(file) == imageTable.end()) {
