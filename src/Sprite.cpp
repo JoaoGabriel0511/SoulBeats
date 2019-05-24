@@ -168,3 +168,9 @@ void Sprite::SetFrameCount(int frameCount) {
 void Sprite::SetFrameTime(float frameTime) {
     this->frameTime = frameTime;
 }
+
+void Sprite::SwitchSprite(string file, int frameCount, float frameTime) {
+    this->frameCount = frameCount;
+    this->frameTime = frameTime;
+    Open(file);
+}
