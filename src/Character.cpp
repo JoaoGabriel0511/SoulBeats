@@ -11,6 +11,7 @@ void Character::Start() {
     isFalling = false;
     beforeRisingDone = true;
     peakDone = true;
+    isLanding = false;
     landingDone = true;
 }
 
@@ -35,7 +36,7 @@ void Character::Update(float dt){
     if(input.KeyPress(SPACE_KEY)) {
         if(!isRising && !isFalling) {
             velocity.y = JUMPING_SPEED;
-            gravity = GRAVITY;
+            gravity = GRAVITY_RISING;
             isRising = true;
             beforeRisingDone = false;
             charSprite->SwitchSprite(BEFORE_RISE_SPRITE,BEFORE_RISE_FRAME_COUNT,BEFORE_RISE_FRAME_TIME);
@@ -49,19 +50,18 @@ void Character::Update(float dt){
             isStill = true;
         }
     }
-    if(isRising || isFalling) {
+    if(isRising || isFalling || isLanding) {
         beforeRiseTimer.Update(dt);
         if(beforeRiseTimer.Get() >= BEFORE_RISE_DURATION && !beforeRisingDone) {
             charSprite->SwitchSprite(RISING_SPRITE,RISING_FRAME_COUNT,RISING_FRAME_TIME);
             beforeRiseTimer.Restart();
             beforeRisingDone = true;
         }
-        if(velocity.y <= MAX_FALL_SPEED) {
-            velocity.y += gravity;
-        }
+        velocity.y += gravity;
         if(velocity.y + 3*gravity >= 0 && isRising) {
             charSprite->SwitchSprite(PEAK_SPRITE,PEAK_FRAME_COUNT,PEAK_FRAME_TIME);
             peakDone = false;
+            gravity = GRAVITY_PEAK;
             peakTimer.Restart();
             isRising = false;
             isFalling = true;
@@ -70,14 +70,15 @@ void Character::Update(float dt){
             peakTimer.Update(dt);
             if(peakTimer.Get() >= PEAK_DURATION) {
                 peakDone = true;
+                gravity = GRAVITY_FALLING;
                 charSprite->SwitchSprite(FALLING_SPRITE,FALLING_FRAME_COUNT,FALLING_FRAME_TIME);
             }
         }
         if(associated.box.y >= 500 && isFalling) {
-            gravity = 0;
-            velocity.y = 0;
-            isFalling = false;
             isStill = true;
+            isFalling = false;
+            velocity.y = 0;
+            gravity = 0;
             charSprite->SwitchSprite(IDLE_SPRITE,IDLE_FRAME_COUNT,IDLE_FRAME_TIME);
         }
     }
