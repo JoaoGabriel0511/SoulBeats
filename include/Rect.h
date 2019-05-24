@@ -10,8 +10,8 @@ class Rect {
         Rect operator-(Vect2 vect);
         void operator+=(Vect2 vect);
         void operator-=(Vect2 vect);
-        int x;
-        int y;
+        float x;
+        float y;
         int z;
         int w;
         int h;

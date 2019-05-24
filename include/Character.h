@@ -23,10 +23,10 @@
 #define LANDING_FRAME_TIME 0.1
 #define BEFORE_RISE_DURATION 0.2
 #define PEAK_DURATION 0.23
-#define WALKING_SPEED 3
-#define JUMPING_SPEED -15
-#define GRAVITY 0.5
-#define MAX_FALL_SPEED 4
+#define WALKING_SPEED 300
+#define JUMPING_SPEED -1500
+#define GRAVITY 50
+#define MAX_FALL_SPEED 400
 #define LANDING_DURATION 1
 #include "Component.h"
 #include "Sprite.h"

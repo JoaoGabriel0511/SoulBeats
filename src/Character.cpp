@@ -81,7 +81,7 @@ void Character::Update(float dt){
             charSprite->SwitchSprite(IDLE_SPRITE,IDLE_FRAME_COUNT,IDLE_FRAME_TIME);
         }
     }
-    associated.box += velocity;
+    associated.box += velocity * dt;
 }
 
 bool Character::Is(string type){
