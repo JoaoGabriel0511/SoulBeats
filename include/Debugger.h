@@ -9,5 +9,6 @@ public:
     static bool lookUpdateState;
     static bool lookLoopGame;
     static bool lookInputManager;
+    static bool lookSprite;
 };
 #endif
