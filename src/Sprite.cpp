@@ -9,6 +9,7 @@ Sprite::Sprite(GameObject &associated, int frameCount, float frameTime) : Compon
     this->frameTime = frameTime;
     this->secondsToSelfDestruct = 0;
     currentFrame = 0;
+    timeElapsed = 0;
 }
 
 Sprite::Sprite(GameObject &associated, string file, int frameCount, float frameTime) : Component(associated) {
@@ -20,6 +21,7 @@ Sprite::Sprite(GameObject &associated, string file, int frameCount, float frameT
     this->secondsToSelfDestruct = 0;
     this->Open(file);
     currentFrame = 0;
+    timeElapsed = 0;
 }
 
 Sprite::Sprite(GameObject &associated, string file, int frameCount, float frameTime, float secondsToSelfDestruct) : Component(associated) {
@@ -31,6 +33,7 @@ Sprite::Sprite(GameObject &associated, string file, int frameCount, float frameT
     this->secondsToSelfDestruct = secondsToSelfDestruct;
     this->Open(file);
     currentFrame = 0;
+    timeElapsed = 0;
 }
 
 Sprite::Sprite(GameObject &associated, int frameCount, float frameTime, float secondsToSelfDestruct) : Component(associated) {
@@ -41,6 +44,7 @@ Sprite::Sprite(GameObject &associated, int frameCount, float frameTime, float se
     this->frameTime = frameTime;
     this->secondsToSelfDestruct = secondsToSelfDestruct;
     currentFrame = 0;
+    timeElapsed = 0;
 }
 
 Sprite::Sprite(GameObject &associated, string file) : Component(associated) {
@@ -52,6 +56,7 @@ Sprite::Sprite(GameObject &associated, string file) : Component(associated) {
     this->secondsToSelfDestruct = 0;
     this->Open(file);
     currentFrame = 0;
+    timeElapsed = 0;
 }
 
 Sprite::Sprite(GameObject &associated) : Component(associated) {
@@ -62,6 +67,7 @@ Sprite::Sprite(GameObject &associated) : Component(associated) {
     this->frameTime = 1;
     this->secondsToSelfDestruct = 0;
     currentFrame = 0;
+    timeElapsed = 0;
 }
 
 void Sprite::Update(float dt) {
