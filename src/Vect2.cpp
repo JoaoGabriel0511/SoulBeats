@@ -83,3 +83,22 @@ Vect2 Vect2::Rotate(float angle){
     result.y = this->y + this->y * sin(angle);
 }
 
+Rect Vect2::operator+(Rect rect) {
+    Rect result;
+    result.x = this->x + rect.x;
+    result.y = this->y + rect.y;
+    result.w = rect.w;
+    result.h = rect.h;
+    result.z = rect.z;
+    return result;
+}
+
+Rect Vect2::operator-(Rect rect) {
+    Rect result;
+    result.x = this->x - rect.x;
+    result.y = this->y - rect.y;
+    result.w = rect.w;
+    result.h = rect.h;
+    result.z = rect.z;
+    return result;
+}

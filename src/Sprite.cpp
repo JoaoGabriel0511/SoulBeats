@@ -9,6 +9,8 @@ Sprite::Sprite(GameObject &associated, int frameCount, float frameTime) : Compon
     this->frameTime = frameTime;
     this->secondsToSelfDestruct = 0;
     currentFrame = 0;
+    animate = true;
+    flip = false;
     timeElapsed = 0;
 }
 
@@ -21,6 +23,8 @@ Sprite::Sprite(GameObject &associated, string file, int frameCount, float frameT
     this->secondsToSelfDestruct = 0;
     this->Open(file);
     currentFrame = 0;
+    animate = true;
+    flip = false;
     timeElapsed = 0;
 }
 
@@ -33,6 +37,8 @@ Sprite::Sprite(GameObject &associated, string file, int frameCount, float frameT
     this->secondsToSelfDestruct = secondsToSelfDestruct;
     this->Open(file);
     currentFrame = 0;
+    animate = true;
+    flip = false;
     timeElapsed = 0;
 }
 
@@ -44,6 +50,8 @@ Sprite::Sprite(GameObject &associated, int frameCount, float frameTime, float se
     this->frameTime = frameTime;
     this->secondsToSelfDestruct = secondsToSelfDestruct;
     currentFrame = 0;
+    animate = true;
+    flip = false;
     timeElapsed = 0;
 }
 
@@ -56,6 +64,8 @@ Sprite::Sprite(GameObject &associated, string file) : Component(associated) {
     this->secondsToSelfDestruct = 0;
     this->Open(file);
     currentFrame = 0;
+    animate = true;
+    flip = false;
     timeElapsed = 0;
 }
 
@@ -67,6 +77,8 @@ Sprite::Sprite(GameObject &associated) : Component(associated) {
     this->frameTime = 1;
     this->secondsToSelfDestruct = 0;
     currentFrame = 0;
+    animate = true;
+    flip = false;
     timeElapsed = 0;
 }
 
@@ -102,11 +114,15 @@ Sprite::~Sprite() {}
 bool Sprite::Open(string file) {
     texture = Resources::GetImage(file);
     if(texture == NULL){
-        cout << "ERROR CRASHOU: Sprite.Open IMG_LoadTexture"<<endl;
-        cout << SDL_GetError() << endl;
+        if(Debugger::GetInstance().lookSprite) {
+            cout << "ERROR CRASHOU: Sprite.Open IMG_LoadTexture"<<endl;
+            cout << SDL_GetError() << endl;
+        }
         return false;
     } else {
-        cout << "Imagem "<< file <<" do sprite carregada" << endl;
+        if(Debugger::GetInstance().lookSprite) {
+            cout << "Imagem "<< file <<" do sprite carregada" << endl;
+        }
         SDL_QueryTexture(texture.get(), NULL, NULL, &associated.box.w, &associated.box.h);
         currentFrame = 0;
         associated.box.w = associated.box.w / frameCount;
@@ -139,7 +155,11 @@ void Sprite::Render() {
 
 void Sprite::Render(float x, float y, float w, float h) {
     SDL_Rect dstRect{ int(x), int(y), w*scale.y, h*scale.y };
-    SDL_RenderCopyEx(Game::GetInstance().GetRenderer(), texture.get(), &clipRect, &dstRect, associated.angleDeg, NULL, SDL_FLIP_NONE);
+    if(flip) {
+        SDL_RenderCopyEx(Game::GetInstance().GetRenderer(), texture.get(), &clipRect, &dstRect, associated.angleDeg, NULL, SDL_FLIP_HORIZONTAL);
+    } else {
+        SDL_RenderCopyEx(Game::GetInstance().GetRenderer(), texture.get(), &clipRect, &dstRect, associated.angleDeg, NULL, SDL_FLIP_NONE);
+    }
 }
 
 int Sprite::GetHeight() {
@@ -173,4 +193,14 @@ void Sprite::SetFrameCount(int frameCount) {
 
 void Sprite::SetFrameTime(float frameTime) {
     this->frameTime = frameTime;
+}
+
+void Sprite::SwitchSprite(string file, int frameCount, float frameTime) {
+    this->frameCount = frameCount;
+    this->frameTime = frameTime;
+    Open(file);
+}
+
+int Sprite::GetCurrentFrame() {
+    return currentFrame;
 }

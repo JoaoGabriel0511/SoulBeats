@@ -48,9 +48,7 @@ void BellEnemy::Update(float dt) {
 
 
 void BellEnemy::SwitchBellEnemyState(BellEnemyState state, string sprite, int frameCount, float frameTime, Timer * timer){
-    bellEnemySprite->SetFrameCount(frameCount);
-    bellEnemySprite->SetFrameTime(frameTime);
-    bellEnemySprite->Open(sprite);
+    bellEnemySprite->SwitchSprite(sprite,frameCount,frameTime);
     timer->Restart();
     this->state = state;
 }
