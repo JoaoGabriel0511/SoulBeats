@@ -41,6 +41,7 @@ class Sprite : public Component {
         void Update(float dt);
         bool Is(string type);
         bool animate;
+        bool isBlinking;
         bool flip;
 };
 #endif
