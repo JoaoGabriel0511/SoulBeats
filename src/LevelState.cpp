@@ -30,15 +30,15 @@ void LevelState::LoadAssets() {
 
     //Personagem Adicionado
 
-    //ADICIONANDO INIMIGO
+    //Adicionando Inimigo
 
     bellEnemyGO = new GameObject();
-    bellEnemy = new BellEnemy(*bellEnemyGO,10,10);
+    bellEnemy = new BellEnemy(*bellEnemyGO,10,10,characterGO);
     bellEnemyGO->box.x = 100;
     bellEnemyGO->box.y = 537;
     objectArray.emplace_back(bellEnemyGO);
 
-    //INIMIGO ADICIONADO
+    //Inimigo Adicionado
 }
 
 void LevelState::Pause() {

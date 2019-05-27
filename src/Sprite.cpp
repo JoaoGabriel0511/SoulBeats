@@ -12,6 +12,7 @@ Sprite::Sprite(GameObject &associated, int frameCount, float frameTime) : Compon
     animate = true;
     flip = false;
     timeElapsed = 0;
+    isBlinking = false;
 }
 
 Sprite::Sprite(GameObject &associated, string file, int frameCount, float frameTime) : Component(associated) {
@@ -26,6 +27,7 @@ Sprite::Sprite(GameObject &associated, string file, int frameCount, float frameT
     animate = true;
     flip = false;
     timeElapsed = 0;
+    isBlinking = false;
 }
 
 Sprite::Sprite(GameObject &associated, string file, int frameCount, float frameTime, float secondsToSelfDestruct) : Component(associated) {
@@ -40,6 +42,7 @@ Sprite::Sprite(GameObject &associated, string file, int frameCount, float frameT
     animate = true;
     flip = false;
     timeElapsed = 0;
+    isBlinking = false;
 }
 
 Sprite::Sprite(GameObject &associated, int frameCount, float frameTime, float secondsToSelfDestruct) : Component(associated) {
@@ -53,6 +56,7 @@ Sprite::Sprite(GameObject &associated, int frameCount, float frameTime, float se
     animate = true;
     flip = false;
     timeElapsed = 0;
+    isBlinking = false;
 }
 
 Sprite::Sprite(GameObject &associated, string file) : Component(associated) {
@@ -67,6 +71,7 @@ Sprite::Sprite(GameObject &associated, string file) : Component(associated) {
     animate = true;
     flip = false;
     timeElapsed = 0;
+    isBlinking = false;
 }
 
 Sprite::Sprite(GameObject &associated) : Component(associated) {
@@ -80,6 +85,7 @@ Sprite::Sprite(GameObject &associated) : Component(associated) {
     animate = true;
     flip = false;
     timeElapsed = 0;
+    isBlinking = false;
 }
 
 void Sprite::Update(float dt) {
@@ -150,7 +156,9 @@ void Sprite::SetClip(int x, int y, int w, int h){
 }
 
 void Sprite::Render() {
-    Render(associated.box.x + Camera::pos.x, associated.box.y + Camera::pos.y, associated.box.w, associated.box.h);
+    if(!isBlinking) {
+        Render(associated.box.x + Camera::pos.x, associated.box.y + Camera::pos.y, associated.box.w, associated.box.h);
+    }
 }
 
 void Sprite::Render(float x, float y, float w, float h) {

@@ -24,12 +24,13 @@ class BellEnemy : public Component {
     Timer idleTimer;
     Timer lookRight;
     Timer lookLeft;
+    GameObject *character;
     void SwitchBellEnemyState(BellEnemyState state, string sprite, int frameCount, float frameTime, Timer * timer);
     public:
-        BellEnemy(GameObject& associated, int movingDistance, int movingSpeed);
+        BellEnemy(GameObject& associated, int movingDistance, int movingSpeed, GameObject *character);
         void Update(float dt);
         void Render();
-        void Start(int movingDistance, int movingSpeed);
+        void Start();
         bool Is(string type);
 };
 

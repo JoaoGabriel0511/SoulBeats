@@ -30,6 +30,16 @@
 #define GRAVITY_FALLING 50
 #define MAX_FALL_SPEED 400
 #define LANDING_DURATION 0.0833
+#define HURT_SPRITE "assets/img/char/SoulBeatsCharHurtR.png"
+#define HURT_FRAME_COUNT 2
+#define HURT_FRAME_TIME 0.08333
+#define HURT_DURATION 0.16666
+#define HURT_GRAVITY 20
+#define HURT_BOUNCING_SPEED -50
+#define HURT_DEFLECT_SPEED 500
+#define INVINCIBILITY_DURATION 0.7
+#define ENDING_INVINCIBILITY_DURATION 0.15
+#define BLINKING_DURATION 0.05
 #include "Component.h"
 #include "Sprite.h"
 
@@ -42,17 +52,23 @@ class Character : public Component {
     bool beforeRisingDone;
     bool peakDone;
     bool isLanding;
+    bool gotHit;
     bool landingDone;
+    bool isInvincible;
     Timer beforeRiseTimer;
+    Timer recoverFromHitTimer;
     Timer peakTimer;
+    Timer blinkTimer;
     Timer landingTimer;
+    Timer invincibilityTimer;
+    Timer endingInvincibilityTimer;
     float gravity;
     public:
         Character(GameObject &associated);
         void Update(float dt);
         void Start();
         bool Is(string type);
-
+        void NotifyCollision (GameObject& other);
 };
 
 #endif
