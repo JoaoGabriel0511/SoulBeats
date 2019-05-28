@@ -28,16 +28,21 @@ class Sprite : public Component {
         void SetFrameCount(int frameCount);
         void SetFrameTime(float frameTime);
         void SwitchSprite(string file, int frameCount, float frameTime);
+        int GetCurrentFrame();
         bool Open(string file);
         void SetClip(int x, int y, int w, int h);
         void Render();
         void Render(float x, float y, float w, float h);
         int GetWidth();
+        void SwitchSprite(string file, int frameCount, float frameTime);
         int GetHeight();
         void SetScaleX(float scalex, float scaley);
         Vect2 GetScale();
         bool IsOpen();
         void Update(float dt);
         bool Is(string type);
+        bool animate;
+        bool isBlinking;
+        bool flip;
 };
 #endif

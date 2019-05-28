@@ -14,7 +14,7 @@
 
 Collider::Collider(GameObject& associated, Vect2 scale, Vect2 offset) : Component(associated) {
     this->scale = scale;
-    this->scale = offset;
+    this->offset = offset;
 }
 
 Collider::Collider(GameObject& associated) : Component(associated) {
@@ -28,8 +28,10 @@ void Collider::Update(float dt) {
     box = associated.box;
     box.h = box.h * scale.y;
     box.w = box.w * scale.x;
-    box.x += offset.x * cos(associated.angleDeg * PI/180);
-    box.y += offset.y * sin(associated.angleDeg * PI/180);
+    box.w = box.w + offset.x;
+    box.h = box.h + offset.y;
+    box.x = box.x - offset.x/2;
+    box.y = box.y - offset.y/2;
 }
 
 // Copie o conteúdo dessa função para dentro da sua e adapte o nome das funções para as suas.
@@ -42,25 +44,21 @@ void Collider::Render() {
 	Vect2 center( box.GetCenter() );
 	SDL_Point points[5];
 
-	Vect2 point = (Vect2(box.x, box.y) - center).Rotate( associated.angleDeg/(180/PI) )
-					+ center - Camera::pos;
+	Vect2 point = (Vect2(box.x, box.y) - center) + center - Camera::pos;
 	points[0].x = (int) point.x;
     points[0].y = (int) point.y;
 	points[4].x = (int) point.x;
     points[4].y = (int) point.y;
 
-	point = (Vect2(box.x + box.w, box.y) - center).Rotate( associated.angleDeg/(180/PI) )
-					+ center - Camera::pos;
+	point = (Vect2(box.x + box.w, box.y) - center) + center - Camera::pos;
 	points[1].x = (int) point.x;
     points[1].y = (int) point.y;
 
-	point = (Vect2(box.x + box.w, box.y + box.h) - center).Rotate( associated.angleDeg/(180/PI) )
-					+ center - Camera::pos;
+	point = (Vect2(box.x + box.w, box.y + box.h) - center) + center - Camera::pos;
 	points[2].x = (int) point.x;
     points[2].y = (int) point.y;
 
-	point = (Vect2(box.x, box.y + box.h) - center).Rotate( associated.angleDeg/(180/PI) )
-					+ center - Camera::pos;
+	point = (Vect2(box.x, box.y + box.h) - center) + center - Camera::pos;
 	points[3].x = (int) point.x;
     points[3].y = (int) point.y;
 

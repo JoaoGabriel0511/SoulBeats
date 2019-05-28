@@ -2,6 +2,8 @@
 #define LEVEK_STATE_H
 #include "State.h"
 #include "Beat.h"
+#include "Character.h"
+#include "BellEnemy.h"
 
 class LevelState : public State {
     GameObject *bg;

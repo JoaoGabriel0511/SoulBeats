@@ -3,6 +3,8 @@
 #include "Sprite.h"
 #include "Music.h"
 #include "Sound.h"
+#include "Collision.h"
+#include "Collider.h"
 #include "CameraFollower.h"
 #include "Debugger.h"
 #include <vector>

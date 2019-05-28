@@ -1,3 +1,4 @@
 # Ignore folder named '.vscode'
 .vscode/
-
+bin/
+dep/

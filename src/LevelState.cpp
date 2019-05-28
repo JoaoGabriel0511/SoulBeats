@@ -5,13 +5,13 @@ LevelState::LevelState() : State() {
 }
 
 void LevelState::LoadAssets() {
-    cout<<__FILE__<<__LINE__<<endl;
+    //Adicionando Background
 
-    // Level State Game Objects
-    //// Background Game Object
     bg = new GameObject();
+    GameObject* bellEnemyGO;
+    BellEnemy* bellEnemy;
     Sprite *levelSprite;
-    levelSprite = new Sprite(*bg, "assets/img/Sprite-0001.png");
+    levelSprite = new Sprite(*bg, "assets/img/background/Sprite-0001.png");
     bg->box.h = Game::GetInstance().GetHeight();
     bg->box.w = Game::GetInstance().GetWidth();
     objectArray.emplace_back(bg);

@@ -27,3 +27,31 @@ Vect2 Rect::GetCenter() {
     result.y = y + h/2;
     return result;
 }
+
+Rect Rect::operator+(Vect2 vect) {
+    Rect result;
+    result.x = this->x + vect.x;
+    result.y = this->y + vect.y;
+    result.w = this->w;
+    result.h = this->h;
+    result.z = this->z;
+    return result;
+}
+
+Rect Rect::operator-(Vect2 vect) {
+    Rect result;
+    result.x = this->x - vect.x;
+    result.y = this->y - vect.y;
+    result.w = this->w;
+    result.h = this->h;
+    result.z = this->z;
+    return result;
+}
+
+void Rect::operator+=(Vect2 vect) {
+    *this = operator+(vect);
+}
+
+void Rect::operator-=(Vect2 vect) {
+    *this = operator-(vect);
+}
