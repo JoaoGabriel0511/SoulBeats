@@ -27,7 +27,6 @@ class Sprite : public Component {
         void SetFrame(int frame);
         void SetFrameCount(int frameCount);
         void SetFrameTime(float frameTime);
-        void SwitchSprite(string file, int frameCount, float frameTime);
         int GetCurrentFrame();
         bool Open(string file);
         void SetClip(int x, int y, int w, int h);
