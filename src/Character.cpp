@@ -18,6 +18,7 @@ void Character::Start() {
     gotHit = false;
     landingDone = true;
     isInvincible = false;
+    isAttacking = false;
 }
 
 void Character::Update(float dt){
@@ -70,7 +71,7 @@ void Character::Update(float dt){
             isStill = false;
             charSprite->flip = true;
         }
-        if(input.KeyPress(SPACE_KEY)) {
+        if(input.KeyPress(W_KEY)) {
             if(!isRising && !isFalling) {
                 velocity.y = JUMPING_SPEED;
                 gravity = GRAVITY_RISING;
@@ -78,6 +79,23 @@ void Character::Update(float dt){
                 beforeRisingDone = false;
                 charSprite->SwitchSprite(BEFORE_RISE_SPRITE,BEFORE_RISE_FRAME_COUNT,BEFORE_RISE_FRAME_TIME);
                 beforeRiseTimer.Restart();
+            }
+        }
+        if(input.KeyPress(SPACE_KEY)) {
+            isAttacking = true;
+            attackGO = new GameObject();
+            attackGO->box.z = 1;
+            Attack* attack = new Attack(*attackGO, {1,1}, {0,0}, &associated, 50, 25, 10, 10);
+            Game::GetInstance().GetCurrentState().AddObject(attackGO);
+            attackTimer.Restart();
+            charSprite->SwitchSprite(ATTACKING_SPRITE,ATTACKING_FRAME_COUNT,ATTACKING_FRAME_TIME);
+        }
+        if(isAttacking) {
+            attackTimer.Update(dt);
+            if(attackTimer.Get() >= ATTACK_DURATION ) {
+                attackGO->RequestedDelete();
+                isAttacking = false;
+                charSprite->SwitchSprite(IDLE_SPRITE,IDLE_FRAME_COUNT,IDLE_FRAME_TIME);
             }
         }
         if(input.KeyRelease(D_KEY) || input.KeyRelease(A_KEY)) {

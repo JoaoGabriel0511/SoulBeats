@@ -15,6 +15,7 @@
 Collider::Collider(GameObject& associated, Vect2 scale, Vect2 offset) : Component(associated) {
     this->scale = scale;
     this->offset = offset;
+    cout<<__FILE__<<" :: "<<__LINE__<<endl;
 }
 
 Collider::Collider(GameObject& associated) : Component(associated) {

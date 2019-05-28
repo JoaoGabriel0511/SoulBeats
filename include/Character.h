@@ -29,7 +29,7 @@
 #define GRAVITY_PEAK 8
 #define GRAVITY_FALLING 50
 #define MAX_FALL_SPEED 400
-#define LANDING_DURATION 0.0833
+#define LANDING_DURATION 0.08333
 #define HURT_SPRITE "assets/img/char/SoulBeatsCharHurtR.png"
 #define HURT_FRAME_COUNT 2
 #define HURT_FRAME_TIME 0.08333
@@ -40,8 +40,13 @@
 #define INVINCIBILITY_DURATION 0.7
 #define ENDING_INVINCIBILITY_DURATION 0.15
 #define BLINKING_DURATION 0.05
+#define ATTACKING_SPRITE "assets/img/char/SoulBeatsCharAttackR.png"
+#define ATTACKING_FRAME_COUNT 7
+#define ATTACKING_FRAME_TIME 0.08333
+#define ATTACK_DURATION 1
 #include "Component.h"
 #include "Sprite.h"
+#include "Attack.h"
 
 class Character : public Component {
     Vect2 velocity;
@@ -55,14 +60,17 @@ class Character : public Component {
     bool gotHit;
     bool landingDone;
     bool isInvincible;
+    bool isAttacking;
     Timer beforeRiseTimer;
     Timer recoverFromHitTimer;
     Timer peakTimer;
     Timer blinkTimer;
+    Timer attackTimer;
     Timer landingTimer;
     Timer invincibilityTimer;
     Timer endingInvincibilityTimer;
     float gravity;
+    GameObject *attackGO;
     public:
         Character(GameObject &associated);
         void Update(float dt);

@@ -84,6 +84,11 @@ void State::UpdateArray(float dt) {
 			}
 		}
     }
+	for(int k = 0; k < objectArray.size(); k++) {
+		if(objectArray[k]->IsDead() == true) {
+			objectArray.erase(objectArray.begin() + k);
+		}
+	}
 }
 
 void State::RenderArray() {

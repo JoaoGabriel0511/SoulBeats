@@ -9,14 +9,12 @@ GameObject::GameObject(){
 
 GameObject::~GameObject(){
     int components_size = components.size();
+    cout<<__FILE__<<" :: "<<__LINE__<<endl;
     for(int i = components_size-1; i >= 0; i--) {
-        if(components[i]->Is("Sprite")){
-            cout<<"Deletando Sprite"<<endl;
-        }
-        if(components[i]->Is("Sound")){
-            cout<<"Deletando Sound"<<endl;
-        }
+        cout<<__FILE__<<" :: "<<__LINE__<<endl;
+        cout<<"i "<<i<<endl;
         components.erase(components.begin() + i);
+        cout<<__FILE__<<" :: "<<__LINE__<<endl;
     }
     cout<<"Terminou com sucesso de deletar components"<<endl;
     components.clear();
@@ -49,6 +47,7 @@ bool GameObject::IsDead() {
 }
 
 void GameObject::RequestedDelete() {
+    cout<<__FILE__<<" :: "<<__LINE__<<endl;
     this->isDead = true;
 }
 
