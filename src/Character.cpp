@@ -44,7 +44,7 @@ void Character::Update(float dt){
     if(gotHit) {
         velocity.y += gravity;
         recoverFromHitTimer.Update(dt);
-        if(associated.box.y >= 500) {
+        if(associated.box.y >= 383) {
             if(recoverFromHitTimer.Get() >= HURT_DURATION){
                 gotHit = false;
                 velocity.x = 0;
@@ -111,13 +111,6 @@ void Character::Update(float dt){
                     charSprite->SwitchSprite(FALLING_SPRITE,FALLING_FRAME_COUNT,FALLING_FRAME_TIME);
                 }
             }
-            if(associated.box.y >= 500 && isFalling) {
-                isStill = true;
-                isFalling = false;
-                velocity.y = 0;
-                gravity = 0;
-                charSprite->SwitchSprite(IDLE_SPRITE,IDLE_FRAME_COUNT,IDLE_FRAME_TIME);
-            }
         }
     }
     associated.box += velocity * dt;
@@ -149,5 +142,12 @@ void Character::NotifyCollision(GameObject& other) {
             charSprite->SwitchSprite(HURT_SPRITE,HURT_FRAME_COUNT,HURT_FRAME_TIME);
             recoverFromHitTimer.Restart();
         }
+    }
+    if(other.GetComponent("TileMapCollider") != NULL) {
+        isStill = true;
+        isFalling = false;
+        velocity.y = 0;
+        gravity = 0;
+        charSprite->SwitchSprite(IDLE_SPRITE,IDLE_FRAME_COUNT,IDLE_FRAME_TIME);
     }
 }

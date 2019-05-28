@@ -7,7 +7,7 @@ bool Debugger::lookSprite;
 Debugger::Debugger() {
     lookLoopGame = false;
     lookUpdateLevelState = false;
-    lookUpdateState = true;
+    lookUpdateState = false;
     lookInputManager = false;
     lookSprite = false;
 }
