@@ -1,8 +1,8 @@
-bin/Rect.o: src/Rect.cpp src/../include/Rect.h src/../include/Vect2.h \
- src/../include/Rect.h
+bin/Rect.o: src/Rect.cpp src/../include/Rect.h include/Vect2.h \
+  include/Rect.h
 
 src/../include/Rect.h:
 
-src/../include/Vect2.h:
+include/Vect2.h:
 
-src/../include/Rect.h:
+include/Rect.h:

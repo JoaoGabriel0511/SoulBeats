@@ -1,20 +1,19 @@
-bin/Camera.o: src/Camera.cpp src/../include/Camera.h \
- src/../include/GameObject.h src/../include/Component.h \
- src/../include/InputManager.h src/../include/Debugger.h \
- src/../include/Camera.h src/../include/Rect.h src/../include/Vect2.h
+bin/Camera.o: src/Camera.cpp src/../include/Camera.h include/GameObject.h \
+  include/Component.h include/InputManager.h include/Debugger.h \
+  include/Camera.h include/Rect.h include/Vect2.h
 
 src/../include/Camera.h:
 
-src/../include/GameObject.h:
+include/GameObject.h:
 
-src/../include/Component.h:
+include/Component.h:
 
-src/../include/InputManager.h:
+include/InputManager.h:
 
-src/../include/Debugger.h:
+include/Debugger.h:
 
-src/../include/Camera.h:
+include/Camera.h:
 
-src/../include/Rect.h:
+include/Rect.h:
 
-src/../include/Vect2.h:
+include/Vect2.h:

@@ -33,5 +33,5 @@ bool Attack::Is(string type){
 
 Attack::~Attack() {
     cout<<__FILE__<<" :: "<<__LINE__<<endl;
-    delete this->attackOrigin;
+    this->attackOrigin = nullptr;
 }

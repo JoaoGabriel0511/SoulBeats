@@ -1,20 +1,19 @@
 bin/GameObject.o: src/GameObject.cpp src/../include/GameObject.h \
- src/../include/Component.h src/../include/GameObject.h \
- src/../include/InputManager.h src/../include/Debugger.h \
- src/../include/Camera.h src/../include/Vect2.h src/../include/Rect.h
+  include/Component.h include/GameObject.h include/InputManager.h \
+  include/Debugger.h include/Camera.h include/Vect2.h include/Rect.h
 
 src/../include/GameObject.h:
 
-src/../include/Component.h:
+include/Component.h:
 
-src/../include/GameObject.h:
+include/GameObject.h:
 
-src/../include/InputManager.h:
+include/InputManager.h:
 
-src/../include/Debugger.h:
+include/Debugger.h:
 
-src/../include/Camera.h:
+include/Camera.h:
 
-src/../include/Vect2.h:
+include/Vect2.h:
 
-src/../include/Rect.h:
+include/Rect.h:

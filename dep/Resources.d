@@ -1,47 +1,45 @@
 bin/Resources.o: src/Resources.cpp src/../include/Resources.h \
- src/../include/Game.h src/../include/GameData.h src/../include/State.h \
- src/../include/Sprite.h src/../include/Component.h \
- src/../include/GameObject.h src/../include/Rect.h src/../include/Vect2.h \
- src/../include/InputManager.h src/../include/Debugger.h \
- src/../include/Camera.h src/../include/Resources.h \
- src/../include/Timer.h src/../include/Music.h src/../include/Sound.h \
- src/../include/Collision.h src/../include/Collider.h \
- src/../include/CameraFollower.h
+  include/Game.h include/GameData.h include/State.h include/Sprite.h \
+  include/Component.h include/GameObject.h include/Rect.h \
+  include/Vect2.h include/InputManager.h include/Debugger.h \
+  include/Camera.h include/Resources.h include/Timer.h include/Music.h \
+  include/Sound.h include/Collision.h include/Collider.h \
+  include/CameraFollower.h
 
 src/../include/Resources.h:
 
-src/../include/Game.h:
+include/Game.h:
 
-src/../include/GameData.h:
+include/GameData.h:
 
-src/../include/State.h:
+include/State.h:
 
-src/../include/Sprite.h:
+include/Sprite.h:
 
-src/../include/Component.h:
+include/Component.h:
 
-src/../include/GameObject.h:
+include/GameObject.h:
 
-src/../include/Rect.h:
+include/Rect.h:
 
-src/../include/Vect2.h:
+include/Vect2.h:
 
-src/../include/InputManager.h:
+include/InputManager.h:
 
-src/../include/Debugger.h:
+include/Debugger.h:
 
-src/../include/Camera.h:
+include/Camera.h:
 
-src/../include/Resources.h:
+include/Resources.h:
 
-src/../include/Timer.h:
+include/Timer.h:
 
-src/../include/Music.h:
+include/Music.h:
 
-src/../include/Sound.h:
+include/Sound.h:
 
-src/../include/Collision.h:
+include/Collision.h:
 
-src/../include/Collider.h:
+include/Collider.h:
 
-src/../include/CameraFollower.h:
+include/CameraFollower.h:
