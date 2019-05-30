@@ -36,15 +36,16 @@ void TileMap::SetTileSet(TileSet* tileSet){
     this->tileSet = tileSet;
 }
 
-int& TileMap::At(int x, int y, int z ){
+int TileMap::At(int x, int y, int z ){
     int aux;
     int aux2;
     int pos;
+    int index;
     aux = mapHeight * mapWidth * z;
     aux2 = mapWidth * y;
     pos = x + aux + aux2;
-    cout<<"pos "<<pos<<endl;
-    return tileMatrix[pos];
+    index = tileMatrix[pos] + 1;
+    return index;
 }
 
 void TileMap::Render() {

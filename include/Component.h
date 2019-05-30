@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "InputManager.h"
 #include "Camera.h"
+#include "Rect.h"
 #include <string>
 using namespace std;
 class GameObject;
@@ -16,6 +17,7 @@ class Component {
         virtual bool Is(string type) = 0;
         virtual ~Component();
         virtual void NotifyCollision (GameObject& other);
+        virtual void NotifYCollisionWithMap(Rect box);
     protected:
         GameObject& associated;
 };

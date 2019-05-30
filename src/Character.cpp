@@ -18,6 +18,8 @@ void Character::Start() {
     gotHit = false;
     landingDone = true;
     isInvincible = false;
+    isOnGround = true;
+    gravity = GRAVITY_FALLING;
 }
 
 void Character::Update(float dt){
@@ -42,16 +44,14 @@ void Character::Update(float dt){
         }
     }
     if(gotHit) {
-        velocity.y += gravity;
         recoverFromHitTimer.Update(dt);
-        if(associated.box.y >= 383) {
+        if(isOnGround) {
             if(recoverFromHitTimer.Get() >= HURT_DURATION){
                 gotHit = false;
+                gravity = GRAVITY_FALLING;
                 velocity.x = 0;
                 charSprite->SwitchSprite(IDLE_SPRITE, IDLE_FRAME_COUNT, IDLE_FRAME_TIME);
             }
-            velocity.y = 0;
-            gravity = 0;
         }
     } else {
         if(input.IsKeyDown(D_KEY)) {
@@ -75,6 +75,7 @@ void Character::Update(float dt){
                 velocity.y = JUMPING_SPEED;
                 gravity = GRAVITY_RISING;
                 isRising = true;
+                isOnGround = false;
                 beforeRisingDone = false;
                 charSprite->SwitchSprite(BEFORE_RISE_SPRITE,BEFORE_RISE_FRAME_COUNT,BEFORE_RISE_FRAME_TIME);
                 beforeRiseTimer.Restart();
@@ -94,7 +95,6 @@ void Character::Update(float dt){
                 beforeRiseTimer.Restart();
                 beforeRisingDone = true;
             }
-            velocity.y += gravity;
             if(velocity.y + 3*gravity >= 0 && isRising) {
                 charSprite->SwitchSprite(PEAK_SPRITE,PEAK_FRAME_COUNT,PEAK_FRAME_TIME);
                 peakDone = false;
@@ -113,6 +113,7 @@ void Character::Update(float dt){
             }
         }
     }
+    velocity.y += gravity;
     associated.box += velocity * dt;
 }
 
@@ -143,11 +144,47 @@ void Character::NotifyCollision(GameObject& other) {
             recoverFromHitTimer.Restart();
         }
     }
-    if(other.GetComponent("TileMapCollider") != NULL) {
-        isStill = true;
-        isFalling = false;
-        velocity.y = 0;
-        gravity = 0;
-        charSprite->SwitchSprite(IDLE_SPRITE,IDLE_FRAME_COUNT,IDLE_FRAME_TIME);
+}
+
+void Character::NotifYCollisionWithMap(Rect box) {
+    Collider *collider = ((Collider*) associated.GetComponent("Collider").get());
+    if(Debugger::GetInstance().lookCharCollision) {
+        cout<<"collider->box.x: "<<collider->box.x<<endl;
+        cout<<"collider->box.y: "<<collider->box.y<<endl;
+        cout<<"collider->box.w: "<<collider->box.w<<endl;
+        cout<<"collider->box.h: "<<collider->box.h<<endl;
+        cout<<"box.x: "<<box.x<<endl;
+        cout<<"box.y: "<<box.y<<endl;
+        cout<<"box.w: "<<box.w<<endl;
+        cout<<"box.h: "<<box.h<<endl;
+    }
+    if(velocity.y > 0) {
+        if((collider->box.y + collider->box.h - 25 <= box.y) && (collider->box.x + collider->box.w > box.x + 5) && (collider->box.x < box.x + box.w - 5)) {
+            isStill = true;
+            isOnGround = true;
+            isFalling = false;
+            gravity = GRAVITY_FALLING;
+            velocity.y = 0;
+            associated.box.y = box.y - associated.box.h + 20;
+            charSprite->SwitchSprite(IDLE_SPRITE,IDLE_FRAME_COUNT,IDLE_FRAME_TIME);
+        }
+    }
+    if(velocity.y <= 0) {
+        if((collider->box.y >= box.y) && (collider->box.x + collider->box.w > box.x + 5) && (collider->box.x < box.x + box.w - 5)) {
+            velocity.y = 0;
+            associated.box.y = box.y + box.h - 20;
+        }
+    }
+    if((velocity.x >= 0) && (collider->box.x < box.x)) {
+        if((collider->box.y + collider->box.h - 15 > box.y)) {
+            velocity.x = 0;
+            associated.box.x = box.x - associated.box.w + 35;
+        }
+    }
+    if((velocity.x <= 0) && (collider->box.x > box.x)) {
+        if((collider->box.y + collider->box.h - 15 > box.y)) {
+            velocity.x = 0;
+            associated.box.x = box.x + box.w - 35;
+        }
     }
 }

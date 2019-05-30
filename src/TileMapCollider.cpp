@@ -15,9 +15,7 @@ void TileMapCollider::Start() {
         for(int y = 0; y < height; y++) {
             for(int x = 0; x < width; x++) {
                 index = tileMap->At(x,y,z);
-                cout<<"index: "<<index<<endl;
                 if(index == 11) {
-                    cout<<__FILE__<<" :: "<<__LINE__<<endl;
                     box.h = tileMap->GetTileSet()->GetHeight();
                     box.w = tileMap->GetTileSet()->GetWidth();
                     box.x = box.w * x;

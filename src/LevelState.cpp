@@ -66,18 +66,17 @@ void LevelState::Resume() {
 }
 
 void LevelState::Update(float dt) {
-    State::Update(dt);
     TileMapCollider *tileMapCollider = ((TileMapCollider*) tileGO->GetComponent("TileMapCollider").get());
     for(int i = tileMapCollider->boxes.size() - 1; i >= 0; i--) {
         for(int j = objectArray.size()-1; j >= 0 ; j--) {
             if(objectArray[j]->GetComponent("Collider") != NULL) {
-                if(Collision::IsColliding(((Collider*) objectArray[i]->GetComponent("Collider").get())->box, tileMapCollider->boxes[i], objectArray[i]->angleDeg, 0) == true) {
-                    objectArray[i]->NotifyCollision(*tileGO);
-                    tileGO->NotifyCollision(*objectArray[i].get());
+                if(Collision::IsColliding(((Collider*) objectArray[j]->GetComponent("Collider").get())->box, tileMapCollider->boxes[i], objectArray[j]->angleDeg, 0) == true) {
+                    objectArray[j]->NotifyCollisionWithMap(tileMapCollider->boxes[i]);
                 }
             }
 		}
     }
+    State::Update(dt);
     if(InputManager::GetInstance().QuitRequested()){
         quitRequested = true;
     }

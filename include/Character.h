@@ -55,6 +55,7 @@ class Character : public Component {
     bool gotHit;
     bool landingDone;
     bool isInvincible;
+    bool isOnGround;
     Timer beforeRiseTimer;
     Timer recoverFromHitTimer;
     Timer peakTimer;
@@ -69,6 +70,7 @@ class Character : public Component {
         void Start();
         bool Is(string type);
         void NotifyCollision (GameObject& other);
+        void NotifYCollisionWithMap(Rect box);
 };
 
 #endif
