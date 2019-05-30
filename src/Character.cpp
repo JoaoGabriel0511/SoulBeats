@@ -57,7 +57,7 @@ void Character::Update(float dt)
     {
         velocity.y += gravity;
         recoverFromHitTimer.Update(dt);
-        if (associated.box.y >= 500)
+        if (associated.box.y >= 500 || !isAttacking)
         {
             if (recoverFromHitTimer.Get() >= HURT_DURATION)
             {
