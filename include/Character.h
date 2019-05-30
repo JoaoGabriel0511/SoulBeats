@@ -24,6 +24,7 @@
 #define BEFORE_RISE_DURATION 0.2
 #define PEAK_DURATION 0.4
 #define WALKING_SPEED 300
+#define ATTACKING_SPEED 10
 #define JUMPING_SPEED -1500
 #define GRAVITY_RISING 50
 #define GRAVITY_PEAK 8
@@ -48,7 +49,8 @@
 #include "Sprite.h"
 #include "Attack.h"
 
-class Character : public Component {
+class Character : public Component
+{
     Vect2 velocity;
     Sprite *charSprite;
     bool isStill;
@@ -71,12 +73,14 @@ class Character : public Component {
     Timer endingInvincibilityTimer;
     float gravity;
     GameObject *attackGO;
-    public:
-        Character(GameObject &associated);
-        void Update(float dt);
-        void Start();
-        bool Is(string type);
-        void NotifyCollision (GameObject& other);
+    bool isLeaftSide;
+
+  public:
+    Character(GameObject &associated);
+    void Update(float dt);
+    void Start();
+    bool Is(string type);
+    void NotifyCollision(GameObject &other);
 };
 
 #endif
