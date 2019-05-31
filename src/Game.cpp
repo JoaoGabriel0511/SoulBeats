@@ -11,6 +11,7 @@
 using namespace std;
 
 Game* Game::instance;
+Beat* global_beat; 
 
 Game& Game::GetInstance() {
     if(instance != NULL) {
@@ -27,6 +28,10 @@ float Game::GetDeltaTime() {
 
 State& Game::GetCurrentState() {
     return *stateStack.top();
+}
+
+State* Game::GetCurrentStatePointer(){
+    return stateStack.top();
 }
 
 void Game::CalculateDeltaTime() {

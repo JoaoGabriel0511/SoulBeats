@@ -5,7 +5,10 @@
 #include "State.h"
 #include <stack>
 #include "SDL2/SDL_ttf.h"
+
 using namespace std;
+class Beat;
+extern Beat* global_beat;
 
 class State;
 class Game {
@@ -19,10 +22,12 @@ class Game {
     float height;
     void CalculateDeltaTime();
     stack<State*> stateStack;
+    
     public:
         Game(string title, int width, int height);
         ~Game();
         State& GetCurrentState();
+        State* GetCurrentStatePointer();
         float GetWidth();
         float GetHeight();
         void Run();

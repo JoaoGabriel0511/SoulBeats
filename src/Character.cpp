@@ -1,4 +1,6 @@
 #include "../include/Character.h"
+#include "Game.h"
+#include "../include/LevelState.h"
 
 Character::Character(GameObject &associated) : Component(associated) {
     Collider* collider;
@@ -72,7 +74,11 @@ void Character::Update(float dt){
         }
         if(input.KeyPress(SPACE_KEY)) {
             if(!isRising && !isFalling) {
-                velocity.y = JUMPING_SPEED;
+                if(global_beat->GetOnBeat() == true){
+                    velocity.y = JUMPING_SPEED - 500;
+                } else {
+                    velocity.y = JUMPING_SPEED;
+                }
                 gravity = GRAVITY_RISING;
                 isRising = true;
                 beforeRisingDone = false;
