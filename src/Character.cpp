@@ -67,6 +67,8 @@ void Character::Update(float dt) {
                 associated.box.x = associated.box.x + 2;
                 attackGO->RequestedDelete();
                 isAttacking = false;
+                peakDone = true;
+                isRising = false;
                 if(isOnGround) {
                     charSprite->SwitchSprite(IDLE_SPRITE, IDLE_FRAME_COUNT, IDLE_FRAME_TIME);
                 } else {
@@ -134,8 +136,7 @@ void Character::Update(float dt) {
                     beforeRiseTimer.Restart();
                     beforeRisingDone = true;
                 }
-                velocity.y += gravity;
-                if (velocity.y + 3 * gravity >= 0 && isRising && !isAttacking) {
+                if (velocity.y + 3 * gravity >= 0 && isRising) {
                     charSprite->SwitchSprite(PEAK_SPRITE, PEAK_FRAME_COUNT, PEAK_FRAME_TIME);
                     peakDone = false;
                     gravity = GRAVITY_PEAK;
@@ -153,6 +154,9 @@ void Character::Update(float dt) {
                 }
             }
         }
+    }
+    if(velocity.y <= MAX_FALL_SPEED) {
+        velocity.y += gravity;
     }
     associated.box += velocity * dt;
 }
@@ -209,11 +213,12 @@ void Character::NotifYCollisionWithMap(Rect box) {
         cout<<"box.h: "<<box.h<<endl;
     }
     if(velocity.y > 0) {
-        if((collider->box.y + collider->box.h - 25 <= box.y) && (collider->box.x + collider->box.w > box.x + 5) && (collider->box.x < box.x + box.w - 5)) {
+        if((collider->box.y + collider->box.h - 25 <= box.y) && (collider->box.x + collider->box.w > box.x + 10) && (collider->box.x < box.x + box.w - 10)) {
             isStill = true;
             isOnGround = true;
             isFalling = false;
             gravity = GRAVITY_FALLING;
+            cout<<"gravity "<<gravity<<endl;
             velocity.y = 0;
             associated.box.y = box.y - associated.box.h + 20;
             charSprite->SwitchSprite(IDLE_SPRITE,IDLE_FRAME_COUNT,IDLE_FRAME_TIME);
@@ -226,13 +231,13 @@ void Character::NotifYCollisionWithMap(Rect box) {
         }
     }
     if((velocity.x >= 0) && (collider->box.x < box.x)) {
-        if((collider->box.y + collider->box.h - 15 > box.y)) {
+        if((collider->box.y + collider->box.h - 20 > box.y)) {
             velocity.x = 0;
             associated.box.x = box.x - associated.box.w + 35;
         }
     }
     if((velocity.x <= 0) && (collider->box.x > box.x)) {
-        if((collider->box.y + collider->box.h - 15 > box.y)) {
+        if((collider->box.y + collider->box.h - 20 > box.y)) {
             velocity.x = 0;
             associated.box.x = box.x + box.w - 35;
         }
