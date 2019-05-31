@@ -4,15 +4,17 @@ Attack::Attack(GameObject &associated, Vect2 scale, Vect2 offset, GameObject *at
 {
     Collider *collider = new Collider(associated, scale, offset);
     this->attackOrigin = attackOrigin;
+    Start();
     associated.box.h = height;
     associated.box.w = width;
-    associated.box.x = attackOrigin->box.x + offsetX;
-    associated.box.y = attackOrigin->box.y + offsetY;
-    Start();
+    this->offsetX = offsetX;
+    this->offsetY = offsetY;
 }
 
 void Attack::Update(float dt)
 {
+    associated.box.x = attackOrigin->box.x + offsetX;
+    associated.box.y = attackOrigin->box.y + offsetY;
 }
 
 void Attack::NotifyCollision(GameObject &other)

@@ -5,6 +5,8 @@
 
 class Attack : public Component{
     GameObject* attackOrigin;
+    float offsetX;
+    float offsetY;
     public:
         Attack(GameObject& associated, Vect2 scale, Vect2 offset, GameObject* attackOrigin, int width, int height, float offsetX, float offsetY);
         ~Attack();
