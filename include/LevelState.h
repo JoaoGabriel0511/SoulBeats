@@ -14,6 +14,7 @@ class LevelState : public State {
         void Resume();
         void Update(float dt);
         void LoadAssets();
+        GameObject* GetBeatObject();
 };
 
 #endif
