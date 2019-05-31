@@ -49,38 +49,38 @@
 #include "Sprite.h"
 #include "Attack.h"
 
-class Character : public Component
-{
-    Vect2 velocity;
-    Sprite *charSprite;
-    bool isStill;
-    bool isRising;
-    bool isFalling;
-    bool beforeRisingDone;
-    bool peakDone;
-    bool isLanding;
-    bool gotHit;
-    bool landingDone;
-    bool isInvincible;
-    bool isAttacking;
-    Timer beforeRiseTimer;
-    Timer recoverFromHitTimer;
-    Timer peakTimer;
-    Timer blinkTimer;
-    Timer attackTimer;
-    Timer landingTimer;
-    Timer invincibilityTimer;
-    Timer endingInvincibilityTimer;
-    float gravity;
-    GameObject *attackGO;
-    bool isLeaftSide;
-
+class Character : public Component {
+  Vect2 velocity;
+  Sprite *charSprite;
+  bool isStill;
+  bool isRising;
+  bool isFalling;
+  bool beforeRisingDone;
+  bool peakDone;
+  bool isLanding;
+  bool gotHit;
+  bool landingDone;
+  bool isInvincible;
+  bool isAttacking;
+  bool isOnGround;
+  Timer beforeRiseTimer;
+  Timer recoverFromHitTimer;
+  Timer peakTimer;
+  Timer blinkTimer;
+  Timer attackTimer;
+  Timer landingTimer;
+  Timer invincibilityTimer;
+  Timer endingInvincibilityTimer;
+  float gravity;
+  GameObject *attackGO;
+  bool isLeaftSide;
   public:
     Character(GameObject &associated);
     void Update(float dt);
     void Start();
     bool Is(string type);
     void NotifyCollision(GameObject &other);
+    void NotifYCollisionWithMap(Rect);
 };
 
 #endif

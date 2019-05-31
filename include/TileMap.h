@@ -15,12 +15,13 @@ class TileMap : public Component {
         TileMap(GameObject& associated, string file, TileSet* tileSet);
         void Load(string file);
         void SetTileSet(TileSet* tileSet);
-        int& At(int x, int y, int z);
+        int At(int x, int y, int z);
         void Render();
         void RenderLayer(int layer, int cameraX, int cameraY);
         int GetWidth();
         int GetHeight();
         int GetDepth();
+        TileSet* GetTileSet();
         bool Is(string file);
         void Update(float dt);
         ~TileMap();

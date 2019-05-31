@@ -115,7 +115,7 @@ void Game::Run() {
         }
         InputManager::GetInstance().Update();
         if(debugger.lookLoopGame) {
-            cout<<"CONSEGUIU O INSTANCE DO INPUT MANAGE"<<endl;
+            cout<<"CONSEGUIU O INSTANCE DO INPUT MANAGER"<<endl;
         }
         stateStack.top()->Update(GetDeltaTime());
         if(debugger.lookLoopGame) {

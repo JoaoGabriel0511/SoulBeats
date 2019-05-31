@@ -20,6 +20,9 @@ void TileMap::Load(string file){
         }
         if(row > 1 && row != 27) {
             for(int i = 0; i < 75; i = i + 3) {
+                if(stoi(line.substr(i,i+2)) < 10) {
+                    cout<<0;
+                }
                 cout<< stoi(line.substr(i,i+2))<< " ";
                 tileMatrix.push_back(stoi(line.substr(i,i+2))-1);
             }
@@ -33,23 +36,24 @@ void TileMap::SetTileSet(TileSet* tileSet){
     this->tileSet = tileSet;
 }
 
-int& TileMap::At(int x, int y, int z = 0){
+int TileMap::At(int x, int y, int z ){
     int aux;
     int aux2;
     int pos;
-    aux = mapHeight * mapWidth * mapDepth;
-    aux2 = mapWidth * y - 1;
+    int index;
+    aux = mapHeight * mapWidth * z;
+    aux2 = mapWidth * y;
     pos = x + aux + aux2;
-    return tileMatrix[pos];
+    index = tileMatrix[pos] + 1;
+    return index;
 }
 
 void TileMap::Render() {
-    //cout<<"Renderizando mapa do jogo..."<<endl;
-    //  cout<<"Renderizando layer "<< i << " do jogo"<<endl;
-    //    cout<<"Layer "<< i << " do jogo renderizado"<<endl;
-
-    //cout<<"Mapa renderizado"<<endl;
+    for(int i = 0; i < mapDepth; i++) {
+        RenderLayer(i,Camera::pos.x,Camera::pos.y);
+    }
 }
+
 void TileMap::RenderLayer(int layer, int cameraX, int cameraY){
     int aux = mapHeight * mapWidth * layer;
     int aux2 = 0;
@@ -90,6 +94,10 @@ bool TileMap::Is(string type) {
     } else {
         return false;
     }
+}
+
+TileSet* TileMap::GetTileSet() {
+    return tileSet;
 }
 
 void TileMap::Update(float dt) {

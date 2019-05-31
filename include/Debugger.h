@@ -10,5 +10,6 @@ public:
     static bool lookLoopGame;
     static bool lookInputManager;
     static bool lookSprite;
+    static bool lookCharCollision;
 };
 #endif

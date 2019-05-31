@@ -104,3 +104,10 @@ void GameObject::NotifyCollision(GameObject &other)
         components[i].get()->NotifyCollision(other);
     }
 }
+
+void GameObject::NotifyCollisionWithMap(Rect box) {
+    int components_size = components.size();
+    for(int i = 0; i < components_size; i++) {
+        components[i].get()->NotifYCollisionWithMap(box);
+    }
+}

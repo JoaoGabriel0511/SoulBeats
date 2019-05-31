@@ -19,7 +19,8 @@ class GameObject{
         void Render();
         bool IsDead();
         void Start();
-        void  NotifyCollision (GameObject& other);
+        void NotifyCollision(GameObject& other);
+        void NotifyCollisionWithMap(Rect box);
         void RequestedDelete();
         void AddComponent(shared_ptr<Component> cpt);
         void RemoveComponent(shared_ptr<Component> cpt);

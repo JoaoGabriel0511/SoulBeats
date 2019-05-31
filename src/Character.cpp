@@ -24,44 +24,33 @@ void Character::Start()
     isLeaftSide = false;
 }
 
-void Character::Update(float dt)
-{
+void Character::Update(float dt) {
     InputManager &input = InputManager::GetInstance();
-    if (isInvincible)
-    {
+    if (isInvincible) {
         blinkTimer.Update(dt);
-        if (blinkTimer.Get() >= BLINKING_DURATION)
-        {
-            if (charSprite->isBlinking)
-            {
+        if (blinkTimer.Get() >= BLINKING_DURATION) {
+            if (charSprite->isBlinking) {
                 charSprite->isBlinking = false;
             }
-            else
-            {
+            else {
                 charSprite->isBlinking = true;
             }
             blinkTimer.Restart();
         }
         invincibilityTimer.Update(dt);
-        if (invincibilityTimer.Get() >= INVINCIBILITY_DURATION)
-        {
+        if (invincibilityTimer.Get() >= INVINCIBILITY_DURATION) {
             charSprite->isBlinking = false;
             endingInvincibilityTimer.Update(dt);
-            if (endingInvincibilityTimer.Get() >= ENDING_INVINCIBILITY_DURATION)
-            {
+            if (endingInvincibilityTimer.Get() >= ENDING_INVINCIBILITY_DURATION) {
                 isInvincible = false;
             }
         }
     }
-    if (gotHit)
-    {
-        cout<<"hitado"<<endl;
+    if (gotHit) {
         velocity.y += gravity;
         recoverFromHitTimer.Update(dt);
-        if (associated.box.y >= 500 || !isAttacking)
-        {
-            if (recoverFromHitTimer.Get() >= HURT_DURATION)
-            {
+        if (associated.box.y >= 500 || !isAttacking) {
+            if (recoverFromHitTimer.Get() >= HURT_DURATION) {
                 gotHit = false;
                 velocity.x = 0;
                 charSprite->SwitchSprite(IDLE_SPRITE, IDLE_FRAME_COUNT, IDLE_FRAME_TIME);
@@ -70,118 +59,87 @@ void Character::Update(float dt)
             gravity = 0;
         }
     }
-    else
-    {
-        if (isAttacking)
-        {
-            attackTimer.Update(dt);
-            if (attackTimer.Get() >= ATTACK_DURATION)
+    else {
+        if (input.IsKeyDown(D_KEY)) {
+            velocity.x = WALKING_SPEED;
+            if (isStill && !isRising && !isFalling) {
+                charSprite->SwitchSprite(WALKING_SPRITE, WALKING_FRAME_COUNT, WALKING_FRAME_TIME);
+            }
+            isStill = false;
+            isLeaftSide = false;
+            charSprite->flip = false;
+        }
+        if (input.IsKeyDown(A_KEY)) {
+            velocity.x = -1 * WALKING_SPEED;
+            if (isStill && !isRising && !isFalling) {
+                charSprite->SwitchSprite(WALKING_SPRITE, WALKING_FRAME_COUNT, WALKING_FRAME_TIME);
+            }
+            isStill = false;
+            isLeaftSide = true;
+            charSprite->flip = true;
+        }
+        if (input.KeyPress(W_KEY)) {
+            if (!isRising && !isFalling)
             {
+                velocity.y = JUMPING_SPEED;
+                gravity = GRAVITY_RISING;
+                isRising = true;
+                beforeRisingDone = false;
+                charSprite->SwitchSprite(BEFORE_RISE_SPRITE, BEFORE_RISE_FRAME_COUNT, BEFORE_RISE_FRAME_TIME);
+                beforeRiseTimer.Restart();
+            }
+        }
+        if (input.KeyPress(SPACE_KEY)) {
+            isAttacking = true;
+            attackGO = new GameObject();
+            attackGO->box.z = 1;
+            Attack *attack = new Attack(*attackGO, {1, 1}, {0, 0}, &associated, 50, 25, -3, 38);
+            Game::GetInstance().GetCurrentState().AddObject(attackGO);
+            attackTimer.Restart();
+            charSprite->SwitchSprite(ATTACKING_SPRITE, ATTACKING_FRAME_COUNT, ATTACKING_FRAME_TIME);
+        }
+        if (isAttacking) {
+            int isLeaft = isLeaftSide ? -1 : 1;
+
+            attackTimer.Update(dt);
+            velocity.x = isLeaft * ATTACKING_SPEED;
+            if (attackTimer.Get() >= ATTACK_DURATION) {
                 velocity.x = 0;
-                gravity = GRAVITY_FALLING;
                 associated.box.x = associated.box.x + 2;
                 attackGO->RequestedDelete();
                 isAttacking = false;
                 charSprite->SwitchSprite(IDLE_SPRITE, IDLE_FRAME_COUNT, IDLE_FRAME_TIME);
             }
-        } else {
-            if (input.IsKeyDown(D_KEY))
-            {
-                velocity.x = WALKING_SPEED;
-                if (isStill && !isRising && !isFalling)
-                {
-                    charSprite->SwitchSprite(WALKING_SPRITE, WALKING_FRAME_COUNT, WALKING_FRAME_TIME);
-                }
-                isStill = false;
-                isLeaftSide = false;
-                charSprite->flip = false;
+        }
+        if (input.KeyRelease(D_KEY) || input.KeyRelease(A_KEY)) {
+            velocity.x = 0;
+            if (!isRising && !isFalling) {
+                charSprite->SwitchSprite(IDLE_SPRITE, IDLE_FRAME_COUNT, IDLE_FRAME_TIME);
+                isStill = true;
             }
-            if (input.IsKeyDown(A_KEY))
-            {
-                velocity.x = -1 * WALKING_SPEED;
-                if (isStill && !isRising && !isFalling)
-                {
-                    charSprite->SwitchSprite(WALKING_SPRITE, WALKING_FRAME_COUNT, WALKING_FRAME_TIME);
-                }
-                isStill = false;
-                isLeaftSide = true;
-                charSprite->flip = true;
+        }
+        if (isRising || isFalling || isLanding) {
+            beforeRiseTimer.Update(dt);
+            if (beforeRiseTimer.Get() >= BEFORE_RISE_DURATION && !beforeRisingDone) {
+                charSprite->SwitchSprite(RISING_SPRITE, RISING_FRAME_COUNT, RISING_FRAME_TIME);
+                beforeRiseTimer.Restart();
+                beforeRisingDone = true;
             }
-            if (input.KeyPress(W_KEY))
-            {
-                if (!isRising && !isFalling)
-                {
-                    velocity.y = JUMPING_SPEED;
-                    gravity = GRAVITY_RISING;
-                    isRising = true;
-                    beforeRisingDone = false;
-                    charSprite->SwitchSprite(BEFORE_RISE_SPRITE, BEFORE_RISE_FRAME_COUNT, BEFORE_RISE_FRAME_TIME);
-                    beforeRiseTimer.Restart();
-                }
+            velocity.y += gravity;
+            if (velocity.y + 3 * gravity >= 0 && isRising) {
+                charSprite->SwitchSprite(PEAK_SPRITE, PEAK_FRAME_COUNT, PEAK_FRAME_TIME);
+                peakDone = false;
+                gravity = GRAVITY_PEAK;
+                peakTimer.Restart();
+                isRising = false;
+                isFalling = true;
             }
-            if (input.KeyPress(SPACE_KEY))
-            {
-                int isLeaft = isLeaftSide ? -1 : 1;
-                velocity.x = isLeaft * ATTACKING_SPEED;
-                isAttacking = true;
-                velocity.y = 0;
-                gravity = 0;
-                attackGO = new GameObject();
-                attackGO->box.z = 1;
-                if(isLeaftSide) {
-                    Attack *attack = new Attack(*attackGO, {1, 1}, {0, 0}, &associated, 50, 25, -3, 38);
-                } else {
-                    Attack *attack = new Attack(*attackGO, {1, 1}, {0, 0}, &associated, 50, 25, 60, 38);
-                }
-                Game::GetInstance().GetCurrentState().AddObject(attackGO);
-                attackTimer.Restart();
-                charSprite->SwitchSprite(ATTACKING_SPRITE, ATTACKING_FRAME_COUNT, ATTACKING_FRAME_TIME);
-            }
-            if (input.KeyRelease(D_KEY) || input.KeyRelease(A_KEY))
-            {
-                velocity.x = 0;
-                if (!isRising && !isFalling)
-                {
-                    charSprite->SwitchSprite(IDLE_SPRITE, IDLE_FRAME_COUNT, IDLE_FRAME_TIME);
-                    isStill = true;
-                }
-            }
-            if (isRising || isFalling || isLanding)
-            {
-                beforeRiseTimer.Update(dt);
-                if (beforeRiseTimer.Get() >= BEFORE_RISE_DURATION && !beforeRisingDone)
-                {
-                    charSprite->SwitchSprite(RISING_SPRITE, RISING_FRAME_COUNT, RISING_FRAME_TIME);
-                    beforeRiseTimer.Restart();
-                    beforeRisingDone = true;
-                }
-                velocity.y += gravity;
-                if (velocity.y + 3 * gravity >= 0 && isRising)
-                {
-                    charSprite->SwitchSprite(PEAK_SPRITE, PEAK_FRAME_COUNT, PEAK_FRAME_TIME);
-                    peakDone = false;
-                    gravity = GRAVITY_PEAK;
-                    peakTimer.Restart();
-                    isRising = false;
-                    isFalling = true;
-                }
-                if (isFalling && !peakDone)
-                {
-                    peakTimer.Update(dt);
-                    if (peakTimer.Get() >= PEAK_DURATION)
-                    {
-                        peakDone = true;
-                        gravity = GRAVITY_FALLING;
-                        charSprite->SwitchSprite(FALLING_SPRITE, FALLING_FRAME_COUNT, FALLING_FRAME_TIME);
-                    }
-                }
-                if (associated.box.y >= 500 && isFalling)
-                {
-                    isStill = true;
-                    isFalling = false;
-                    velocity.y = 0;
-                    gravity = 0;
-                    charSprite->SwitchSprite(IDLE_SPRITE, IDLE_FRAME_COUNT, IDLE_FRAME_TIME);
+            if (isFalling && !peakDone) {
+                peakTimer.Update(dt);
+                if (peakTimer.Get() >= PEAK_DURATION) {
+                    peakDone = true;
+                    gravity = GRAVITY_FALLING;
+                    charSprite->SwitchSprite(FALLING_SPRITE, FALLING_FRAME_COUNT, FALLING_FRAME_TIME);
                 }
             }
         }
@@ -189,11 +147,9 @@ void Character::Update(float dt)
     associated.box += velocity * dt;
 }
 
-bool Character::Is(string type)
-{
+bool Character::Is(string type) {
     bool result = false;
-    if (type == "Character")
-    {
+    if (type == "Character") {
         result = true;
     }
     return result;
@@ -207,11 +163,6 @@ void Character::NotifyCollision(GameObject &other) {
             }
             else {
                 velocity.x = HURT_DEFLECT_SPEED;
-            }
-            if(isAttacking) {
-                isAttacking = false;
-                cout<<__FILE__<<" :: "<<__LINE__<<endl;
-                attackGO->RequestedDelete();
             }
             velocity.y = HURT_BOUNCING_SPEED;
             gravity = HURT_GRAVITY;

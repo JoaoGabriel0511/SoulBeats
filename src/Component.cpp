@@ -10,3 +10,4 @@ void Component::Render(){}
 bool Component::Is(string type){}
 Component::~Component(){}
 void Component::NotifyCollision(GameObject& other){}
+void Component::NotifYCollisionWithMap(Rect box) {}

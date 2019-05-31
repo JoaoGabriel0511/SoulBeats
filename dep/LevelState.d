@@ -8,7 +8,8 @@ bin/LevelState.o: src/LevelState.cpp src/../include/LevelState.h \
  src/../include/Sound.h src/../include/Collision.h \
  src/../include/Collider.h src/../include/CameraFollower.h \
  src/../include/Character.h src/../include/Attack.h \
- src/../include/BellEnemy.h
+ src/../include/BellEnemy.h src/../include/TileMap.h \
+ src/../include/TileSet.h src/../include/TileMapCollider.h
 
 src/../include/LevelState.h:
 
@@ -53,3 +54,9 @@ src/../include/Character.h:
 src/../include/Attack.h:
 
 src/../include/BellEnemy.h:
+
+src/../include/TileMap.h:
+
+src/../include/TileSet.h:
+
+src/../include/TileMapCollider.h:
