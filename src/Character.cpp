@@ -1,4 +1,6 @@
 #include "../include/Character.h"
+#include "Game.h"
+#include "../include/LevelState.h"
 
 Character::Character(GameObject &associated) : Component(associated){
     Collider *collider;
@@ -77,6 +79,7 @@ void Character::Update(float dt) {
                     charSprite->SwitchSprite(FALLING_SPRITE, FALLING_FRAME_COUNT, FALLING_FRAME_TIME);
                 }
             }
+            isStill = false;
         } else {
             if (input.IsKeyDown(D_KEY)) {
                 velocity.x = WALKING_SPEED;
@@ -98,12 +101,16 @@ void Character::Update(float dt) {
             }
             if (input.KeyPress(W_KEY)) {
                 if (isOnGround) {
-                    velocity.y = JUMPING_SPEED;
+                    if(global_beat->GetOnBeat() == true){
+                        velocity.y = JUMPING_SPEED - 500;
+                    } else {
+                        velocity.y = JUMPING_SPEED;
+                    }
                     gravity = GRAVITY_RISING;
                     isRising = true;
                     isOnGround = false;
                     beforeRisingDone = false;
-                    charSprite->SwitchSprite(BEFORE_RISE_SPRITE, BEFORE_RISE_FRAME_COUNT, BEFORE_RISE_FRAME_TIME);
+                    charSprite->SwitchSprite(BEFORE_RISE_SPRITE,BEFORE_RISE_FRAME_COUNT,BEFORE_RISE_FRAME_TIME);
                     beforeRiseTimer.Restart();
                 }
             }

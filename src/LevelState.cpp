@@ -15,8 +15,13 @@ void LevelState::LoadAssets() {
     bg->box.h = Game::GetInstance().GetHeight();
     bg->box.w = Game::GetInstance().GetWidth();
     objectArray.emplace_back(bg);
-
-    //Background Adicionado
+    //// Beat Game Object
+    beat = new GameObject();
+    beat->box.x = 900;
+    beat->box.y = 30;
+    Beat* beat_component = new Beat(*beat);
+    global_beat = beat_component;
+    objectArray.emplace_back(beat);
 
     //Adicionando Personagem
 
@@ -80,4 +85,8 @@ void LevelState::Update(float dt) {
     if(InputManager::GetInstance().QuitRequested()){
         quitRequested = true;
     }
+}
+
+GameObject* LevelState::GetBeatObject(){
+    return this->beat;
 }

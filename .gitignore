@@ -2,4 +2,8 @@
 .vscode/
 bin/
 dep/
+<<<<<<< HEAD
 *.out
+=======
+*.out
+>>>>>>> master
