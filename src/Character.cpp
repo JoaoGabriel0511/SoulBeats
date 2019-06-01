@@ -1,15 +1,12 @@
 #include "../include/Character.h"
 
-Character::Character(GameObject &associated) : Component(associated)
-{
+Character::Character(GameObject &associated) : Component(associated){
     Collider *collider;
     collider = new Collider(associated, {1, 1}, {-70, -30});
-    associated.AddComponent(shared_ptr<Component>(collider));
     Start();
 }
 
-void Character::Start()
-{
+void Character::Start() {
     charSprite = new Sprite(associated, IDLE_SPRITE, IDLE_FRAME_COUNT, IDLE_FRAME_TIME);
     isStill = true;
     isRising = false;
@@ -22,7 +19,9 @@ void Character::Start()
     isInvincible = false;
     isAttacking = false;
     isOnGround = false;
-    isLeaftSide = false;
+    isLeftSide = false;
+    canAttack = true;
+    gravity = GRAVITY_FALLING;
 }
 
 void Character::Update(float dt) {
@@ -61,6 +60,10 @@ void Character::Update(float dt) {
     else {
         if (isAttacking) {
             attackTimer.Update(dt);
+            beforeAttackTimer.Update(dt);
+            if(beforeAttackTimer.Get() >= BEFORE_ATTACK_DURATION) {
+                charSprite->SwitchSprite(ATTACKING_SPRITE, ATTACKING_FRAME_COUNT, ATTACKING_FRAME_TIME);
+            }
             if (attackTimer.Get() >= ATTACK_DURATION) {
                 velocity.x = 0;
                 gravity = GRAVITY_FALLING;
@@ -68,7 +71,6 @@ void Character::Update(float dt) {
                 attackGO->RequestedDelete();
                 isAttacking = false;
                 peakDone = true;
-                isRising = false;
                 if(isOnGround) {
                     charSprite->SwitchSprite(IDLE_SPRITE, IDLE_FRAME_COUNT, IDLE_FRAME_TIME);
                 } else {
@@ -82,7 +84,7 @@ void Character::Update(float dt) {
                     charSprite->SwitchSprite(WALKING_SPRITE, WALKING_FRAME_COUNT, WALKING_FRAME_TIME);
                 }
                 isStill = false;
-                isLeaftSide = false;
+                isLeftSide = false;
                 charSprite->flip = false;
             }
             if (input.IsKeyDown(A_KEY)) {
@@ -91,11 +93,11 @@ void Character::Update(float dt) {
                     charSprite->SwitchSprite(WALKING_SPRITE, WALKING_FRAME_COUNT, WALKING_FRAME_TIME);
                 }
                 isStill = false;
-                isLeaftSide = true;
+                isLeftSide = true;
                 charSprite->flip = true;
             }
             if (input.KeyPress(W_KEY)) {
-                if (!isRising && !isFalling) {
+                if (isOnGround) {
                     velocity.y = JUMPING_SPEED;
                     gravity = GRAVITY_RISING;
                     isRising = true;
@@ -106,21 +108,26 @@ void Character::Update(float dt) {
                 }
             }
             if (input.KeyPress(SPACE_KEY)) {
-                int isLeaft = isLeaftSide ? -1 : 1;
-                gravity = 0;
-                velocity.y = 0;
-                isAttacking = true;
-                velocity.x = isLeaft * ATTACKING_SPEED;
-                attackGO = new GameObject();
-                attackGO->box.z = 1;
-                if(isLeaftSide) {
-                    Attack *attack = new Attack(*attackGO, {1, 1}, {0, 0}, &associated, 50, 25, -3, 38);
-                } else {
-                    Attack *attack = new Attack(*attackGO, {1, 1}, {0, 0}, &associated, 50, 25, 60, 38);
+                if(canAttack) {
+                    int isLeft = isLeftSide ? -1 : 1;
+                    gravity = 0;
+                    velocity.y = 0;
+                    isAttacking = true;
+                    canAttack = false;
+                    isRising = false;
+                    velocity.x = isLeft * ATTACKING_SPEED;
+                    attackGO = new GameObject();
+                    attackGO->box.z = 1;
+                    if(isLeftSide) {
+                        Attack *attack = new Attack(*attackGO, {1, 1}, {0, 0}, &associated, 50, 25, -3, 38);
+                    } else {
+                        Attack *attack = new Attack(*attackGO, {1, 1}, {0, 0}, &associated, 50, 25, 60, 38);
+                    }
+                    Game::GetInstance().GetCurrentState().AddObject(attackGO);
+                    attackTimer.Restart();
+                    beforeAttackTimer.Restart();
+                    charSprite->SwitchSprite(BEFORE_ATTACK_SPRITE, BEFORE_ATTACK_FRAME_COUNT, BEFORE_ATTACK_DURATION/BEFORE_ATTACK_FRAME_COUNT);
                 }
-                Game::GetInstance().GetCurrentState().AddObject(attackGO);
-                attackTimer.Restart();
-                charSprite->SwitchSprite(ATTACKING_SPRITE, ATTACKING_FRAME_COUNT, ATTACKING_FRAME_TIME);
             }
             if (input.KeyRelease(D_KEY) || input.KeyRelease(A_KEY)) {
                 velocity.x = 0;
@@ -170,7 +177,6 @@ bool Character::Is(string type) {
 }
 
 void Character::NotifyCollision(GameObject &other) {
-    cout<<__FILE__<<" :: "<<__LINE__<<endl;
     if (!isInvincible) {
         if (other.GetComponent("BellEnemy") != NULL) {
             if (other.box.x > associated.box.x) {
@@ -197,22 +203,58 @@ void Character::NotifyCollision(GameObject &other) {
             recoverFromHitTimer.Restart();
         }
     }
-    cout<<__FILE__<<" :: "<<__LINE__<<endl;
 }
 
-void Character::NotifYCollisionWithMap(Rect box) {
+void Character::NotifYCollisionWithMap(Rect tileBox) {
     Collider *collider = ((Collider*) associated.GetComponent("Collider").get());
+    Rect pastPosition;
     if(Debugger::GetInstance().lookCharCollision) {
         cout<<"collider->box.x: "<<collider->box.x<<endl;
         cout<<"collider->box.y: "<<collider->box.y<<endl;
         cout<<"collider->box.w: "<<collider->box.w<<endl;
         cout<<"collider->box.h: "<<collider->box.h<<endl;
-        cout<<"box.x: "<<box.x<<endl;
-        cout<<"box.y: "<<box.y<<endl;
-        cout<<"box.w: "<<box.w<<endl;
-        cout<<"box.h: "<<box.h<<endl;
+        cout<<"box.x: "<<tileBox.x<<endl;
+        cout<<"box.y: "<<tileBox.y<<endl;
+        cout<<"box.w: "<<tileBox.w<<endl;
+        cout<<"box.h: "<<tileBox.h<<endl;
     }
-    if(velocity.y > 0) {
+    if( velocity.y > 0 ) {
+        pastPosition.y = -1 * velocity.y;
+        if(WasNotCollinding(tileBox,pastPosition)){
+            if(!isOnGround) {
+                charSprite->SwitchSprite(IDLE_SPRITE,IDLE_FRAME_COUNT,IDLE_FRAME_TIME);
+            }
+            isStill = true;
+            isOnGround = true;
+            isFalling = false;
+            canAttack = true;
+            gravity = GRAVITY_FALLING;
+            velocity.y = 0;
+            associated.box.y = tileBox.y - associated.box.h + 20;
+        }
+        pastPosition.y = 0;
+    }
+    /*if(velocity.x > 0) {
+        pastPosition.x = -1 * velocity.x;
+        pastPosition.y = 20;
+        if(WasNotCollinding(tileBox,pastPosition) &&  tileBox.y){
+            velocity.x = 0;
+            associated.box.x = tileBox.x - associated.box.w + 35;
+        }
+        pastPosition.x = 0;
+        pastPosition.y = 0;
+    }
+    if(velocity.x < 0) {
+        pastPosition.x = velocity.x;
+        pastPosition.y = 20;
+        if(WasNotCollinding(tileBox,pastPosition)){
+            velocity.x = 0;
+            associated.box.x = tileBox.x + tileBox.w - 35;
+        }
+        pastPosition.x = 0;
+        pastPosition.y = 0;
+    }*/
+    /*if(velocity.y > 0) {
         if((collider->box.y + collider->box.h - 25 <= box.y) && (collider->box.x + collider->box.w > box.x + 10) && (collider->box.x < box.x + box.w - 10)) {
             isStill = true;
             isOnGround = true;
@@ -241,5 +283,15 @@ void Character::NotifYCollisionWithMap(Rect box) {
             velocity.x = 0;
             associated.box.x = box.x + box.w - 35;
         }
+    }*/
+}
+
+bool Character::WasNotCollinding(Rect tileBox, Rect pastPosition) {
+    bool result = true;
+    Collider *collider = ((Collider*) associated.GetComponent("Collider").get());
+    pastPosition = collider->box + pastPosition;
+    if(Collision::IsColliding(pastPosition, tileBox, associated.angleDeg, 0)) {
+        result = false;
     }
+    return result;
 }

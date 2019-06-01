@@ -4,7 +4,6 @@ BellEnemy::BellEnemy(GameObject& associated, int movingDistance, int movingSpeed
     this->character = character;
     Collider* collider;
     collider = new Collider(associated, {1,1}, {-70,0});
-    associated.AddComponent(shared_ptr<Component> (collider));
     Start();
 }
 
@@ -60,3 +59,13 @@ void BellEnemy::SwitchBellEnemyState(BellEnemyState state, string sprite, int fr
 }
 
 void BellEnemy::Render() {}
+
+void BellEnemy::NotifyCollision(GameObject& other) {
+    if(other.GetComponent("Attack") != NULL){
+        associated.RequestedDelete();
+    }
+}
+
+BellEnemy::~BellEnemy() {
+    character = NULL;
+}

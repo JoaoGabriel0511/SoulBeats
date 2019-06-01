@@ -24,7 +24,7 @@
 #define BEFORE_RISE_DURATION 0.2
 #define PEAK_DURATION 0.4
 #define WALKING_SPEED 300
-#define ATTACKING_SPEED 400
+#define ATTACKING_SPEED 600
 #define JUMPING_SPEED -1500
 #define GRAVITY_RISING 50
 #define GRAVITY_PEAK 8
@@ -41,10 +41,13 @@
 #define INVINCIBILITY_DURATION 0.7
 #define ENDING_INVINCIBILITY_DURATION 0.15
 #define BLINKING_DURATION 0.05
+#define BEFORE_ATTACK_DURATION 0.5
+#define BEFORE_ATTACK_SPRITE "assets/img/char/SoulBeatsCharBeforeAttackR.png"
 #define ATTACKING_SPRITE "assets/img/char/SoulBeatsCharAttackR.png"
-#define ATTACKING_FRAME_COUNT 7
+#define ATTACKING_FRAME_COUNT 1
+#define BEFORE_ATTACK_FRAME_COUNT 6
 #define ATTACKING_FRAME_TIME 0.08333
-#define ATTACK_DURATION 1
+#define ATTACK_DURATION 0.6
 #include "Component.h"
 #include "Sprite.h"
 #include "Attack.h"
@@ -62,25 +65,28 @@ class Character : public Component {
   bool landingDone;
   bool isInvincible;
   bool isAttacking;
+  bool canAttack;
   bool isOnGround;
   Timer beforeRiseTimer;
   Timer recoverFromHitTimer;
   Timer peakTimer;
   Timer blinkTimer;
+  Timer beforeAttackTimer;
   Timer attackTimer;
   Timer landingTimer;
   Timer invincibilityTimer;
   Timer endingInvincibilityTimer;
   float gravity;
   GameObject *attackGO;
-  bool isLeaftSide;
+  bool isLeftSide;
   public:
     Character(GameObject &associated);
     void Update(float dt);
     void Start();
     bool Is(string type);
     void NotifyCollision(GameObject &other);
-    void NotifYCollisionWithMap(Rect);
+    void NotifYCollisionWithMap(Rect Tilebox);
+    bool WasNotCollinding(Rect Tilebox, Rect pastPosition);
 };
 
 #endif

@@ -115,8 +115,6 @@ bool Sprite::Is(string type) {
     return result;
 }
 
-Sprite::~Sprite() {}
-
 bool Sprite::Open(string file) {
     texture = Resources::GetImage(file);
     if(texture == NULL){

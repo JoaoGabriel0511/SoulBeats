@@ -8,6 +8,8 @@ class Rect {
         ~Rect();
         Rect operator+(Vect2 vect);
         Rect operator-(Vect2 vect);
+        Rect operator+(Rect rect);
+        Rect operator-(Rect rect);
         void operator+=(Vect2 vect);
         void operator-=(Vect2 vect);
         float x;

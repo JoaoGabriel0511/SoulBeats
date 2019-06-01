@@ -28,9 +28,11 @@ class BellEnemy : public Component {
     void SwitchBellEnemyState(BellEnemyState state, string sprite, int frameCount, float frameTime, Timer * timer);
     public:
         BellEnemy(GameObject& associated, int movingDistance, int movingSpeed, GameObject *character);
+        ~BellEnemy();
         void Update(float dt);
         void Render();
         void Start();
+        void NotifyCollision(GameObject& other);
         bool Is(string type);
 };
 

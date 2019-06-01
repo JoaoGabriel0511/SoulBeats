@@ -23,7 +23,6 @@ class Sprite : public Component {
         Sprite(GameObject &associated, string file, int frameCount, float frameTime);
         Sprite(GameObject &associated, string file);
         Sprite(GameObject &associated);
-        ~Sprite();
         void SetFrame(int frame);
         void SetFrameCount(int frameCount);
         void SetFrameTime(float frameTime);

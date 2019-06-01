@@ -34,7 +34,7 @@ void LevelState::LoadAssets() {
 
     bellEnemyGO = new GameObject();
     bellEnemy = new BellEnemy(*bellEnemyGO,10,10,characterGO);
-    bellEnemyGO->box.x = 100;
+    bellEnemyGO->box.x = 600;
     bellEnemyGO->box.y = 420;
     bellEnemyGO->box.z = 1;
     objectArray.emplace_back(bellEnemyGO);

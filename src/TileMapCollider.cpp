@@ -10,16 +10,20 @@ void TileMapCollider::Start() {
     int height = tileMap->GetHeight();
     int depth = tileMap->GetDepth();
     int index;
+    int auxh;
+    int auxw;
     Rect box;
     for(int z = 0; z < depth; z++) {
         for(int y = 0; y < height; y++) {
             for(int x = 0; x < width; x++) {
                 index = tileMap->At(x,y,z);
                 if(index == 11) {
-                    box.h = tileMap->GetTileSet()->GetHeight();
-                    box.w = tileMap->GetTileSet()->GetWidth();
-                    box.x = box.w * x;
-                    box.y = box.h * y;
+                    auxh = tileMap->GetTileSet()->GetHeight();
+                    auxw = tileMap->GetTileSet()->GetWidth();
+                    box.h = auxh;
+                    box.w = auxw;
+                    box.x = auxw * x;
+                    box.y = auxh * y;
                     boxes.emplace_back(box);
                 }
             }

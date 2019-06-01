@@ -48,6 +48,26 @@ Rect Rect::operator-(Vect2 vect) {
     return result;
 }
 
+Rect Rect::operator+(Rect rect) {
+    Rect result;
+    result.x = this->x + rect.x;
+    result.y = this->y + rect.y;
+    result.w = this->w;
+    result.h = this->h;
+    result.z = this->z;
+    return result;
+}
+
+Rect Rect::operator-(Rect rect) {
+    Rect result;
+    result.x = this->x - rect.x;
+    result.y = this->y - rect.y;
+    result.w = this->w;
+    result.h = this->h;
+    result.z = this->z;
+    return result;
+}
+
 void Rect::operator+=(Vect2 vect) {
     *this = operator+(vect);
 }
