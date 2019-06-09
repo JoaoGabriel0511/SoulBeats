@@ -54,7 +54,10 @@
 
 class Character : public Component {
   Vect2 velocity;
+  Vect2 oldVelocity;
+  Rect oldPosition;
   Sprite *charSprite;
+  bool isOnGround;
   bool isStill;
   bool isRising;
   bool isFalling;
@@ -66,7 +69,6 @@ class Character : public Component {
   bool isInvincible;
   bool isAttacking;
   bool canAttack;
-  bool isOnGround;
   Timer beforeRiseTimer;
   Timer recoverFromHitTimer;
   Timer peakTimer;

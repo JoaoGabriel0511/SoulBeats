@@ -36,7 +36,7 @@ void TileMap::SetTileSet(TileSet* tileSet){
     this->tileSet = tileSet;
 }
 
-int TileMap::At(int x, int y, int z ){
+int TileMap::At(int x, int y, int z){
     int aux;
     int aux2;
     int pos;

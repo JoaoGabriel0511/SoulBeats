@@ -24,5 +24,10 @@ class Vect2{
         Vect2 operator*(const float &right) const;
         Vect2 operator*(float nro);
         bool operator==(Vect2 vet);
+        static inline Vect2 Rotate(const Vect2& p, float angle) {
+			float cs = cos(angle);
+            float sn = sin(angle);
+			return Vect2 ( p.x * cs - p.y * sn, p.x * sn + p.y * cs );
+		}
 };
 #endif

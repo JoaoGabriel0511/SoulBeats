@@ -27,6 +27,9 @@ void Character::Start() {
 }
 
 void Character::Update(float dt) {
+    Collider *collider = ((Collider*) associated.GetComponent("Collider").get());
+    oldPosition = collider->box;
+    oldVelocity = velocity;
     InputManager &input = InputManager::GetInstance();
     if (isInvincible) {
         blinkTimer.Update(dt);
@@ -225,80 +228,34 @@ void Character::NotifYCollisionWithMap(Rect tileBox) {
         cout<<"box.w: "<<tileBox.w<<endl;
         cout<<"box.h: "<<tileBox.h<<endl;
     }
-    if( velocity.y > 0 ) {
-        pastPosition.y = -1 * velocity.y;
-        if(WasNotCollinding(tileBox,pastPosition)){
-            if(!isOnGround) {
-                charSprite->SwitchSprite(IDLE_SPRITE,IDLE_FRAME_COUNT,IDLE_FRAME_TIME);
-            }
+    if(velocity.y > 0) {
+        if((collider->box.y + collider->box.h - 25 <= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 10) && (collider->box.x < tileBox.x + tileBox.w - 10)) {
             isStill = true;
             isOnGround = true;
-            isFalling = false;
             canAttack = true;
+            isFalling = false;
             gravity = GRAVITY_FALLING;
             velocity.y = 0;
             associated.box.y = tileBox.y - associated.box.h + 20;
-        }
-        pastPosition.y = 0;
-    }
-    /*if(velocity.x > 0) {
-        pastPosition.x = -1 * velocity.x;
-        pastPosition.y = 20;
-        if(WasNotCollinding(tileBox,pastPosition) &&  tileBox.y){
-            velocity.x = 0;
-            associated.box.x = tileBox.x - associated.box.w + 35;
-        }
-        pastPosition.x = 0;
-        pastPosition.y = 0;
-    }
-    if(velocity.x < 0) {
-        pastPosition.x = velocity.x;
-        pastPosition.y = 20;
-        if(WasNotCollinding(tileBox,pastPosition)){
-            velocity.x = 0;
-            associated.box.x = tileBox.x + tileBox.w - 35;
-        }
-        pastPosition.x = 0;
-        pastPosition.y = 0;
-    }*/
-    /*if(velocity.y > 0) {
-        if((collider->box.y + collider->box.h - 25 <= box.y) && (collider->box.x + collider->box.w > box.x + 10) && (collider->box.x < box.x + box.w - 10)) {
-            isStill = true;
-            isOnGround = true;
-            isFalling = false;
-            gravity = GRAVITY_FALLING;
-            cout<<"gravity "<<gravity<<endl;
-            velocity.y = 0;
-            associated.box.y = box.y - associated.box.h + 20;
             charSprite->SwitchSprite(IDLE_SPRITE,IDLE_FRAME_COUNT,IDLE_FRAME_TIME);
         }
     }
     if(velocity.y <= 0) {
-        if((collider->box.y >= box.y) && (collider->box.x + collider->box.w > box.x + 5) && (collider->box.x < box.x + box.w - 5)) {
+        if((collider->box.y >= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 10) && (collider->box.x < tileBox.x + tileBox.w - 10)) {
             velocity.y = 0;
-            associated.box.y = box.y + box.h - 20;
+            associated.box.y = tileBox.y + tileBox.h - 20;
         }
     }
-    if((velocity.x >= 0) && (collider->box.x < box.x)) {
-        if((collider->box.y + collider->box.h - 20 > box.y)) {
+    if((velocity.x >= 0) && (collider->box.x < tileBox.x)) {
+        if((collider->box.y + collider->box.h - 20 > tileBox.y) && (collider->box.y + 20 < tileBox.y + tileBox.h)) {
             velocity.x = 0;
-            associated.box.x = box.x - associated.box.w + 35;
+            associated.box.x = tileBox.x - associated.box.w + 35;
         }
     }
-    if((velocity.x <= 0) && (collider->box.x > box.x)) {
-        if((collider->box.y + collider->box.h - 20 > box.y)) {
+    if((velocity.x <= 0) && (collider->box.x > tileBox.x) && (collider->box.y + 20 < tileBox.y + tileBox.h)) {
+        if((collider->box.y + collider->box.h - 20 > tileBox.y)) {
             velocity.x = 0;
-            associated.box.x = box.x + box.w - 35;
+            associated.box.x = tileBox.x + tileBox.w - 35;
         }
-    }*/
-}
-
-bool Character::WasNotCollinding(Rect tileBox, Rect pastPosition) {
-    bool result = true;
-    Collider *collider = ((Collider*) associated.GetComponent("Collider").get());
-    pastPosition = collider->box + pastPosition;
-    if(Collision::IsColliding(pastPosition, tileBox, associated.angleDeg, 0)) {
-        result = false;
     }
-    return result;
 }
