@@ -125,7 +125,12 @@ void Character::Update(float dt) {
                     isAttacking = true;
                     canAttack = false;
                     isRising = false;
-                    velocity.x = isLeft * ATTACKING_SPEED;
+                    peakDone = true;
+                    if(global_beat->GetOnBeat() == true){
+                        velocity.x = isLeft * ONBEAT_ATTACKING_SPEED;
+                    } else {
+                        velocity.x = isLeft * ATTACKING_SPEED;
+                    }
                     attackGO = new GameObject();
                     attackGO->box.z = 1;
                     if(isLeftSide) {
@@ -161,9 +166,9 @@ void Character::Update(float dt) {
                     isRising = false;
                     isFalling = true;
                 }
-                if (isFalling && !peakDone) {
+                if (isFalling && !peakDone && !isRising) {
                     peakTimer.Update(dt);
-                    if (peakTimer.Get() >= PEAK_DURATION) {
+                    if(peakTimer.Get() >= PEAK_DURATION) {
                         peakDone = true;
                         gravity = GRAVITY_FALLING;
                         charSprite->SwitchSprite(FALLING_SPRITE, FALLING_FRAME_COUNT, FALLING_FRAME_TIME);
@@ -176,6 +181,8 @@ void Character::Update(float dt) {
         velocity.y += gravity;
     }
     associated.box += velocity * dt;
+    isFalling = true;
+    peakDone = false;
 }
 
 bool Character::Is(string type) {
@@ -229,11 +236,13 @@ void Character::NotifYCollisionWithMap(Rect tileBox) {
         cout<<"box.h: "<<tileBox.h<<endl;
     }
     if(velocity.y > 0) {
-        if((collider->box.y + collider->box.h - 25 <= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 10) && (collider->box.x < tileBox.x + tileBox.w - 10)) {
+        if((collider->box.y + collider->box.h - 25 <= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 12) && (collider->box.x < tileBox.x + tileBox.w - 12)) {
             isStill = true;
             isOnGround = true;
             canAttack = true;
             isFalling = false;
+            isRising = false;
+            peakDone = true;
             gravity = GRAVITY_FALLING;
             velocity.y = 0;
             associated.box.y = tileBox.y - associated.box.h + 20;
@@ -241,7 +250,7 @@ void Character::NotifYCollisionWithMap(Rect tileBox) {
         }
     }
     if(velocity.y <= 0) {
-        if((collider->box.y >= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 10) && (collider->box.x < tileBox.x + tileBox.w - 10)) {
+        if((collider->box.y >= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 12) && (collider->box.x < tileBox.x + tileBox.w - 12)) {
             velocity.y = 0;
             associated.box.y = tileBox.y + tileBox.h - 20;
         }
