@@ -72,6 +72,7 @@ void LevelState::Resume() {
 
 void LevelState::Update(float dt) {
     TileMapCollider *tileMapCollider = ((TileMapCollider*) tileGO->GetComponent("TileMapCollider").get());
+    State::Update(dt);
     for(int i = tileMapCollider->boxes.size() - 1; i >= 0; i--) {
         for(int j = objectArray.size()-1; j >= 0 ; j--) {
             if(objectArray[j]->GetComponent("Collider") != NULL) {
@@ -81,7 +82,6 @@ void LevelState::Update(float dt) {
             }
 		}
     }
-    State::Update(dt);
     if(InputManager::GetInstance().QuitRequested()){
         quitRequested = true;
     }
