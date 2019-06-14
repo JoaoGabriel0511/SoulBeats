@@ -6,11 +6,12 @@ LevelState::LevelState() : State() {
 
 void LevelState::LoadAssets() {
     //Adicionando Background
-
+    CameraFollower *cameraFollower;
     bg = new GameObject();
     GameObject* bellEnemyGO;
     BellEnemy* bellEnemy;
     Sprite *levelSprite;
+    cameraFollower = new CameraFollower(*bg);
     levelSprite = new Sprite(*bg, "assets/img/background/Sprite-0001.png");
     bg->box.h = Game::GetInstance().GetHeight();
     bg->box.w = Game::GetInstance().GetWidth();
@@ -20,6 +21,7 @@ void LevelState::LoadAssets() {
     beat->box.x = 900;
     beat->box.y = 30;
     Beat* beat_component = new Beat(*beat);
+    // new CameraFollower(*beat);
     global_beat = beat_component;
     objectArray.emplace_back(beat);
 
@@ -31,6 +33,7 @@ void LevelState::LoadAssets() {
     characterGO->box.y = 383;
     characterGO->box.z = 1;
     new Character(*characterGO);
+    Camera::Follow(characterGO);
     objectArray.emplace_back(characterGO);
 
     //Personagem Adicionado

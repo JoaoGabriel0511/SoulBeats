@@ -53,16 +53,15 @@
 #define INVINCIBILITY_DURATION 0.7
 #define ENDING_INVINCIBILITY_DURATION 0.15
 #define BLINKING_DURATION 0.05
-#define BEFORE_ATTACK_DURATION 0.5
-#define BEFORE_ATTACK_RIGHT_SPRITE "assets/img/char/SoulBeatsCharBeforeAttackR.png"
-#define BEFORE_ATTACK_RIGHT_SPRITE_ON_BEAT "assets/img/char/SoulBeatsCharBeforeAttackBEAT.png"
-#define ATTACKING_RIGHT_SPRITE "assets/img/char/SoulBeatsCharAttackR.png"
-#define BEFORE_ATTACK_LEFT_SPRITE "assets/img/char/SoulBeatsCharBeforeAttackL.png"
-#define BEFORE_ATTACK_LEFT_SPRITE_ON_BEAT "assets/img/char/SoulBeatsCharBeforeAttackLBEAT.png"
-#define ATTACKING_LEFT_SPRITE "assets/img/char/SoulBeatsCharAttackL.png"
-#define ATTACKING_FRAME_COUNT 1
-#define BEFORE_ATTACK_FRAME_COUNT 6
-#define ATTACKING_FRAME_TIME 0.08333
+#define ATTACK_RIGHT_SPRITE "assets/img/char/SoulBeatsCharAttack.png"
+#define ATTACK_RIGHT_SPRITE_ON_BEAT "assets/img/char/SoulBeatsCharAttackBEAT.png"
+#define ATTACK_LEFT_SPRITE "assets/img/char/SoulBeatsCharAttackL.png"
+#define ATTACK_LEFT_SPRITE_ON_BEAT "assets/img/char/SoulBeatsCharAttackLBEAT.png"
+#define ATTACK_AIR_RIGHT_SPRITE "assets/img/char/SoulBeatsCharAttackAir.png"
+#define ATTACK_AIR_RIGHT_SPRITE_ON_BEAT "assets/img/char/SoulBeatsCharAttackAirBEAT.png"
+#define ATTACK_AIR_LEFT_SPRITE "assets/img/char/SoulBeatsCharAttackAirL.png"
+#define ATTACK_AIR_LEFT_SPRITE_ON_BEAT "assets/img/char/SoulBeatsCharAttackAirLBEAT.png"
+#define ATTACK_FRAME_COUNT 5
 #define ATTACK_DURATION 0.6
 #define LITSEN_TO_MUSIC_RIGHT_SPRITE "assets/img/char/SoulBeatsCharBang.png"
 #define LITSEN_TO_MUSIC_LEFT_SPRITE "assets/img/char/SoulBeatsCharBangL.png"
@@ -91,13 +90,13 @@ class Character : public Component {
   bool landingDone;
   bool isInvincible;
   bool isAttacking;
+  bool hasChanged;
   bool canAttack;
   bool jumpedOnBeat;
   Timer beforeRiseTimer;
   Timer recoverFromHitTimer;
   Timer peakTimer;
   Timer blinkTimer;
-  Timer beforeAttackTimer;
   Timer attackTimer;
   Timer landingTimer;
   Timer idleTimer;

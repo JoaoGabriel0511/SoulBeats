@@ -45,6 +45,7 @@ void State::Pause() {}
 void State::Resume() {}
 
 void State::Update(float dt) {
+	Camera::Update(dt);
 	UpdateArray(dt);
 }
 

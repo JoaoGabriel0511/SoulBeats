@@ -16,7 +16,7 @@ void Camera::UnFollow() {
 void Camera::Update(float dt) {
     InputManager inputManager = InputManager::GetInstance();
     if(focus == NULL) {
-        if(inputManager.IsKeyDown(W_KEY)) {
+        /*if(inputManager.IsKeyDown(W_KEY)) {
             speed.x = 0;
             speed.y = 500 * dt;
         }
@@ -48,7 +48,7 @@ void Camera::Update(float dt) {
             speed.x = 0;
             speed.y = 0;
         }
-        pos = pos + speed;
+        pos = pos + speed;*/
     } else {
         pos.x = -1 * (focus->box.x - 512);
         pos.y = -1 * (focus->box.y - 300);
