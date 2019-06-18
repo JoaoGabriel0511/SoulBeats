@@ -5,6 +5,7 @@ class Vect2;
 class Rect {
     public:
         Rect();
+        Rect(int x, int y, int w, int h);
         ~Rect();
         Rect operator+(Vect2 vect);
         Rect operator-(Vect2 vect);

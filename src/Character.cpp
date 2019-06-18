@@ -24,6 +24,7 @@ void Character::Start() {
     isLeftSide = false;
     canAttack = true;
     finishIdle = false;
+    hasChanged = false;
     jumpedOnBeat = false;
     wasLeftSide = isLeftSide;
     wasOnGround = isOnGround;
@@ -87,14 +88,6 @@ void Character::Update(float dt) {
     else {
         if (isAttacking) {
             attackTimer.Update(dt);
-            beforeAttackTimer.Update(dt);
-            if(beforeAttackTimer.Get() >= BEFORE_ATTACK_DURATION) {
-                if(isLeftSide) {
-                    charSprite->SwitchSprite(ATTACKING_LEFT_SPRITE, ATTACKING_FRAME_COUNT, ATTACKING_FRAME_TIME);
-                } else {
-                    charSprite->SwitchSprite(ATTACKING_RIGHT_SPRITE, ATTACKING_FRAME_COUNT, ATTACKING_FRAME_TIME);
-                }
-            }
             if (attackTimer.Get() >= ATTACK_DURATION) {
                 velocity.x = 0;
                 gravity = GRAVITY_FALLING;
@@ -103,6 +96,7 @@ void Character::Update(float dt) {
                 isAttacking = false;
                 peakDone = true;
                 if(isOnGround) {
+                    isStill = true;
                     if(isLeftSide){
                         charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
                     } else {
@@ -112,17 +106,17 @@ void Character::Update(float dt) {
                     finishIdle = false;
                 } else {
                     if(isLeftSide) {
-                        charSprite->SwitchSprite(FALLING_RIGHT_SPRITE, FALLING_FRAME_COUNT, FALLING_FRAME_TIME);
-                    } else {
                         charSprite->SwitchSprite(FALLING_LEFT_SPRITE, FALLING_FRAME_COUNT, FALLING_FRAME_TIME);
+                    } else {
+                        charSprite->SwitchSprite(FALLING_RIGHT_SPRITE, FALLING_FRAME_COUNT, FALLING_FRAME_TIME);
                     }
                 }
             }
-            isStill = false;
+            isStill = true;
         } else {
             if (input.IsKeyDown(D_KEY)) {
                 velocity.x = WALKING_SPEED;
-                if(isStill || (isOnGround && !wasOnGround) || (isOnGround && isLeftSide)) {
+                if((isStill || (!wasOnGround) || (isLeftSide)) && isOnGround ) {
                     charSprite->SwitchSprite(WALKING_SPRITE_RIGHT, WALKING_FRAME_COUNT, WALKING_FRAME_TIME);
                 }
                 isStill = false;
@@ -131,7 +125,7 @@ void Character::Update(float dt) {
             } else {
                 if (input.IsKeyDown(A_KEY)) {
                     velocity.x = -1 * WALKING_SPEED;
-                    if (isStill || (isOnGround && !wasOnGround) || (isOnGround && !isLeftSide)) {
+                    if ((isStill || (!wasOnGround) || (!isLeftSide)) && isOnGround) {
                         charSprite->SwitchSprite(WALKING_SPRITE_LEFT, WALKING_FRAME_COUNT, WALKING_FRAME_TIME);
                     }
                     isStill = false;
@@ -142,7 +136,7 @@ void Character::Update(float dt) {
             if (input.KeyPress(W_KEY)) {
                 if (isOnGround) {
                     if(global_beat->GetOnBeat() == true){
-                        velocity.y = JUMPING_SPEED - 500;
+                        velocity.y = JUMPING_SPEED_ON_BEAT;
                         jumpedOnBeat = true;
                     } else {
                         jumpedOnBeat = false;
@@ -191,18 +185,33 @@ void Character::Update(float dt) {
                     }
                     Game::GetInstance().GetCurrentState().AddObject(attackGO);
                     attackTimer.Restart();
-                    beforeAttackTimer.Restart();
-                    if(isLeftSide) {
-                        if(global_beat->GetOnBeat() == true) {
-                            charSprite->SwitchSprite(BEFORE_ATTACK_LEFT_SPRITE_ON_BEAT, BEFORE_ATTACK_FRAME_COUNT, BEFORE_ATTACK_DURATION/BEFORE_ATTACK_FRAME_COUNT);
+                    if(isOnGround) {
+                        if(isLeftSide) {
+                            if(global_beat->GetOnBeat() == true) {
+                                charSprite->SwitchSprite(ATTACK_LEFT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
+                            } else {
+                                charSprite->SwitchSprite(ATTACK_LEFT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
+                            }
                         } else {
-                            charSprite->SwitchSprite(BEFORE_ATTACK_LEFT_SPRITE, BEFORE_ATTACK_FRAME_COUNT, BEFORE_ATTACK_DURATION/BEFORE_ATTACK_FRAME_COUNT);
+                            if(global_beat->GetOnBeat() == true) {
+                                charSprite->SwitchSprite(ATTACK_RIGHT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
+                            } else {
+                                charSprite->SwitchSprite(ATTACK_RIGHT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
+                            }
                         }
                     } else {
-                        if(global_beat->GetOnBeat() == true) {
-                            charSprite->SwitchSprite(BEFORE_ATTACK_RIGHT_SPRITE_ON_BEAT, BEFORE_ATTACK_FRAME_COUNT, BEFORE_ATTACK_DURATION/BEFORE_ATTACK_FRAME_COUNT);
+                        if(isLeftSide) {
+                            if(global_beat->GetOnBeat() == true) {
+                                charSprite->SwitchSprite(ATTACK_AIR_LEFT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
+                            } else {
+                                charSprite->SwitchSprite(ATTACK_AIR_LEFT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
+                            }
                         } else {
-                            charSprite->SwitchSprite(BEFORE_ATTACK_RIGHT_SPRITE, BEFORE_ATTACK_FRAME_COUNT, BEFORE_ATTACK_DURATION/BEFORE_ATTACK_FRAME_COUNT);
+                            if(global_beat->GetOnBeat() == true) {
+                                charSprite->SwitchSprite(ATTACK_AIR_RIGHT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
+                            } else {
+                                charSprite->SwitchSprite(ATTACK_AIR_RIGHT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
+                            }
                         }
                     }
                 }
@@ -277,10 +286,11 @@ void Character::Update(float dt) {
                     isRising = false;
                     isFalling = true;
                 }
-                if (isFalling && !peakDone && !isRising) {
+                if (isFalling && !peakDone && !isRising && !hasChanged) {
                     peakTimer.Update(dt);
                     if(peakTimer.Get() >= PEAK_DURATION) {
                         peakDone = true;
+                        hasChanged = true;
                         gravity = GRAVITY_FALLING;
                         if(isLeftSide) {
                             charSprite->SwitchSprite(FALLING_LEFT_SPRITE, FALLING_FRAME_COUNT, FALLING_FRAME_TIME);
@@ -296,6 +306,7 @@ void Character::Update(float dt) {
         velocity.y += gravity;
     }
     associated.box += velocity * dt;
+    Camera::Update(dt);
     isFalling = true;
     peakDone = false;
     wasOnGround = isOnGround;
@@ -356,44 +367,78 @@ void Character::NotifYCollisionWithMap(Rect tileBox) {
         cout<<"box.w: "<<tileBox.w<<endl;
         cout<<"box.h: "<<tileBox.h<<endl;
     }
-    if(velocity.y > 0) {
-        if((collider->box.y + collider->box.h - 25 <= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 12) && (collider->box.x < tileBox.x + tileBox.w - 12)) {
-            // isStill = true;
-            if(!wasOnGround) {
-                if(isLeftSide){
-                    charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
-                } else {
-                    charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
+    if(tileBox.z == 101 || tileBox.z == 102 || tileBox.z == 103 || tileBox.z == 148 || tileBox.z == 104 || tileBox.z == 84 ||
+     tileBox.z == 67 || tileBox.z == 68 || tileBox.z == 57 || tileBox.z == 58 || tileBox.z == 66){
+        if(velocity.y > 0) {
+            if((collider->box.y + collider->box.h - 25 <= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 12) && (collider->box.x < tileBox.x + tileBox.w - 12)) {
+                // isStill = true;
+                if(!wasOnGround) {
+                    if(isLeftSide){
+                        charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
+                    } else {
+                        charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
+                    }
+                    idleTimer.Restart();
+                    finishIdle = false;
                 }
-                idleTimer.Restart();
-                finishIdle = false;
+                isOnGround = true;
+                canAttack = true;
+                isFalling = false;
+                isRising = false;
+                peakDone = true;
+                hasChanged = false;
+                if(!wasOnGround){
+                    isStill = true;
+                }
+                gravity = GRAVITY_FALLING;
+                velocity.y = 0;
+                associated.box.y = tileBox.y - associated.box.h + 20;
             }
-            isOnGround = true;
-            canAttack = true;
-            isFalling = false;
-            isRising = false;
-            peakDone = true;
-            gravity = GRAVITY_FALLING;
-            velocity.y = 0;
-            associated.box.y = tileBox.y - associated.box.h + 20;
         }
-    }
-    if(velocity.y <= 0) {
-        if((collider->box.y >= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 12) && (collider->box.x < tileBox.x + tileBox.w - 12)) {
-            velocity.y = 0;
-            associated.box.y = tileBox.y + tileBox.h - 20;
+    } else {
+        if(velocity.y > 0) {
+            if((collider->box.y + collider->box.h - 25 <= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 12) && (collider->box.x < tileBox.x + tileBox.w - 12)) {
+                // isStill = true;
+                if(!wasOnGround) {
+                    if(isLeftSide){
+                        charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
+                    } else {
+                        charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
+                    }
+                    idleTimer.Restart();
+                    finishIdle = false;
+                }
+                isOnGround = true;
+                canAttack = true;
+                isFalling = false;
+                isRising = false;
+                peakDone = true;
+                hasChanged = false;
+                if(!wasOnGround){
+                    isStill = true;
+                }
+                gravity = GRAVITY_FALLING;
+                velocity.y = 0;
+                associated.box.y = tileBox.y - associated.box.h + 20;
+            }
         }
-    }
-    if((velocity.x >= 0) && (collider->box.x < tileBox.x)) {
-        if((collider->box.y + collider->box.h - 20 > tileBox.y) && (collider->box.y + 20 < tileBox.y + tileBox.h)) {
-            velocity.x = 0;
-            associated.box.x = tileBox.x - associated.box.w + 35;
+        if(velocity.y <= 0) {
+            if((collider->box.y >= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 12) && (collider->box.x < tileBox.x + tileBox.w - 12)) {
+                velocity.y = 0;
+                associated.box.y = tileBox.y + tileBox.h - 20;
+            }
         }
-    }
-    if((velocity.x <= 0) && (collider->box.x > tileBox.x) && (collider->box.y + 20 < tileBox.y + tileBox.h)) {
-        if((collider->box.y + collider->box.h - 20 > tileBox.y)) {
-            velocity.x = 0;
-            associated.box.x = tileBox.x + tileBox.w - 35;
+        if((velocity.x >= 0) && (collider->box.x < tileBox.x)) {
+            if((collider->box.y + collider->box.h - 20 > tileBox.y) && (collider->box.y + 20 < tileBox.y + tileBox.h)) {
+                velocity.x = 0;
+                associated.box.x = tileBox.x - associated.box.w + 35;
+            }
+        }
+        if((velocity.x <= 0) && (collider->box.x > tileBox.x) && (collider->box.y + 20 < tileBox.y + tileBox.h)) {
+            if((collider->box.y + collider->box.h - 20 > tileBox.y)) {
+                velocity.x = 0;
+                associated.box.x = tileBox.x + tileBox.w - 35;
+            }
         }
     }
 }

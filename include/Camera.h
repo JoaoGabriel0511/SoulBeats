@@ -1,6 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 #include "GameObject.h"
+#include "GameInfo.h"
 #include "Vect2.h"
 class GameObject;
 class Camera {
@@ -9,6 +10,7 @@ class Camera {
         static void Follow(GameObject * newFocus);
         static void UnFollow();
         static void Update(float dt);
+        static bool IsOnCamera(Rect box);
         static Vect2 pos;
         static Vect2 speed;
 };

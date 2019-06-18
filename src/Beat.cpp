@@ -10,12 +10,14 @@ void Beat::Start(){
 }
 
 void Beat::Update(float dt){
+    associated.box.x = 900 - Camera::pos.x;
+    associated.box.y = 30 - Camera::pos.y;
     if(onBeat){
         if(trueTimer.Get() >= BEAT_TRUE_LIMIT){
             onBeat = false;
             beatSprite->SwitchSprite(IDLE_HEART_SPRITE, STILL_FRAME_COUNT, FRAME_TIME);
             trueTimer.Restart();
-        } 
+        }
         trueTimer.Update(dt);
     } else {
         if(falseTimer.Get() >= BEAT_FALSE_LIMIT){
@@ -23,7 +25,6 @@ void Beat::Update(float dt){
             beatSprite->SwitchSprite(BEATING_HEART_SPRITE, FRAME_COUNT, FRAME_TIME);
             falseTimer.Restart();
         }
-        
         falseTimer.Update(dt);
     }
 }

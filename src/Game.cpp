@@ -11,13 +11,13 @@
 using namespace std;
 
 Game* Game::instance;
-Beat* global_beat; 
+Beat* global_beat;
 
 Game& Game::GetInstance() {
     if(instance != NULL) {
         return *instance;
     } else {
-        instance = new Game("SoulBeats", 1024, 600);
+        instance = new Game("SoulBeats", GameInfo::GetInstance().WIDTH, GameInfo::GetInstance().HEIGHT);
         return *instance;
     }
 }
@@ -132,11 +132,11 @@ void Game::Run() {
             cout<< "RENDER DE STATE FEITO" <<endl;
         }
         SDL_RenderPresent(renderer);
-        SDL_Delay(11);
         i++;
         if(debugger.lookLoopGame) {
             cout<<"LOOP "<< i << " DO JOGO FINALIZADO"<<endl;
         }
+        SDL_Delay(5);
     }
     while(!stateStack.empty()) {
         stateStack.pop();

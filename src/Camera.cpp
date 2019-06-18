@@ -13,6 +13,18 @@ void Camera::UnFollow() {
     Camera::focus = NULL;
 }
 
+bool Camera::IsOnCamera(Rect box) {
+    bool result = true;
+    //cout<<"Camera pos x: "<<pos.x<<" box x: "<<box.x<<endl;
+    if(box.x + pos.x > GameInfo::GetInstance().WIDTH + 50 || box.x + pos.x < -50) {
+        result = false;
+    }
+    if(box.y + pos.y > GameInfo::GetInstance().HEIGHT + 50 || box.y + pos.y < -50) {
+        result = false;
+    }
+    return result;
+}
+
 void Camera::Update(float dt) {
     InputManager inputManager = InputManager::GetInstance();
     if(focus == NULL) {
@@ -50,7 +62,7 @@ void Camera::Update(float dt) {
         }
         pos = pos + speed;
     } else {
-        pos.x = -1 * (focus->box.x - 512);
-        pos.y = -1 * (focus->box.y - 300);
+        pos.x = -1 * (focus->box.x - (GameInfo::GetInstance().WIDTH / 2));
+        pos.y = -1 * (focus->box.y - (GameInfo::GetInstance().HEIGHT / 2));
     }
 }

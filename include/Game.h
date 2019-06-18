@@ -2,6 +2,7 @@
 #define GAME_H
 #include <string>
 #include "GameData.h"
+#include "GameInfo.h"
 #include "State.h"
 #include <stack>
 #include "SDL2/SDL_ttf.h"

@@ -44,21 +44,21 @@ void Collider::Render() {
 	Vect2 center( box.GetCenter() );
 	SDL_Point points[5];
 
-	Vect2 point = (Vect2(box.x, box.y) - center) + center - Camera::pos;
+	Vect2 point = (Vect2(box.x, box.y) - center) + center + Camera::pos;
 	points[0].x = (int) point.x;
     points[0].y = (int) point.y;
 	points[4].x = (int) point.x;
     points[4].y = (int) point.y;
 
-	point = (Vect2(box.x + box.w, box.y) - center) + center - Camera::pos;
+	point = (Vect2(box.x + box.w, box.y) - center) + center + Camera::pos;
 	points[1].x = (int) point.x;
     points[1].y = (int) point.y;
 
-	point = (Vect2(box.x + box.w, box.y + box.h) - center) + center - Camera::pos;
+	point = (Vect2(box.x + box.w, box.y + box.h) - center) + center + Camera::pos;
 	points[2].x = (int) point.x;
     points[2].y = (int) point.y;
 
-	point = (Vect2(box.x, box.y + box.h) - center) + center - Camera::pos;
+	point = (Vect2(box.x, box.y + box.h) - center) + center + Camera::pos;
 	points[3].x = (int) point.x;
     points[3].y = (int) point.y;
 
