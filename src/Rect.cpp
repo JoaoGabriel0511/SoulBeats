@@ -10,6 +10,12 @@ bool Rect::Contains(float mouseX, float mouseY) {
     return result;
 }
 
+Rect::Rect(int x, int y, int w, int h) {
+    this->x = x;
+    this->y = y;
+    this->w = w;
+    this->h = h;
+}
 
 Rect::Rect() {
     x=0;

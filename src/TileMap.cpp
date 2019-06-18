@@ -13,18 +13,21 @@ void TileMap::Load(string file){
     cout<<"Lendo o tileMap: "<<endl;
     while(getline(myFile,line)){
         if(row == 0){
-            mapWidth = stoi(line.substr(0,2));
-            mapHeight = stoi(line.substr(3,5));
-            mapDepth = stoi(line.substr(6,7));
-            cout<<stoi(line.substr(0,2))<<" "<<stoi(line.substr(3,5))<<" "<<stoi(line.substr(6,7))<<endl;
+            mapWidth = stoi(line.substr(0,3));
+            mapHeight = stoi(line.substr(4,7));
+            mapDepth = stoi(line.substr(8,9));
+            cout<<stoi(line.substr(0,3))<<" "<<stoi(line.substr(4,7))<<" "<<stoi(line.substr(8,9))<<endl;
         }
-        if(row > 1 && row != 27) {
-            for(int i = 0; i < 75; i = i + 3) {
-                if(stoi(line.substr(i,i+2)) < 10) {
+        if(row > 1) {
+            for(int i = 0; i < 4 * mapWidth; i = i + 4) {
+                if(stoi(line.substr(i,i+3)) < 10) {
                     cout<<0;
                 }
-                cout<< stoi(line.substr(i,i+2))<< " ";
-                tileMatrix.push_back(stoi(line.substr(i,i+2))-1);
+                if(stoi(line.substr(i,i+3)) < 100) {
+                    cout<<0;
+                }
+                cout<< stoi(line.substr(i,i+3))<< " ";
+                tileMatrix.push_back(stoi(line.substr(i,i+3))-1);
             }
             cout<<endl;
         }
@@ -68,10 +71,12 @@ void TileMap::RenderLayer(int layer, int cameraX, int cameraY){
         }
         aux2 = aux2 - mapWidth * aux3;
         posx = aux2 * tileSet->GetWidth();
-        if(tileSet->RenderTile(tileMatrix[i], posx + cameraX * (1+layer), posy + cameraY *(1+layer))){
-            //cout<<"carregou tile pos("<<posx<<","<<posy<<") index: "<<tileMatrix[i]<<endl;
-        } else {
-            //cout<<"falha ao carregar tile pos("<<posx<<","<<posy<<") index: "<<tileMatrix[i]<<endl;
+        if(Camera::IsOnCamera({posx, posy, 0, 0})){
+            if(tileSet->RenderTile(tileMatrix[i], posx + cameraX * (1+layer), posy + cameraY *(1+layer))){
+                //cout<<"carregou tile pos("<<posx<<","<<posy<<") index: "<<tileMatrix[i]<<endl;
+            } else {
+                //cout<<"falha ao carregar tile pos("<<posx<<","<<posy<<") index: "<<tileMatrix[i]<<endl;
+            }
         }
     }
 }

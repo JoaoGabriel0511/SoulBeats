@@ -136,7 +136,7 @@ void Character::Update(float dt) {
             if (input.KeyPress(W_KEY)) {
                 if (isOnGround) {
                     if(global_beat->GetOnBeat() == true){
-                        velocity.y = JUMPING_SPEED - 500;
+                        velocity.y = JUMPING_SPEED_ON_BEAT;
                         jumpedOnBeat = true;
                     } else {
                         jumpedOnBeat = false;
@@ -367,48 +367,78 @@ void Character::NotifYCollisionWithMap(Rect tileBox) {
         cout<<"box.w: "<<tileBox.w<<endl;
         cout<<"box.h: "<<tileBox.h<<endl;
     }
-    if(velocity.y > 0) {
-        if((collider->box.y + collider->box.h - 25 <= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 12) && (collider->box.x < tileBox.x + tileBox.w - 12)) {
-            // isStill = true;
-            if(!wasOnGround) {
-                if(isLeftSide){
-                    charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
-                } else {
-                    charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
+    if(tileBox.z == 101 || tileBox.z == 102 || tileBox.z == 103 || tileBox.z == 148 || tileBox.z == 104 || tileBox.z == 84 ||
+     tileBox.z == 67 || tileBox.z == 68 || tileBox.z == 57 || tileBox.z == 58 || tileBox.z == 66){
+        if(velocity.y > 0) {
+            if((collider->box.y + collider->box.h - 25 <= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 12) && (collider->box.x < tileBox.x + tileBox.w - 12)) {
+                // isStill = true;
+                if(!wasOnGround) {
+                    if(isLeftSide){
+                        charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
+                    } else {
+                        charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
+                    }
+                    idleTimer.Restart();
+                    finishIdle = false;
                 }
-                idleTimer.Restart();
-                finishIdle = false;
+                isOnGround = true;
+                canAttack = true;
+                isFalling = false;
+                isRising = false;
+                peakDone = true;
+                hasChanged = false;
+                if(!wasOnGround){
+                    isStill = true;
+                }
+                gravity = GRAVITY_FALLING;
+                velocity.y = 0;
+                associated.box.y = tileBox.y - associated.box.h + 20;
             }
-            isOnGround = true;
-            canAttack = true;
-            isFalling = false;
-            isRising = false;
-            peakDone = true;
-            hasChanged = false;
-            if(!wasOnGround){
-                isStill = true;
+        }
+    } else {
+        if(velocity.y > 0) {
+            if((collider->box.y + collider->box.h - 25 <= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 12) && (collider->box.x < tileBox.x + tileBox.w - 12)) {
+                // isStill = true;
+                if(!wasOnGround) {
+                    if(isLeftSide){
+                        charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
+                    } else {
+                        charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
+                    }
+                    idleTimer.Restart();
+                    finishIdle = false;
+                }
+                isOnGround = true;
+                canAttack = true;
+                isFalling = false;
+                isRising = false;
+                peakDone = true;
+                hasChanged = false;
+                if(!wasOnGround){
+                    isStill = true;
+                }
+                gravity = GRAVITY_FALLING;
+                velocity.y = 0;
+                associated.box.y = tileBox.y - associated.box.h + 20;
             }
-            gravity = GRAVITY_FALLING;
-            velocity.y = 0;
-            associated.box.y = tileBox.y - associated.box.h + 20;
         }
-    }
-    if(velocity.y <= 0) {
-        if((collider->box.y >= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 12) && (collider->box.x < tileBox.x + tileBox.w - 12)) {
-            velocity.y = 0;
-            associated.box.y = tileBox.y + tileBox.h - 20;
+        if(velocity.y <= 0) {
+            if((collider->box.y >= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 12) && (collider->box.x < tileBox.x + tileBox.w - 12)) {
+                velocity.y = 0;
+                associated.box.y = tileBox.y + tileBox.h - 20;
+            }
         }
-    }
-    if((velocity.x >= 0) && (collider->box.x < tileBox.x)) {
-        if((collider->box.y + collider->box.h - 20 > tileBox.y) && (collider->box.y + 20 < tileBox.y + tileBox.h)) {
-            velocity.x = 0;
-            associated.box.x = tileBox.x - associated.box.w + 35;
+        if((velocity.x >= 0) && (collider->box.x < tileBox.x)) {
+            if((collider->box.y + collider->box.h - 20 > tileBox.y) && (collider->box.y + 20 < tileBox.y + tileBox.h)) {
+                velocity.x = 0;
+                associated.box.x = tileBox.x - associated.box.w + 35;
+            }
         }
-    }
-    if((velocity.x <= 0) && (collider->box.x > tileBox.x) && (collider->box.y + 20 < tileBox.y + tileBox.h)) {
-        if((collider->box.y + collider->box.h - 20 > tileBox.y)) {
-            velocity.x = 0;
-            associated.box.x = tileBox.x + tileBox.w - 35;
+        if((velocity.x <= 0) && (collider->box.x > tileBox.x) && (collider->box.y + 20 < tileBox.y + tileBox.h)) {
+            if((collider->box.y + collider->box.h - 20 > tileBox.y)) {
+                velocity.x = 0;
+                associated.box.x = tileBox.x + tileBox.w - 35;
+            }
         }
     }
 }

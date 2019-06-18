@@ -93,9 +93,15 @@ void State::UpdateArray(float dt) {
 }
 
 void State::RenderArray() {
-	for(int j = 0; j < 3; j++) {
+	int maxLayer = 0;
+	for(int i = 0; i < objectArray.size(); i++) {
+		if(objectArray[i]->box.z > maxLayer) {
+			maxLayer = objectArray[i]->box.z;
+		}
+	}
+	for(int j = 0; j <= maxLayer; j++) {
 		for(int i = 0; i < objectArray.size(); i++) {
-			if(objectArray[i]->box.z == j) {
+			if(objectArray[i]->box.z == j && (Camera::IsOnCamera(objectArray[i]->box) || (objectArray[i]->GetComponent("TileMap") != NULL) || (objectArray[i]->GetComponent("CameraFollower") != NULL))) {
 				objectArray[i]->Render();
 			}
 		}

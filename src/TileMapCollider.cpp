@@ -17,13 +17,20 @@ void TileMapCollider::Start() {
         for(int y = 0; y < height; y++) {
             for(int x = 0; x < width; x++) {
                 index = tileMap->At(x,y,z);
-                if(index == 11) {
+                if(index == 18 || index == 17 || index == 11 || index == 1 || index == 2 ||
+                index == 3 || index == 5 || index == 6 || index == 88 || index == 19 || index == 87 || index == 71
+                || index == 53 || index == 38 || index == 54 || index == 34 || index == 71 || index == 50 || index == 51
+                || index == 7 || index == 8 || index == 24 || index == 50 || index == 35 || index == 33 || index == 55
+                || index == 39 || index == 19 || index == 49 || index == 86 || index == 85 || index == 69
+                || index == 87 || index == 56 || index == 72 || index == 101 || index == 102 || index == 103 || index == 148
+                || index == 104 || index == 66 || index == 84 || index == 67 || index == 68 || index == 57 || index == 58) {
                     auxh = tileMap->GetTileSet()->GetHeight();
                     auxw = tileMap->GetTileSet()->GetWidth();
                     box.h = auxh;
                     box.w = auxw;
                     box.x = auxw * x;
                     box.y = auxh * y;
+                    box.z = index;
                     boxes.emplace_back(box);
                 }
             }
@@ -45,29 +52,31 @@ void TileMapCollider::Update(float dt) {
 void TileMapCollider::Render() {
     #ifdef DEBUG
     for(int i = 0; i < boxes.size(); i++) {
-        Vect2 center( boxes[i].GetCenter() );
-        SDL_Point points[5];
+        if(Camera::IsOnCamera(boxes[i])) {
+            Vect2 center( boxes[i].GetCenter() );
+            SDL_Point points[5];
 
-        Vect2 point = (Vect2(boxes[i].x, boxes[i].y) - center) + center - Camera::pos;
-        points[0].x = (int) point.x;
-        points[0].y = (int) point.y;
-        points[4].x = (int) point.x;
-        points[4].y = (int) point.y;
+            Vect2 point = (Vect2(boxes[i].x, boxes[i].y) - center) + center + Camera::pos;
+            points[0].x = (int) point.x;
+            points[0].y = (int) point.y;
+            points[4].x = (int) point.x;
+            points[4].y = (int) point.y;
 
-        point = (Vect2(boxes[i].x + boxes[i].w, boxes[i].y) - center) + center - Camera::pos;
-        points[1].x = (int) point.x;
-        points[1].y = (int) point.y;
+            point = (Vect2(boxes[i].x + boxes[i].w, boxes[i].y) - center) + center + Camera::pos;
+            points[1].x = (int) point.x;
+            points[1].y = (int) point.y;
 
-        point = (Vect2(boxes[i].x + boxes[i].w, boxes[i].y + boxes[i].h) - center) + center - Camera::pos;
-        points[2].x = (int) point.x;
-        points[2].y = (int) point.y;
+            point = (Vect2(boxes[i].x + boxes[i].w, boxes[i].y + boxes[i].h) - center) + center + Camera::pos;
+            points[2].x = (int) point.x;
+            points[2].y = (int) point.y;
 
-        point = (Vect2(boxes[i].x, boxes[i].y + boxes[i].h) - center) + center - Camera::pos;
-        points[3].x = (int) point.x;
-        points[3].y = (int) point.y;
+            point = (Vect2(boxes[i].x, boxes[i].y + boxes[i].h) - center) + center + Camera::pos;
+            points[3].x = (int) point.x;
+            points[3].y = (int) point.y;
 
-        SDL_SetRenderDrawColor(Game::GetInstance().GetRenderer(), 255, 0, 0, SDL_ALPHA_OPAQUE);
-        SDL_RenderDrawLines(Game::GetInstance().GetRenderer(), points, 5);
+            SDL_SetRenderDrawColor(Game::GetInstance().GetRenderer(), 255, 0, 0, SDL_ALPHA_OPAQUE);
+            SDL_RenderDrawLines(Game::GetInstance().GetRenderer(), points, 5);
+        }
     }
     #endif // DEBUG
 }

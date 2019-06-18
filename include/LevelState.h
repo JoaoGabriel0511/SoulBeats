@@ -11,7 +11,8 @@
 
 class LevelState : public State {
     GameObject *bg;
-    GameObject *tileGO;
+    GameObject *tileTerrForeGO;
+    GameObject *tileTerrBackGO;
     GameObject* beat;
     public:
         LevelState();
