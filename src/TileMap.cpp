@@ -2,6 +2,21 @@
 
 TileMap::TileMap(GameObject& associated, string file, TileSet* tileSet) : Component(associated) {
     this->tileSet = tileSet;
+    this->scale = 1;
+    this->offsetX = 0;
+    this->offsetY = 0;
+    this->paralaxX = 1;
+    this->paralaxY = 1;
+    Load(file);
+}
+
+TileMap::TileMap(GameObject& associated, string file, TileSet* tileSet, float scale, int offsetX, int offsetY, float paralaxX, float paralaxY) : Component(associated) {
+    this->tileSet = tileSet;
+    this->scale = scale;
+    this->offsetX = offsetX;
+    this->offsetY = offsetY;
+    this->paralaxX = paralaxX;
+    this->paralaxY = paralaxY;
     Load(file);
 }
 
@@ -71,8 +86,8 @@ void TileMap::RenderLayer(int layer, int cameraX, int cameraY){
         }
         aux2 = aux2 - mapWidth * aux3;
         posx = aux2 * tileSet->GetWidth();
-        if(Camera::IsOnCamera({posx, posy, 0, 0})){
-            if(tileSet->RenderTile(tileMatrix[i], posx + cameraX * (1+layer), posy + cameraY *(1+layer))){
+        if(Camera::IsOnCamera({posx + offsetX, posy + offsetY, tileSet->GetWidth() * scale, tileSet->GetHeight() * scale}, paralaxX, paralaxY)){
+            if(tileSet->RenderTile(tileMatrix[i], posx + cameraX * paralaxX, posy + cameraY * paralaxY, scale, offsetX, offsetY)){
                 //cout<<"carregou tile pos("<<posx<<","<<posy<<") index: "<<tileMatrix[i]<<endl;
             } else {
                 //cout<<"falha ao carregar tile pos("<<posx<<","<<posy<<") index: "<<tileMatrix[i]<<endl;

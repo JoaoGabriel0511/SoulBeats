@@ -11,7 +11,13 @@ class TileMap : public Component {
     int mapWidth;
     int mapHeight;
     int mapDepth;
+    int offsetX;
+    int offsetY;
+    float paralaxX;
+    float paralaxY;
+    float scale;
     public:
+        TileMap(GameObject& associated, string file, TileSet* tileSet, float scale, int offsetX, int offsetY, float paralaxX, float paralaxY);
         TileMap(GameObject& associated, string file, TileSet* tileSet);
         void Load(string file);
         void SetTileSet(TileSet* tileSet);
