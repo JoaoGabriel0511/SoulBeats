@@ -18,7 +18,7 @@ TileSet::TileSet(int tileWidth, int tileHeight, string file) {
     }
 }
 
-bool TileSet::RenderTile(unsigned index, float x, float y) {
+bool TileSet::RenderTile(unsigned index, float x, float y, float scale, int offsetX, int offsetY) {
     int tiles = rows * columns;
     int column = 0;
     int row = 0;
@@ -31,10 +31,10 @@ bool TileSet::RenderTile(unsigned index, float x, float y) {
                     row++;
                 }
             }
-            column = column * tileWidth;
-            row = row * tileHeight;
+            column = column * tileWidth * scale;
+            row = row * tileHeight * scale;
             tileSet->SetClip(column, row, tileWidth, tileHeight);
-            tileSet->Render(x,y,tileWidth,tileWidth);
+            tileSet->Render(x + offsetX,y + offsetY,tileWidth * scale,tileHeight * scale);
             return true;
         } else {
             return false;

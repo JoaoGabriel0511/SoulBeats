@@ -11,6 +11,7 @@ class Camera {
         static void UnFollow();
         static void Update(float dt);
         static bool IsOnCamera(Rect box);
+        static bool IsOnCamera(Rect box, float paralaxX, float paralaxY);
         static Vect2 pos;
         static Vect2 speed;
 };

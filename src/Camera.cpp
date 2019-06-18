@@ -13,13 +13,23 @@ void Camera::UnFollow() {
     Camera::focus = NULL;
 }
 
-bool Camera::IsOnCamera(Rect box) {
+bool Camera::IsOnCamera(Rect box, float paralaxX, float paralaxY) {
     bool result = true;
-    //cout<<"Camera pos x: "<<pos.x<<" box x: "<<box.x<<endl;
-    if(box.x + pos.x > GameInfo::GetInstance().WIDTH + 50 || box.x + pos.x < -50) {
+    if(box.x + paralaxX * pos.x > GameInfo::GetInstance().WIDTH + 50 || box.x + box.w + pos.x * paralaxX < -50) {
         result = false;
     }
-    if(box.y + pos.y > GameInfo::GetInstance().HEIGHT + 50 || box.y + pos.y < -50) {
+    if(box.y + paralaxY * pos.y > GameInfo::GetInstance().HEIGHT + 50 || box.y + box.h + pos.y * paralaxY < -50) {
+        result = false;
+    }
+    return result;
+}
+
+bool Camera::IsOnCamera(Rect box) {
+    bool result = true;
+    if(box.x + pos.x > GameInfo::GetInstance().WIDTH + 50 || box.x + box.w + pos.x < -50) {
+        result = false;
+    }
+    if(box.y + pos.y > GameInfo::GetInstance().HEIGHT + 50 || box.y + box.h + pos.y < -50) {
         result = false;
     }
     return result;

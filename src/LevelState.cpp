@@ -6,23 +6,69 @@ LevelState::LevelState() : State() {
 
 void LevelState::LoadAssets() {
     //Adicionando Background
+
     CameraFollower *cameraFollower;
     bg = new GameObject();
     GameObject* bellEnemyGO;
     BellEnemy* bellEnemy;
     Sprite *levelSprite;
     cameraFollower = new CameraFollower(*bg);
-    levelSprite = new Sprite(*bg, "assets/img/background/Sprite-0001.png");
+    levelSprite = new Sprite(*bg, "assets/img/background/Fundo.png");
     bg->box.h = Game::GetInstance().GetHeight();
     bg->box.w = Game::GetInstance().GetWidth();
     objectArray.emplace_back(bg);
+
+
+    //Adicionando Montanha
+
+    TileSet *tileSetMontain;
+    TileMap *tileMapMontain;
+    GameObject *montain = new GameObject();
+    tileSetMontain = new TileSet(317,288,"assets/img/background/Montanhas.png");
+    tileMapMontain = new TileMap(*montain, "assets/map/MapaMontanha.txt", tileSetMontain, 3, -1024, 150, 1, 1);
+    objectArray.emplace_back(montain);
+
+    //Montanha Adicionada
+
+    //Adicionando Floresta 2
+
+    TileSet *tileSetFlorest2;
+    TileMap *tileMapFlorest2;
+    GameObject *florest2 = new GameObject();
+    tileSetFlorest2 = new TileSet(512,144,"assets/img/background/Pines2.png");
+    tileMapFlorest2 = new TileMap(*florest2, "assets/map/MapaFloresta2.txt", tileSetFlorest2, 1.5, -1024, 50, 1.1, 1);
+    objectArray.emplace_back(florest2);
+
+    //Floresta 2 Adicionada
+
+    //Adicionando Floresta 1.5
+
+    TileSet *tileSetFlorest1_5;
+    TileMap *tileMapFlorest1_5;
+    GameObject *florest1_5 = new GameObject();
+    tileSetFlorest1_5 = new TileSet(512,144,"assets/img/background/Pines1.5.png");
+    tileMapFlorest1_5 = new TileMap(*florest1_5, "assets/map/MapaFloresta1.5.txt", tileSetFlorest1_5, 2, -1024, 50, 1.2, 1);
+    objectArray.emplace_back(florest1_5);
+
+    //Floresta 1.5 Adicionada
+
+    //Adicionando Floresta 1
+
+    TileSet *tileSetFlorest1;
+    TileMap *tileMapFlorest1;
+    GameObject *florest1 = new GameObject();
+    tileSetFlorest1 = new TileSet(512,144,"assets/img/background/Pines1.png");
+    tileMapFlorest1 = new TileMap(*florest1, "assets/map/MapaFloresta1.txt", tileSetFlorest1, 3, -1024, 50, 1.3, 1);
+    objectArray.emplace_back(florest1);
+
+    //Floresta 1 Adicionada
+
     //// Beat Game Object
     beat = new GameObject();
     beat->box.x = 900;
     beat->box.y = 30;
     beat->box.z = 5;
     Beat* beat_component = new Beat(*beat);
-    // new CameraFollower(*beat);
     global_beat = beat_component;
     objectArray.emplace_back(beat);
 
@@ -102,7 +148,7 @@ void LevelState::LoadAssets() {
     tileTerrBackerGO->box.z = 1;
     tileMapTerrBacker = new TileMap(*tileTerrBackerGO, "assets/map/MAPA TESTE._Terreno Backgrounder.txt", tileSet);
     objectArray.emplace_back(tileTerrBackerGO);
-    
+
     //TileMap Decoracao BackGround Adicionada
 
 }
