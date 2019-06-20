@@ -1,67 +1,68 @@
 bin/LevelState.o: src/LevelState.cpp src/../include/LevelState.h \
- src/../include/State.h src/../include/Sprite.h \
- src/../include/Component.h src/../include/GameObject.h \
- src/../include/Rect.h src/../include/Vect2.h \
- src/../include/InputManager.h src/../include/Debugger.h \
- src/../include/Camera.h src/../include/GameInfo.h \
- src/../include/Resources.h src/../include/Game.h \
- src/../include/GameData.h src/../include/Timer.h src/../include/Music.h \
- src/../include/Sound.h src/../include/Collision.h \
- src/../include/Collider.h src/../include/CameraFollower.h \
- src/../include/Beat.h src/../include/Character.h src/../include/Attack.h \
- src/../include/BellEnemy.h src/../include/TileMap.h \
- src/../include/TileSet.h src/../include/TileMapCollider.h
+  include/State.h include/Sprite.h include/Component.h \
+  include/GameObject.h include/Rect.h include/Vect2.h \
+  include/InputManager.h include/Debugger.h include/Camera.h \
+  include/GameInfo.h include/Resources.h include/Game.h \
+  include/GameData.h include/Timer.h include/Music.h include/Sound.h \
+  include/Collision.h include/Collider.h include/CameraFollower.h \
+  include/Beat.h include/Character.h include/Attack.h \
+  include/BellEnemy.h include/HarpEnemy.h include/AccordionEnemy.h \
+  include/TileMap.h include/TileSet.h include/TileMapCollider.h
 
 src/../include/LevelState.h:
 
-src/../include/State.h:
+include/State.h:
 
-src/../include/Sprite.h:
+include/Sprite.h:
 
-src/../include/Component.h:
+include/Component.h:
 
-src/../include/GameObject.h:
+include/GameObject.h:
 
-src/../include/Rect.h:
+include/Rect.h:
 
-src/../include/Vect2.h:
+include/Vect2.h:
 
-src/../include/InputManager.h:
+include/InputManager.h:
 
-src/../include/Debugger.h:
+include/Debugger.h:
 
-src/../include/Camera.h:
+include/Camera.h:
 
-src/../include/GameInfo.h:
+include/GameInfo.h:
 
-src/../include/Resources.h:
+include/Resources.h:
 
-src/../include/Game.h:
+include/Game.h:
 
-src/../include/GameData.h:
+include/GameData.h:
 
-src/../include/Timer.h:
+include/Timer.h:
 
-src/../include/Music.h:
+include/Music.h:
 
-src/../include/Sound.h:
+include/Sound.h:
 
-src/../include/Collision.h:
+include/Collision.h:
 
-src/../include/Collider.h:
+include/Collider.h:
 
-src/../include/CameraFollower.h:
+include/CameraFollower.h:
 
-src/../include/Beat.h:
+include/Beat.h:
 
-src/../include/Character.h:
+include/Character.h:
 
-src/../include/Attack.h:
+include/Attack.h:
 
-src/../include/BellEnemy.h:
+include/BellEnemy.h:
 
-src/../include/TileMap.h:
+include/HarpEnemy.h:
 
-src/../include/TileSet.h:
+include/AccordionEnemy.h:
 
-src/../include/TileMapCollider.h:
+include/TileMap.h:
+
+include/TileSet.h:
+
+include/TileMapCollider.h:
