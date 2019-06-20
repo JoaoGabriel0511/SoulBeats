@@ -25,7 +25,7 @@ void LevelState::LoadAssets() {
     TileMap *tileMapMontain;
     GameObject *montain = new GameObject();
     tileSetMontain = new TileSet(317,288,"assets/img/background/Montanhas.png");
-    tileMapMontain = new TileMap(*montain, "assets/map/MapaMontanha.txt", tileSetMontain, 3, -1024, 150, 1, 1);
+    tileMapMontain = new TileMap(*montain, "assets/map/MapaMontanha.txt", tileSetMontain, 5, -1024, -600, 1, 1);
     objectArray.emplace_back(montain);
 
     //Montanha Adicionada
@@ -36,7 +36,7 @@ void LevelState::LoadAssets() {
     TileMap *tileMapFlorest2;
     GameObject *florest2 = new GameObject();
     tileSetFlorest2 = new TileSet(512,144,"assets/img/background/Pines2.png");
-    tileMapFlorest2 = new TileMap(*florest2, "assets/map/MapaFloresta2.txt", tileSetFlorest2, 1.5, -1024, 50, 1.1, 1);
+    tileMapFlorest2 = new TileMap(*florest2, "assets/map/MapaFloresta2.txt", tileSetFlorest2, 2, -1024, 50, 1.1, 1);
     objectArray.emplace_back(florest2);
 
     //Floresta 2 Adicionada
@@ -47,7 +47,7 @@ void LevelState::LoadAssets() {
     TileMap *tileMapFlorest1_5;
     GameObject *florest1_5 = new GameObject();
     tileSetFlorest1_5 = new TileSet(512,144,"assets/img/background/Pines1.5.png");
-    tileMapFlorest1_5 = new TileMap(*florest1_5, "assets/map/MapaFloresta1.5.txt", tileSetFlorest1_5, 2, -1024, 50, 1.2, 1);
+    tileMapFlorest1_5 = new TileMap(*florest1_5, "assets/map/MapaFloresta1.5.txt", tileSetFlorest1_5, 3, -1024, -120, 1.2, 1);
     objectArray.emplace_back(florest1_5);
 
     //Floresta 1.5 Adicionada
@@ -58,7 +58,7 @@ void LevelState::LoadAssets() {
     TileMap *tileMapFlorest1;
     GameObject *florest1 = new GameObject();
     tileSetFlorest1 = new TileSet(512,144,"assets/img/background/Pines1.png");
-    tileMapFlorest1 = new TileMap(*florest1, "assets/map/MapaFloresta1.txt", tileSetFlorest1, 3, -1024, 50, 1.3, 1);
+    tileMapFlorest1 = new TileMap(*florest1, "assets/map/MapaFloresta1.txt", tileSetFlorest1, 4, -1024, -50, 1.3, 1);
     objectArray.emplace_back(florest1);
 
     //Floresta 1 Adicionada
@@ -76,8 +76,8 @@ void LevelState::LoadAssets() {
 
     GameObject * characterGO;
     characterGO = new GameObject();
-    characterGO->box.x = 200;
-    characterGO->box.y = 383;
+    characterGO->box.x = 150;
+    characterGO->box.y = 3100;
     characterGO->box.z = 4;
     new Character(*characterGO);
     Camera::Follow(characterGO);
@@ -89,8 +89,8 @@ void LevelState::LoadAssets() {
 
     bellEnemyGO = new GameObject();
     bellEnemy = new BellEnemy(*bellEnemyGO,10,10,characterGO);
-    bellEnemyGO->box.x = 600;
-    bellEnemyGO->box.y = 420;
+    bellEnemyGO->box.x = 1700;
+    bellEnemyGO->box.y = 2630;
     bellEnemyGO->box.z = 4;
     objectArray.emplace_back(bellEnemyGO);
 
@@ -104,7 +104,7 @@ void LevelState::LoadAssets() {
     tileTerrForeGO = new GameObject();
     tileTerrForeGO->box.z = 3;
     tileSet = new TileSet(32, 32, "assets/img/tileSet/TilesetTerrain.png");
-    tileMapTerrFore = new TileMap(*tileTerrForeGO, "assets/map/MAPA TESTE._Terreno Foreground.txt", tileSet);
+    tileMapTerrFore = new TileMap(*tileTerrForeGO, "assets/map/MAPA TESTE._Terreno Foreground.txt", tileSet, 2, 0, 0, 1, 1);
     tileMapTerrForeCollider = new TileMapCollider(*tileTerrForeGO, tileMapTerrFore);
     objectArray.emplace_back(tileTerrForeGO);
 
@@ -115,7 +115,7 @@ void LevelState::LoadAssets() {
     TileMap *tileMapDecoFore;
     GameObject *tileDecoForeGO = new GameObject();
     tileDecoForeGO->box.z = 4;
-    tileMapDecoFore = new TileMap(*tileDecoForeGO, "assets/map/MAPA TESTE._Decoração Foreground.txt", tileSet);
+    tileMapDecoFore = new TileMap(*tileDecoForeGO, "assets/map/MAPA TESTE._Decoração Foreground.txt", tileSet, 2, 0, 0, 1, 1);
     objectArray.emplace_back(tileDecoForeGO);
 
     //TileMap Decoracao ForeGround Adicionada
@@ -125,7 +125,7 @@ void LevelState::LoadAssets() {
     TileMap *tileMapDecoBack;
     GameObject *tileDecoBackGO = new GameObject();
     tileDecoBackGO->box.z = 4;
-    tileMapDecoBack = new TileMap(*tileDecoBackGO, "assets/map/MAPA TESTE._Decoração Background.txt", tileSet);
+    tileMapDecoBack = new TileMap(*tileDecoBackGO, "assets/map/MAPA TESTE._Decoração Background.txt", tileSet, 2, 0, 0, 1, 1);
     objectArray.emplace_back(tileDecoBackGO);
 
     //TileMap Decoracao BackGround Adicionada
@@ -135,7 +135,7 @@ void LevelState::LoadAssets() {
     TileMap *tileMapTerrBack;
     tileTerrBackGO = new GameObject();
     tileTerrBackGO->box.z = 2;
-    tileMapTerrBack = new TileMap(*tileTerrBackGO, "assets/map/MAPA TESTE._Terreno Background.txt", tileSet);
+    tileMapTerrBack = new TileMap(*tileTerrBackGO, "assets/map/MAPA TESTE._Terreno Background.txt", tileSet, 2, 0, 0, 1, 1);
     TileMapCollider *tileMapTerrBackCollider = new TileMapCollider(*tileTerrBackGO, tileMapTerrBack);
     objectArray.emplace_back(tileTerrBackGO);
 
@@ -146,7 +146,7 @@ void LevelState::LoadAssets() {
     TileMap *tileMapTerrBacker;
     GameObject *tileTerrBackerGO = new GameObject();
     tileTerrBackerGO->box.z = 1;
-    tileMapTerrBacker = new TileMap(*tileTerrBackerGO, "assets/map/MAPA TESTE._Terreno Backgrounder.txt", tileSet);
+    tileMapTerrBacker = new TileMap(*tileTerrBackerGO, "assets/map/MAPA TESTE._Terreno Backgrounder.txt", tileSet, 2, 0, 0, 1, 1);
     objectArray.emplace_back(tileTerrBackerGO);
 
     //TileMap Decoracao BackGround Adicionada

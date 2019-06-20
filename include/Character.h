@@ -33,11 +33,11 @@
 #define BEFORE_RISE_DURATION_ON_BEAT 0.5
 #define BEFORE_RISE_DURATION 0.2
 #define PEAK_DURATION 0.4
-#define WALKING_SPEED 300
-#define ON_BEAT_ATTACKING_SPEED 800
-#define ATTACKING_SPEED 600
-#define JUMPING_SPEED -800
-#define JUMPING_SPEED_ON_BEAT -1000
+#define WALKING_SPEED 400
+#define ON_BEAT_ATTACKING_SPEED 1000
+#define ATTACKING_SPEED 800
+#define JUMPING_SPEED -930
+#define JUMPING_SPEED_ON_BEAT -1100
 #define GRAVITY_RISING 25
 #define GRAVITY_PEAK 8
 #define GRAVITY_FALLING 25
@@ -63,7 +63,7 @@
 #define ATTACK_AIR_LEFT_SPRITE "assets/img/char/SoulBeatsCharAttackAirL.png"
 #define ATTACK_AIR_LEFT_SPRITE_ON_BEAT "assets/img/char/SoulBeatsCharAttackAirLBEAT.png"
 #define ATTACK_FRAME_COUNT 5
-#define ATTACK_DURATION 0.6
+#define ATTACK_DURATION 0.3
 #define LITSEN_TO_MUSIC_RIGHT_SPRITE "assets/img/char/SoulBeatsCharBang.png"
 #define LITSEN_TO_MUSIC_LEFT_SPRITE "assets/img/char/SoulBeatsCharBangL.png"
 #define LITSEN_TO_MUSIC_FRAME_COUNT 8
@@ -107,6 +107,10 @@ class Character : public Component {
   GameObject *attackGO;
   bool isLeftSide;
   bool wasLeftSide;
+  void LandOnground();
+  void SolidGroundCollision(Rect tileBox);
+  void SolidSlopeCollision(Rect tileBox);
+  void LightGroundCollision(Rect tileBox);
   public:
     Character(GameObject &associated);
     void Update(float dt);

@@ -24,6 +24,7 @@ class Sprite : public Component {
         Sprite(GameObject &associated, string file);
         Sprite(GameObject &associated);
         void SetFrame(int frame);
+        void SetScale(Vect2 scale);
         void SetFrameCount(int frameCount);
         void SetFrameTime(float frameTime);
         int GetCurrentFrame();

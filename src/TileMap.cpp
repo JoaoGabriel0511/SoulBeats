@@ -82,10 +82,10 @@ void TileMap::RenderLayer(int layer, int cameraX, int cameraY){
         aux2 = i - aux;
         if( aux2 >= mapWidth * (aux3+ 1)) {
             aux3++;
-            posy = posy + tileSet->GetHeight();
+            posy = posy + tileSet->GetHeight() * scale;
         }
         aux2 = aux2 - mapWidth * aux3;
-        posx = aux2 * tileSet->GetWidth();
+        posx = aux2 * tileSet->GetWidth() * scale;
         if(Camera::IsOnCamera({posx + offsetX, posy + offsetY, tileSet->GetWidth() * scale, tileSet->GetHeight() * scale}, paralaxX, paralaxY)){
             if(tileSet->RenderTile(tileMatrix[i], posx + cameraX * paralaxX, posy + cameraY * paralaxY, scale, offsetX, offsetY)){
                 //cout<<"carregou tile pos("<<posx<<","<<posy<<") index: "<<tileMatrix[i]<<endl;
@@ -106,6 +106,10 @@ int TileMap::GetHeight(){
 
 int TileMap::GetDepth(){
     return mapDepth;
+}
+
+float TileMap::GetScale() {
+    return scale;
 }
 
 bool TileMap::Is(string type) {

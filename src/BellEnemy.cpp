@@ -3,7 +3,7 @@
 BellEnemy::BellEnemy(GameObject& associated, int movingDistance, int movingSpeed, GameObject * character) : Component(associated) {
     this->character = character;
     Collider* collider;
-    collider = new Collider(associated, {1,1}, {-70,0});
+    collider = new Collider(associated, {2,2}, {-140,0});
     Start();
 }
 
@@ -20,6 +20,7 @@ void BellEnemy::Start() {
     idleTimer.Restart();
     side = RIGHT;
     bellEnemySprite = new Sprite(associated,ENEMY_IDLE_SPRITE,ENEMY_IDLE_FRAME_COUNT,ENEMY_IDLE_DURATION/ENEMY_IDLE_FRAME_COUNT);
+    bellEnemySprite->SetScale({2,2});
 }
 
 void BellEnemy::Update(float dt) {

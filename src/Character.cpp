@@ -1,15 +1,17 @@
 #include "../include/Character.h"
 #include "Game.h"
 #include "../include/LevelState.h"
+#define PI 3.14159265
 
 Character::Character(GameObject &associated) : Component(associated){
     Collider *collider;
-    collider = new Collider(associated, {1, 1}, {-70, -30});
+    collider = new Collider(associated, {2, 2}, {-140, -60});
     Start();
 }
 
 void Character::Start() {
     charSprite = new Sprite(associated, IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
+    charSprite->SetScale({2,2});
     isStill = true;
     isRising = false;
     isFalling = false;
@@ -177,11 +179,11 @@ void Character::Update(float dt) {
                         velocity.x = isLeft * ATTACKING_SPEED;
                     }
                     attackGO = new GameObject();
-                    attackGO->box.z = 1;
+                    attackGO->box.z = 4;
                     if(isLeftSide) {
-                        Attack *attack = new Attack(*attackGO, {1, 1}, {0, 0}, &associated, 50, 25, -3, 38);
+                        Attack *attack = new Attack(*attackGO, {2, 2}, {0, 0}, &associated, 50, 25, -6, 76);
                     } else {
-                        Attack *attack = new Attack(*attackGO, {1, 1}, {0, 0}, &associated, 50, 25, 60, 38);
+                        Attack *attack = new Attack(*attackGO, {2, 2}, {0, 0}, &associated, 50, 25, 126, 76);
                     }
                     Game::GetInstance().GetCurrentState().AddObject(attackGO);
                     attackTimer.Restart();
@@ -355,8 +357,8 @@ void Character::NotifyCollision(GameObject &other) {
 }
 
 void Character::NotifYCollisionWithMap(Rect tileBox) {
-    Collider *collider = ((Collider*) associated.GetComponent("Collider").get());
     Rect pastPosition;
+    Collider *collider = ((Collider*) associated.GetComponent("Collider").get());
     if(Debugger::GetInstance().lookCharCollision) {
         cout<<"collider->box.x: "<<collider->box.x<<endl;
         cout<<"collider->box.y: "<<collider->box.y<<endl;
@@ -367,78 +369,89 @@ void Character::NotifYCollisionWithMap(Rect tileBox) {
         cout<<"box.w: "<<tileBox.w<<endl;
         cout<<"box.h: "<<tileBox.h<<endl;
     }
-    if(tileBox.z == 101 || tileBox.z == 102 || tileBox.z == 103 || tileBox.z == 148 || tileBox.z == 104 || tileBox.z == 84 ||
-     tileBox.z == 67 || tileBox.z == 68 || tileBox.z == 57 || tileBox.z == 58 || tileBox.z == 66){
-        if(velocity.y > 0) {
-            if((collider->box.y + collider->box.h - 25 <= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 12) && (collider->box.x < tileBox.x + tileBox.w - 12)) {
-                // isStill = true;
-                if(!wasOnGround) {
-                    if(isLeftSide){
-                        charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
-                    } else {
-                        charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
-                    }
-                    idleTimer.Restart();
-                    finishIdle = false;
-                }
-                isOnGround = true;
-                canAttack = true;
-                isFalling = false;
-                isRising = false;
-                peakDone = true;
-                hasChanged = false;
-                if(!wasOnGround){
-                    isStill = true;
-                }
-                gravity = GRAVITY_FALLING;
-                velocity.y = 0;
-                associated.box.y = tileBox.y - associated.box.h + 20;
-            }
-        }
+    if(tileBox.z == 101 || tileBox.z == 102 || tileBox.z == 103 || tileBox.z == 148 || tileBox.z == 104 ||
+       tileBox.z == 67 || tileBox.z == 68 || tileBox.z == 57 || tileBox.z == 58 || tileBox.z == 66 || tileBox.z == 84){
+       LightGroundCollision(tileBox);
     } else {
-        if(velocity.y > 0) {
-            if((collider->box.y + collider->box.h - 25 <= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 12) && (collider->box.x < tileBox.x + tileBox.w - 12)) {
-                // isStill = true;
-                if(!wasOnGround) {
-                    if(isLeftSide){
-                        charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
-                    } else {
-                        charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
-                    }
-                    idleTimer.Restart();
-                    finishIdle = false;
-                }
-                isOnGround = true;
-                canAttack = true;
-                isFalling = false;
-                isRising = false;
-                peakDone = true;
-                hasChanged = false;
-                if(!wasOnGround){
-                    isStill = true;
-                }
-                gravity = GRAVITY_FALLING;
-                velocity.y = 0;
-                associated.box.y = tileBox.y - associated.box.h + 20;
-            }
+        //if(tileBox.z == 7) {
+        //    SolidSlopeCollision(tileBox);
+        //} else {
+            SolidGroundCollision(tileBox);
+        //}
+    }
+}
+
+void Character::SolidGroundCollision(Rect tileBox) {
+    Collider *collider = ((Collider*) associated.GetComponent("Collider").get());
+    if(velocity.y > 0) {
+        if((collider->box.y + collider->box.h - 50 <= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 24) && (collider->box.x < tileBox.x + tileBox.w - 24)) {
+            LandOnground();
+            associated.box.y = tileBox.y - associated.box.h - 45;
         }
-        if(velocity.y <= 0) {
-            if((collider->box.y >= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 12) && (collider->box.x < tileBox.x + tileBox.w - 12)) {
-                velocity.y = 0;
-                associated.box.y = tileBox.y + tileBox.h - 20;
-            }
+    }
+    if(velocity.y <= 0) {
+        if((collider->box.y >= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 24) && (collider->box.x < tileBox.x + tileBox.w - 24)) {
+            velocity.y = 0;
+            associated.box.y = tileBox.y + tileBox.h - 45;
         }
-        if((velocity.x >= 0) && (collider->box.x < tileBox.x)) {
-            if((collider->box.y + collider->box.h - 20 > tileBox.y) && (collider->box.y + 20 < tileBox.y + tileBox.h)) {
-                velocity.x = 0;
-                associated.box.x = tileBox.x - associated.box.w + 35;
-            }
+    }
+    if((velocity.x >= 0) && (collider->box.x < tileBox.x)) {
+        if((collider->box.y + collider->box.h - 50 > tileBox.y) && (collider->box.y + 50 < tileBox.y + tileBox.h)) {
+            velocity.x = 0;
+            associated.box.x = tileBox.x - associated.box.w - 35;
         }
-        if((velocity.x <= 0) && (collider->box.x > tileBox.x) && (collider->box.y + 20 < tileBox.y + tileBox.h)) {
-            if((collider->box.y + collider->box.h - 20 > tileBox.y)) {
-                velocity.x = 0;
-                associated.box.x = tileBox.x + tileBox.w - 35;
-            }
+    }
+    if((velocity.x <= 0) && (collider->box.x > tileBox.x) && (collider->box.y + 40 < tileBox.y + tileBox.h)) {
+        if((collider->box.y + collider->box.h - 40 > tileBox.y)) {
+            velocity.x = 0;
+            associated.box.x = tileBox.x + tileBox.w - 75;
         }
+    }
+}
+
+void Character::LightGroundCollision(Rect tileBox) {
+    Collider *collider = ((Collider*) associated.GetComponent("Collider").get());
+    if(velocity.y > 0) {
+        if((collider->box.y + collider->box.h - 25 <= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 12) && (collider->box.x < tileBox.x + tileBox.w - 12)) {
+            LandOnground();
+            associated.box.y = tileBox.y - associated.box.h - 45;
+        }
+    }
+}
+
+void Character::LandOnground() {
+    if(!wasOnGround) {
+        if(isLeftSide){
+            charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
+        } else {
+            charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
+        }
+        idleTimer.Restart();
+        finishIdle = false;
+    }
+    isOnGround = true;
+    canAttack = true;
+    isFalling = false;
+    isRising = false;
+    peakDone = true;
+    hasChanged = false;
+    if(!wasOnGround){
+        isStill = true;
+    }
+    gravity = GRAVITY_FALLING;
+    velocity.y = 0;
+}
+
+void Character::SolidSlopeCollision(Rect tileBox) {
+    float posX;
+    float posY;
+    Collider *collider = ((Collider*) associated.GetComponent("Collider").get());
+    if(velocity.y > 0) {
+        posY = tileBox.y + (tileBox.h / (tileBox.x / collider->box.x));
+        if((collider->box.y + collider->box.h - 25 <= posY)) {
+            velocity.y = 0;
+            associated.box.y = posY - associated.box.h;
+        }
+        LandOnground();
     }
 }

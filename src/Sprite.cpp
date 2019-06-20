@@ -210,3 +210,7 @@ void Sprite::SwitchSprite(string file, int frameCount, float frameTime) {
 int Sprite::GetCurrentFrame() {
     return currentFrame;
 }
+
+void Sprite::SetScale(Vect2 scale) {
+    this->scale = scale;
+}

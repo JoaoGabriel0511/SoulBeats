@@ -31,8 +31,8 @@ bool TileSet::RenderTile(unsigned index, float x, float y, float scale, int offs
                     row++;
                 }
             }
-            column = column * tileWidth * scale;
-            row = row * tileHeight * scale;
+            column = column * tileWidth;
+            row = row * tileHeight;
             tileSet->SetClip(column, row, tileWidth, tileHeight);
             tileSet->Render(x + offsetX,y + offsetY,tileWidth * scale,tileHeight * scale);
             return true;
