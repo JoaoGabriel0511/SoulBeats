@@ -69,6 +69,7 @@
 #define LITSEN_TO_MUSIC_FRAME_COUNT 8
 #define LISTEN_TO_MUSIC_FRAME_TIME 0.08333
 #define IDLE_DURATION 10
+#define HIT_RECOVER_TIME 0.2
 #include "Component.h"
 #include "Sprite.h"
 #include "Attack.h"
@@ -94,6 +95,8 @@ class Character : public Component {
   bool hasChanged;
   bool canAttack;
   bool jumpedOnBeat;
+  bool recoveringFromHitKnockback;
+  
   Timer beforeRiseTimer;
   Timer recoverFromHitTimer;
   Timer peakTimer;
@@ -103,6 +106,8 @@ class Character : public Component {
   Timer idleTimer;
   Timer invincibilityTimer;
   Timer endingInvincibilityTimer;
+  Timer hitRecoverTimer;
+
   float gravity;
   GameObject *attackGO;
   bool isLeftSide;

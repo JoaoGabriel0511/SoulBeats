@@ -62,7 +62,8 @@ void BellEnemy::SwitchBellEnemyState(BellEnemyState state, string sprite, int fr
 void BellEnemy::Render() {}
 
 void BellEnemy::NotifyCollision(GameObject& other) {
-    if(other.GetComponent("Attack") != NULL){
+    if(other.GetComponent("Attack") != NULL){     
+        global_hit_flag = true;   
         associated.RequestedDelete();
     }
 }

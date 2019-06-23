@@ -10,6 +10,7 @@
 using namespace std;
 class Beat;
 extern Beat* global_beat;
+extern bool global_hit_flag;
 
 class State;
 class Game {
