@@ -7,11 +7,11 @@ bool Debugger::lookSprite;
 bool Debugger::lookCharCollision;
 Debugger::Debugger() {
     lookLoopGame = false;
-    lookUpdateLevelState = true;
+    lookUpdateLevelState = false;
     lookUpdateState = false;
     lookInputManager = false;
     lookSprite = false;
-    lookCharCollision = true;
+    lookCharCollision = false;
 }
 
 Debugger::~Debugger(){}

@@ -19,13 +19,13 @@ void TileMapCollider::Start() {
             for(int x = 0; x < width; x++) {
                 index = tileMap->At(x,y,z);
                 if(index == 18 || index == 17 || index == 11 || index == 1 || index == 2 || index == 71
-                || index == 3 || index == 5 || index == 6 || index == 88 || index == 19 || index == 87
+                || index == 3  || index == 6 || index == 88 || index == 19 || index == 87
                 || index == 53 || index == 38 || index == 54 || index == 34 || index == 71 || index == 50
                 || index == 24 || index == 50 || index == 35 || index == 33 || index == 55 || index == 51
                 || index == 39 || index == 19 || index == 49 || index == 86 || index == 85 || index == 69
                 || index == 87 || index == 56 || index == 72 || index == 101 || index == 102 || index == 103
                 || index == 104 || index == 66 || index == 84 || index == 67 || index == 68 || index == 57
-                || index == 58 || index == 148) {
+                || index == 58 || index == 148 || index == 7) {
                     auxh = tileMap->GetTileSet()->GetHeight() * tileMap->GetScale();
                     auxw = tileMap->GetTileSet()->GetWidth() * tileMap->GetScale();
                     box.h = auxh;
@@ -34,16 +34,28 @@ void TileMapCollider::Start() {
                     box.y = auxh * y;
                     box.z = index;
                     boxes.emplace_back(box);
-                }
-                if(index == 8 || index == 7) {
-                    auxh = tileMap->GetTileSet()->GetHeight() * tileMap->GetScale();
-                    auxw = tileMap->GetTileSet()->GetWidth() * tileMap->GetScale();
-                    box.h = auxh;
-                    box.w = auxw;
-                    box.x = auxw * x;
-                    box.y = auxh * y;
-                    box.z = index;
-                    boxes.emplace_back(box);
+                } else {
+                    if(index == 8 || index == 68) {
+                        auxh = tileMap->GetTileSet()->GetHeight() * tileMap->GetScale();
+                        auxw = tileMap->GetTileSet()->GetWidth() * tileMap->GetScale();
+                        box.h = auxh - 30;
+                        box.w = auxw - 23;
+                        box.x = auxw * x;
+                        box.y = (auxh * y) + 30;
+                        //box.z = index;
+                        boxes.emplace_back(box);
+                    } else {
+                        if(index == 5 || index == 65) {
+                            auxh = tileMap->GetTileSet()->GetHeight() * tileMap->GetScale();
+                            auxw = tileMap->GetTileSet()->GetWidth() * tileMap->GetScale();
+                            box.h = auxh - 30;
+                            box.w = auxw - 23;
+                            box.x = auxw * x + 23;
+                            box.y = (auxh * y) + 30;
+                            //box.z = index;
+                            boxes.emplace_back(box);
+                        }
+                    }
                 }
             }
         }
