@@ -24,6 +24,7 @@ void Character::Start() {
     isAttacking = false;
     isOnGround = false;
     isLeftSide = false;
+    isOnSlope = false;
     canAttack = true;
     finishIdle = false;
     hasChanged = false;
@@ -416,13 +417,31 @@ void Character::NotifYCollisionWithMap(Rect tileBox) {
     }
     if(tileBox.z == 101 || tileBox.z == 102 || tileBox.z == 103 || tileBox.z == 148 || tileBox.z == 104 ||
        tileBox.z == 67 || tileBox.z == 68 || tileBox.z == 57 || tileBox.z == 58 || tileBox.z == 66 || tileBox.z == 84){
-       LightGroundCollision(tileBox);
+        if(tileBox.z == 67) {
+           LightSlope1Collision(tileBox);
+           isOnSlope == true;
+        } else {
+            if(tileBox.z == 66) {
+                LightSlope2Collision(tileBox);
+                isOnSlope = true;
+            } else {
+                LightGroundCollision(tileBox);
+                isOnSlope = false;
+            }
+        }
     } else {
-        //if(tileBox.z == 7) {
-        //    SolidSlopeCollision(tileBox);
-        //} else {
-            SolidGroundCollision(tileBox);
-        //}
+        if(tileBox.z == 7) {
+            SolidSlope1Collision(tileBox);
+            isOnSlope = true;
+        } else {
+            if(tileBox.z == 6) {
+                SolidSlope2Collision(tileBox);
+                isOnSlope = true;
+            } else {
+                SolidGroundCollision(tileBox);
+                isOnSlope = false;
+            }
+        }
     }
 }
 
@@ -487,16 +506,142 @@ void Character::LandOnground() {
     velocity.y = 0;
 }
 
-void Character::SolidSlopeCollision(Rect tileBox) {
+void Character::SolidSlope2Collision(Rect tileBox) {
     float posX;
     float posY;
+    float tang;
     Collider *collider = ((Collider*) associated.GetComponent("Collider").get());
+    tang = (float)(tileBox.h)/(float)(tileBox.w + 40);
+    posX = collider->box.x + collider->box.w - (tileBox.x - 40);
+    posY = posX * tang;
+    cout<<" posY "<<posY<<endl;
+    cout<<"tang "<<tang<<endl;
+    posY = tileBox.y + tileBox.h - posY;
+    cout<<"posX "<<posX<<" posY "<<posY<<endl;
     if(velocity.y > 0) {
-        posY = tileBox.y + (tileBox.h / (tileBox.x / collider->box.x));
-        if((collider->box.y + collider->box.h - 25 <= posY)) {
-            velocity.y = 0;
-            associated.box.y = posY - associated.box.h;
+        if((collider->box.y + collider->box.h >= posY) && (collider->box.x + collider->box.w > tileBox.x) && (collider->box.x < tileBox.x + tileBox.w)) {
+            cout<<"aqui"<<endl;
+            associated.box.y = posY - associated.box.h - 20;
+            LandOnground();
         }
-        LandOnground();
+    }
+    if(velocity.y <= 0) {
+        if((collider->box.y >= posY) && (collider->box.x + collider->box.w > tileBox.x + 24) && (collider->box.x < tileBox.x + tileBox.w - 24)) {
+            velocity.y = 0;
+            associated.box.y = posY + tileBox.h - 45;
+        }
+    }
+    if((velocity.x >= 0) && (collider->box.x < tileBox.x)) {
+        if((collider->box.y + collider->box.h - 60 > posY) && (collider->box.y + 50 < posY + tileBox.h)) {
+            if(isOnSlope) {
+                velocity.x = 0;
+                associated.box.x = tileBox.x - associated.box.w - 35;
+            } else {
+                associated.box.y =  posY - associated.box.h - 40;
+            }
+        }
+    }
+    if((velocity.x <= 0) && (collider->box.x > tileBox.x) && (collider->box.y + 40 < posY + tileBox.h)) {
+        if((collider->box.y + collider->box.h - 40 > posY)) {
+            velocity.x = 0;
+            associated.box.x = tileBox.x + tileBox.w - 75;
+        }
+    }
+}
+
+void Character::LightSlope2Collision(Rect tileBox) {
+    float posX;
+    float posY;
+    float tang;
+    Collider *collider = ((Collider*) associated.GetComponent("Collider").get());
+    tang = (float)(tileBox.h)/(float)(tileBox.w + 40);
+    posX = collider->box.x + collider->box.w - (tileBox.x - 40);
+    posY = posX * tang;
+    posY = tileBox.y + tileBox.h - posY;
+    if(velocity.y > 0) {
+        if((collider->box.y + collider->box.h >= posY) && (collider->box.x + collider->box.w > tileBox.x) && (collider->box.x < tileBox.x + tileBox.w)) {
+            associated.box.y = posY - associated.box.h - 20;
+            LandOnground();
+        }
+    }
+    if((velocity.x >= 0) && (collider->box.x < tileBox.x)) {
+        if((collider->box.y + collider->box.h - 60 > posY) && (collider->box.y + 80 < posY + tileBox.h)) {
+            if(isOnSlope) {
+                velocity.x = 0;
+                associated.box.x = tileBox.x - associated.box.w - 35;
+            } else {
+                associated.box.y =  posY - associated.box.h - 40;
+            }
+        }
+    }
+}
+
+void Character::LightSlope1Collision(Rect tileBox) {
+    float posX;
+    float posY;
+    float tang;
+    Collider *collider = ((Collider*) associated.GetComponent("Collider").get());
+    tang = (float)(tileBox.h)/(float)(tileBox.w + 40);
+    posX = tileBox.x + tileBox.w + 40 - collider->box.x;
+    posY = posX * tang;
+    posY = tileBox.y + tileBox.h - posY;
+    if(velocity.y > 0) {
+        if((collider->box.y + collider->box.h - 25 >= posY) && (collider->box.x + collider->box.w > tileBox.x) && (collider->box.x < tileBox.x + tileBox.w)) {
+            associated.box.y = posY - associated.box.h - 20;
+            LandOnground();
+        }
+    }
+    if((velocity.x <= 0) && (collider->box.x > tileBox.x) && (collider->box.y + 70 < posY + tileBox.h)) {
+        if((collider->box.y + collider->box.h - 42 > posY)) {
+            if(isOnSlope) {
+                velocity.x = 0;
+                associated.box.x = tileBox.x + tileBox.w - 75;
+            } else {
+                associated.box.y =  posY - associated.box.h - 40;
+            }
+        }
+    }
+}
+
+
+void Character::SolidSlope1Collision(Rect tileBox) {
+    float posX;
+    float posY;
+    float tang;
+    Collider *collider = ((Collider*) associated.GetComponent("Collider").get());
+    tang = (float)(tileBox.h)/(float)(tileBox.w + 40);
+    posX = tileBox.x + tileBox.w + 40 - collider->box.x;
+    posY = posX * tang;
+    cout<<"posY "<<posY<<endl;
+    cout<<"tang "<<tang<<endl;
+    posY = tileBox.y + tileBox.h - posY;
+    cout<<"posX "<<posX<<" posY "<<posY<<endl;
+    if(velocity.y > 0) {
+        if((collider->box.y + collider->box.h - 25 >= posY) && (collider->box.x + collider->box.w > tileBox.x) && (collider->box.x < tileBox.x + tileBox.w)) {
+            associated.box.y = posY - associated.box.h - 20;
+            LandOnground();
+        }
+    }
+    if(velocity.y <= 0) {
+        if((collider->box.y >= posY) && (collider->box.x + collider->box.w > tileBox.x + 24) && (collider->box.x < tileBox.x + tileBox.w - 24)) {
+            velocity.y = 0;
+            associated.box.y = posY + tileBox.h - 45;
+        }
+    }
+    if((velocity.x >= 0) && (collider->box.x < tileBox.x)) {
+        if((collider->box.y + collider->box.h - 60 > posY) && (collider->box.y + 50 < posY + tileBox.h)) {
+            velocity.x = 0;
+            associated.box.x = tileBox.x - associated.box.w - 35;
+        }
+    }
+    if((velocity.x <= 0) && (collider->box.x > tileBox.x) && (collider->box.y + 40 < posY + tileBox.h)) {
+        if((collider->box.y + collider->box.h - 42 > posY)) {
+            if(isOnSlope) {
+                velocity.x = 0;
+                associated.box.x = tileBox.x + tileBox.w - 75;
+            } else {
+                associated.box.y =  posY - associated.box.h - 40;
+            }
+        }
     }
 }

@@ -36,8 +36,8 @@
 #define WALKING_SPEED 400
 #define ON_BEAT_ATTACKING_SPEED 1000
 #define ATTACKING_SPEED 800
-#define JUMPING_SPEED -930
-#define JUMPING_SPEED_ON_BEAT -1100
+#define JUMPING_SPEED -920
+#define JUMPING_SPEED_ON_BEAT -1200
 #define GRAVITY_RISING 25
 #define GRAVITY_PEAK 8
 #define GRAVITY_FALLING 25
@@ -112,9 +112,13 @@ class Character : public Component {
   GameObject *attackGO;
   bool isLeftSide;
   bool wasLeftSide;
+  bool isOnSlope;
   void LandOnground();
   void SolidGroundCollision(Rect tileBox);
-  void SolidSlopeCollision(Rect tileBox);
+  void SolidSlope1Collision(Rect tileBox);
+  void SolidSlope2Collision(Rect tileBox);
+  void LightSlope1Collision(Rect tileBox);
+  void LightSlope2Collision(Rect tileBox);
   void LightGroundCollision(Rect tileBox);
   public:
     Character(GameObject &associated);
