@@ -12,7 +12,6 @@ using namespace std;
 
 Game* Game::instance;
 Beat* global_beat;
-bool global_hit_flag = false;
 
 Game& Game::GetInstance() {
     if(instance != NULL) {

@@ -2,6 +2,7 @@
 #define BELL_ENEMY_H
 #include "Component.h"
 #include "Sprite.h"
+#include "Character.h"
 #define ENEMY_IDLE_SPRITE "assets/img/enemies/BelIdlel.png"
 #define ENEMY_IDLE_FRAME_COUNT 9
 #define ENEMY_IDLE_DURATION 0.747

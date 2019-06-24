@@ -69,7 +69,10 @@
 #define LITSEN_TO_MUSIC_FRAME_COUNT 8
 #define LISTEN_TO_MUSIC_FRAME_TIME 0.08333
 #define IDLE_DURATION 10
-#define HIT_RECOVER_TIME 0.2
+#define RECOVER_SPRITE_RIGHT "assets/img/char/SoulBeatsCharBounce.png"
+#define RECOVER_SPRITE_LEFT "assets/img/char/SoulBeatsCharBounceL.png"
+#define RECOVER_FRAME_COUNT 6
+#define RECOVER_DURATION 0.25
 #include "Component.h"
 #include "Sprite.h"
 #include "Attack.h"
@@ -90,13 +93,14 @@ class Character : public Component {
   bool gotHit;
   bool finishIdle;
   bool landingDone;
+  bool attackOnBeat;
+  bool canCancelKnockBack;
   bool isInvincible;
   bool isAttacking;
   bool hasChanged;
   bool canAttack;
   bool jumpedOnBeat;
   bool recoveringFromHitKnockback;
-  
   Timer beforeRiseTimer;
   Timer recoverFromHitTimer;
   Timer peakTimer;
@@ -124,6 +128,7 @@ class Character : public Component {
     Character(GameObject &associated);
     void Update(float dt);
     void Start();
+    void HitKnockBack();
     bool Is(string type);
     void NotifyCollision(GameObject &other);
     void NotifYCollisionWithMap(Rect Tilebox);
