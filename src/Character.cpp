@@ -12,6 +12,7 @@ Character::Character(GameObject &associated) : Component(associated){
 void Character::Start() {
     charSprite = new Sprite(associated, IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
     charSprite->SetScale({2,2});
+    sound = new Sound(associated);
     isStill = true;
     isRising = false;
     isFalling = false;
@@ -36,6 +37,7 @@ void Character::Start() {
     wasOnGround = isOnGround;
     gravity = GRAVITY_FALLING;
     idleTimer.Restart();
+    walkingSoundTimer.Restart();
 }
 
 void Character::Update(float dt) {
@@ -143,12 +145,28 @@ void Character::Update(float dt) {
                     }
                     isStill = false;
                     isLeftSide = false;
+                    if(isOnGround) {
+                        walkingSoundTimer.Update(dt);
+                        if(walkingSoundTimer.Get() >= WALKING_SOUND_TIMER) {
+                            sound->Open(WALKING_SOUND);
+                            sound->Play(1);
+                            walkingSoundTimer.Restart();
+                        }
+                    }
                     //charSprite->flip = false;
                 } else {
                     if (input.IsKeyDown(A_KEY)) {
                         velocity.x = -1 * WALKING_SPEED;
                         if ((isStill || (!wasOnGround) || (!isLeftSide)) && isOnGround) {
                             charSprite->SwitchSprite(WALKING_SPRITE_LEFT, WALKING_FRAME_COUNT, WALKING_FRAME_TIME);
+                        }
+                        if(isOnGround) {
+                            walkingSoundTimer.Update(dt);
+                            if(walkingSoundTimer.Get() >= WALKING_SOUND_TIMER) {
+                                sound->Open(WALKING_SOUND);
+                                sound->Play(1);
+                                walkingSoundTimer.Restart();
+                            }
                         }
                         isStill = false;
                         isLeftSide = true;
@@ -157,12 +175,17 @@ void Character::Update(float dt) {
                 }
                 if (input.KeyPress(W_KEY)) {
                     if (isOnGround) {
+                        walkingSoundTimer.Restart();
                         if(global_beat->GetOnBeat() == true){
                             velocity.y = JUMPING_SPEED_ON_BEAT;
                             jumpedOnBeat = true;
+                            sound->Open(JUMPING_SOUND);
+                            sound->Play(1);
                         } else {
                             jumpedOnBeat = false;
                             velocity.y = JUMPING_SPEED;
+                            sound->Open(JUMPING_SOUND_ON_BEAT);
+                            sound->Play(1);
                         }
                         gravity = GRAVITY_RISING;
                         isRising = true;
@@ -186,6 +209,7 @@ void Character::Update(float dt) {
                 }
                 if (input.KeyPress(SPACE_KEY)) {
                     if(canAttack) {
+                        walkingSoundTimer.Restart();
                         int isLeft = isLeftSide ? -1 : 1;
                         gravity = 0;
                         velocity.y = 0;
@@ -196,8 +220,12 @@ void Character::Update(float dt) {
                         if(global_beat->GetOnBeat() == true){
                             velocity.x = isLeft * ON_BEAT_ATTACKING_SPEED;
                             attackOnBeat = true;
+                            sound->Open(ATTACK_SOUND_ON_BEAT);
+                            sound->Play(1);
                         } else {
                             velocity.x = isLeft * ATTACKING_SPEED;
+                            sound->Open(ATTACK_SOUND);
+                            sound->Play(1);
                         }
                         attackGO = new GameObject();
                         attackGO->box.z = 4;
@@ -242,6 +270,7 @@ void Character::Update(float dt) {
                 if (input.KeyRelease(D_KEY) || input.KeyRelease(A_KEY)) {
                     velocity.x = 0;
                     if(isOnGround) {
+                        walkingSoundTimer.Restart();
                         if(isLeftSide) {
                             charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
                         } else {
@@ -356,6 +385,8 @@ void Character::NotifyCollision(GameObject &other) {
             }
             if(!isOnGround) {
                 velocity.y = HURT_BOUNCING_SPEED;
+            } else {
+                walkingSoundTimer.Restart();
             }
             gravity = HURT_GRAVITY;
             gotHit = true;
@@ -550,6 +581,7 @@ void Character::LightSlope2Collision(Rect tileBox) {
 }
 
 void Character::HitKnockBack() {
+    attackGO->RequestedDelete();
     if (isLeftSide) {
         velocity.x = HURT_DEFLECT_SPEED;
         charSprite->SwitchSprite(RECOVER_SPRITE_LEFT, RECOVER_FRAME_COUNT, RECOVER_DURATION / RECOVER_FRAME_COUNT);
