@@ -12,6 +12,9 @@
 #define ENEMY_LOOKING_RIGHT_SPRITE "assets/img/enemies/BelIPeekR.png"
 #define ENEMY_LOOKING_RIGHT_FRAME_COUNT 9
 #define ENEMY_LOOKING_RIGHT_DURATION 0.747
+#define ENEMY_HIT_SOUND "assets/audio/SFX/GolpeForte2.wav"
+#define ENEMY_DEFEND_SOUND "assets/audio/SFX/GolpeIneficaz1.wav"
+#define BELL_SOUND "assets/audio/SFX/Sino1.wav"
 
 class BellEnemy : public Component {
     float distance;
@@ -26,6 +29,7 @@ class BellEnemy : public Component {
     Timer lookRight;
     Timer lookLeft;
     GameObject *character;
+    Sound *sound;
     void SwitchBellEnemyState(BellEnemyState state, string sprite, int frameCount, float frameTime, Timer * timer);
     public:
         BellEnemy(GameObject& associated, int movingDistance, int movingSpeed, GameObject *character);
