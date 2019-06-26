@@ -3,13 +3,13 @@
 #include "Component.h"
 #include "Sprite.h"
 #define ENEMY_IDLE_SPRITE "assets/img/enemies/Harp/HarpNormal.png"
-#define ENEMY_IDLE_FRAME_COUNT 5
+#define ENEMY_IDLE_FRAME_COUNT 16
 #define ENEMY_IDLE_DURATION 0.447
 #define ENEMY_LOOKING_UP_SPRITE "assets/img/enemies/Harp/HarpUp.png"
-#define ENEMY_LOOKING_UP_FRAME_COUNT 4
+#define ENEMY_LOOKING_UP_FRAME_COUNT 16
 #define ENEMY_LOOKING_UP_DURATION 0.447
 #define ENEMY_LOOKING_DOWN_SPRITE "assets/img/enemies/Harp/HarpDown.png"
-#define ENEMY_LOOKING_DOWN_FRAME_COUNT 9
+#define ENEMY_LOOKING_DOWN_FRAME_COUNT 16
 #define ENEMY_LOOKING_DOWN_DURATION 0.447
 
 class HarpEnemy : public Component

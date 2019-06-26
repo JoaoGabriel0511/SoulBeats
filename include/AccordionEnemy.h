@@ -3,13 +3,13 @@
 #include "Component.h"
 #include "Sprite.h"
 #define ENEMY_IDLE_SPRITE "assets/img/enemies/Accordion/SanfonaIdle.png"
-#define ENEMY_IDLE_FRAME_COUNT 5
+#define ENEMY_IDLE_FRAME_COUNT 8
 #define ENEMY_IDLE_DURATION 0.447
 #define ENEMY_LOOKING_UP_SPRITE "assets/img/enemies/Accordion/SanfonaBoioing.png"
 #define ENEMY_LOOKING_UP_FRAME_COUNT 4
 #define ENEMY_LOOKING_UP_DURATION 0.447
 #define ENEMY_LOOKING_DOWN_SPRITE "assets/img/enemies/Accordion/SanfonaDown.png"
-#define ENEMY_LOOKING_DOWN_FRAME_COUNT 9
+#define ENEMY_LOOKING_DOWN_FRAME_COUNT 2
 #define ENEMY_LOOKING_DOWN_DURATION 0.447
 
 class AccordionEnemy : public Component

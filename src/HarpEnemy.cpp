@@ -4,7 +4,7 @@ HarpEnemy::HarpEnemy(GameObject &associated, int movingDistance, int movingSpeed
 {
     this->character = character;
     Collider *collider;
-    collider = new Collider(associated, {2, 2}, {-140, 0});
+    collider = new Collider(associated, {2, 2}, {-70, -80});
     Start();
 }
 
@@ -20,7 +20,7 @@ bool HarpEnemy::Is(string type)
 
 void HarpEnemy::Start()
 {
-    state = IDLE;
+    state = LOOKING_UP;
     idleTimer.Restart();
     side = DOWN;
     harpEnemySprite = new Sprite(associated, ENEMY_IDLE_SPRITE, ENEMY_IDLE_FRAME_COUNT, ENEMY_IDLE_DURATION / ENEMY_IDLE_FRAME_COUNT);
@@ -31,32 +31,18 @@ void HarpEnemy::Update(float dt)
 {
     switch (state)
     {
-    case IDLE:
-        idleTimer.Update(dt);
-        if (idleTimer.Get() >= ENEMY_IDLE_DURATION)
-        {
-            if (character->box.x > associated.box.x)
-            {
-                SwitchHarpEnemyState(LOOKING_UP, ENEMY_LOOKING_UP_SPRITE, ENEMY_LOOKING_UP_FRAME_COUNT, ENEMY_LOOKING_UP_DURATION / ENEMY_LOOKING_UP_FRAME_COUNT, &lookUp);
-            }
-            else
-            {
-                SwitchHarpEnemyState(LOOKING_DOWN, ENEMY_LOOKING_DOWN_SPRITE, ENEMY_LOOKING_DOWN_FRAME_COUNT, ENEMY_LOOKING_DOWN_DURATION / ENEMY_LOOKING_DOWN_FRAME_COUNT, &lookDown);
-            }
-        }
-        break;
     case LOOKING_DOWN:
         lookDown.Update(dt);
         if (lookDown.Get() >= ENEMY_LOOKING_DOWN_DURATION)
         {
-            SwitchHarpEnemyState(IDLE, ENEMY_IDLE_SPRITE, ENEMY_IDLE_FRAME_COUNT, ENEMY_IDLE_DURATION / ENEMY_IDLE_FRAME_COUNT, &idleTimer);
+            SwitchHarpEnemyState(LOOKING_UP, ENEMY_LOOKING_UP_SPRITE, ENEMY_LOOKING_UP_FRAME_COUNT, ENEMY_LOOKING_UP_DURATION / ENEMY_LOOKING_UP_FRAME_COUNT, &lookUp);
         }
         break;
     case LOOKING_UP:
         lookUp.Update(dt);
         if (lookUp.Get() >= ENEMY_LOOKING_UP_DURATION)
         {
-            SwitchHarpEnemyState(IDLE, ENEMY_IDLE_SPRITE, ENEMY_IDLE_FRAME_COUNT, ENEMY_IDLE_DURATION / ENEMY_IDLE_FRAME_COUNT, &idleTimer);
+            SwitchHarpEnemyState(LOOKING_DOWN, ENEMY_LOOKING_DOWN_SPRITE, ENEMY_LOOKING_DOWN_FRAME_COUNT, ENEMY_LOOKING_DOWN_DURATION / ENEMY_LOOKING_DOWN_FRAME_COUNT, &lookDown);
         }
         break;
     default:
