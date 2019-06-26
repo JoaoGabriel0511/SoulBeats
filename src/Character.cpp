@@ -249,9 +249,9 @@ void Character::Update(float dt)
                         attackGO = new GameObject();
                         attackGO->box.z = 4;
                         if(isLeftSide) {
-                            Attack *attack = new Attack(*attackGO, {2, 2}, {0, 0}, &associated, 50, 25, -6, 76);
+                            Attack *attack = new Attack(*attackGO, {2, 2}, {0, 0}, &associated, 20, 25, 25, 76);
                         } else {
-                            Attack *attack = new Attack(*attackGO, {2, 2}, {0, 0}, &associated, 50, 25, 126, 76);
+                            Attack *attack = new Attack(*attackGO, {2, 2}, {0, 0}, &associated, 20, 25, 155, 76);
                         }
                         Game::GetInstance().GetCurrentState().AddObject(attackGO);
                         attackTimer.Restart();

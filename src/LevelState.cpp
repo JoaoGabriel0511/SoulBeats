@@ -37,7 +37,7 @@ void LevelState::LoadAssets() {
     TileMap *tileMapMontain;
     GameObject *montain = new GameObject();
     tileSetMontain = new TileSet(317, 288, "assets/img/background/Montanhas.png");
-    tileMapMontain = new TileMap(*montain, "assets/map/MapaMontanha.txt", tileSetMontain, 5, -1024, -600, 1, 1);
+    tileMapMontain = new TileMap(*montain, "assets/map/MapaMontanha.txt", tileSetMontain, 4, -1024, -850, 0.1, 0.2);
     objectArray.emplace_back(montain);
 
     //Montanha Adicionada
@@ -48,7 +48,7 @@ void LevelState::LoadAssets() {
     TileMap *tileMapFlorest2;
     GameObject *florest2 = new GameObject();
     tileSetFlorest2 = new TileSet(512, 144, "assets/img/background/Pines2.png");
-    tileMapFlorest2 = new TileMap(*florest2, "assets/map/MapaFloresta2.txt", tileSetFlorest2, 2, -1024, 50, 1.1, 1);
+    tileMapFlorest2 = new TileMap(*florest2, "assets/map/MapaFloresta2.txt", tileSetFlorest2, 2, -1024, -50, 0.5, 0.5);
     objectArray.emplace_back(florest2);
 
     //Floresta 2 Adicionada
@@ -59,7 +59,7 @@ void LevelState::LoadAssets() {
     TileMap *tileMapFlorest1_5;
     GameObject *florest1_5 = new GameObject();
     tileSetFlorest1_5 = new TileSet(512, 144, "assets/img/background/Pines1.5.png");
-    tileMapFlorest1_5 = new TileMap(*florest1_5, "assets/map/MapaFloresta1.5.txt", tileSetFlorest1_5, 3, -1024, -120, 1.2, 1);
+    tileMapFlorest1_5 = new TileMap(*florest1_5, "assets/map/MapaFloresta1.5.txt", tileSetFlorest1_5, 3, -1024, -30, 0.7, 0.7);
     objectArray.emplace_back(florest1_5);
 
     //Floresta 1.5 Adicionada
@@ -70,7 +70,7 @@ void LevelState::LoadAssets() {
     TileMap *tileMapFlorest1;
     GameObject *florest1 = new GameObject();
     tileSetFlorest1 = new TileSet(512, 144, "assets/img/background/Pines1.png");
-    tileMapFlorest1 = new TileMap(*florest1, "assets/map/MapaFloresta1.txt", tileSetFlorest1, 4, -1024, -50, 1.3, 1);
+    tileMapFlorest1 = new TileMap(*florest1, "assets/map/MapaFloresta1.txt", tileSetFlorest1, 4, -1024, -250, 1.1, 0.9);
     objectArray.emplace_back(florest1);
 
     //Floresta 1 Adicionada

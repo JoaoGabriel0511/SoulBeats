@@ -3,8 +3,8 @@
 #define IDLE_HEART_SPRITE "assets/img/heart/HeartStill.png"
 #define BEATING_HEART_SPRITE "assets/img/heart/Heart.png"
 #define BEATING_HEART_BG "assets/img/heart/Interface do coração.png"
-#define BEAT_FALSE_LIMIT 0.2
-#define BEAT_TRUE_LIMIT 0.1
+#define BEAT_FALSE_LIMIT 0.4
+#define BEAT_TRUE_LIMIT 0.2
 #define STILL_FRAME_COUNT 1
 #define FRAME_COUNT 8
 #include "Component.h"
