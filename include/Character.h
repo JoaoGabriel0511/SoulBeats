@@ -34,9 +34,12 @@
 #define BEFORE_RISE_DURATION 0.2
 #define PEAK_DURATION 0.4
 #define WALKING_SPEED 400
+#define WALKING_SOUND "assets/audio/SFX/Passo1.wav"
 #define ON_BEAT_ATTACKING_SPEED 1000
 #define ATTACKING_SPEED 800
-#define JUMPING_SPEED -920
+#define JUMPING_SOUND "assets/audio/SFX/PuloForte1.wav"
+#define JUMPING_SOUND_ON_BEAT "assets/audio/SFX/PuloFraco1.wav"
+#define JUMPING_SPEED -900
 #define JUMPING_SPEED_ON_BEAT -1200
 #define GRAVITY_RISING 25
 #define GRAVITY_PEAK 8
@@ -54,6 +57,8 @@
 #define INVINCIBILITY_DURATION 0.7
 #define ENDING_INVINCIBILITY_DURATION 0.15
 #define BLINKING_DURATION 0.05
+#define ATTACK_SOUND "assets/audio/SFX/GolpeFraco1.wav"
+#define ATTACK_SOUND_ON_BEAT "assets/audio/SFX/GolpeForte1.wav"
 #define ATTACK_RIGHT_SPRITE "assets/img/char/SoulBeatsCharAttack.png"
 #define ATTACK_RIGHT_SPRITE_ON_BEAT "assets/img/char/SoulBeatsCharAttackBEAT.png"
 #define ATTACK_LEFT_SPRITE "assets/img/char/SoulBeatsCharAttackL.png"
@@ -73,6 +78,7 @@
 #define RECOVER_SPRITE_LEFT "assets/img/char/SoulBeatsCharBounceL.png"
 #define RECOVER_FRAME_COUNT 6
 #define RECOVER_DURATION 0.25
+#define WALKING_SOUND_TIMER 0.3
 #include "Component.h"
 #include "Sprite.h"
 #include "Attack.h"
@@ -100,8 +106,10 @@ class Character : public Component {
   bool hasChanged;
   bool canAttack;
   bool jumpedOnBeat;
+  bool playingWalkingSound;
   bool recoveringFromHitKnockback;
   Timer beforeRiseTimer;
+  Timer walkingSoundTimer;
   Timer recoverFromHitTimer;
   Timer peakTimer;
   Timer blinkTimer;
@@ -111,7 +119,7 @@ class Character : public Component {
   Timer invincibilityTimer;
   Timer endingInvincibilityTimer;
   Timer hitRecoverTimer;
-
+  Sound *sound;
   float gravity;
   GameObject *attackGO;
   bool isLeftSide;

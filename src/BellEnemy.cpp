@@ -3,6 +3,7 @@
 BellEnemy::BellEnemy(GameObject& associated, int movingDistance, int movingSpeed, GameObject * character) : Component(associated) {
     this->character = character;
     Collider* collider;
+    sound = new Sound(associated);
     collider = new Collider(associated, {2,2}, {-140,0});
     Start();
 }
@@ -24,31 +25,37 @@ void BellEnemy::Start() {
 }
 
 void BellEnemy::Update(float dt) {
-    switch (state) {
-        case IDLE:
-            idleTimer.Update(dt);
-            if(idleTimer.Get() >= ENEMY_IDLE_DURATION) {
-                if(character->box.x > associated.box.x) {
-                    SwitchBellEnemyState(LOOKING_LEFT, ENEMY_LOOKING_LEFT_SPRITE, ENEMY_LOOKING_LEFT_FRAME_COUNT, ENEMY_LOOKING_LEFT_DURATION/ENEMY_LOOKING_LEFT_FRAME_COUNT, &lookLeft);
-                } else{
-                    SwitchBellEnemyState(LOOKING_RIGHT, ENEMY_LOOKING_RIGHT_SPRITE, ENEMY_LOOKING_RIGHT_FRAME_COUNT, ENEMY_LOOKING_RIGHT_DURATION / ENEMY_LOOKING_RIGHT_FRAME_COUNT, &lookRight);
+    if(Camera::IsOnCamera(associated.box)) {
+        switch (state) {
+            case IDLE:
+                idleTimer.Update(dt);
+                if(idleTimer.Get() >= ENEMY_IDLE_DURATION) {
+                    if(character->box.x > associated.box.x) {
+                        SwitchBellEnemyState(LOOKING_LEFT, ENEMY_LOOKING_LEFT_SPRITE, ENEMY_LOOKING_LEFT_FRAME_COUNT, ENEMY_LOOKING_LEFT_DURATION/ENEMY_LOOKING_LEFT_FRAME_COUNT, &lookLeft);
+                    } else{
+                        SwitchBellEnemyState(LOOKING_RIGHT, ENEMY_LOOKING_RIGHT_SPRITE, ENEMY_LOOKING_RIGHT_FRAME_COUNT, ENEMY_LOOKING_RIGHT_DURATION / ENEMY_LOOKING_RIGHT_FRAME_COUNT, &lookRight);
+                    }
                 }
-            }
-            break;
-        case LOOKING_RIGHT:
-            lookRight.Update(dt);
-            if(lookRight.Get() >= ENEMY_LOOKING_RIGHT_DURATION) {
-                SwitchBellEnemyState(IDLE, ENEMY_IDLE_SPRITE, ENEMY_IDLE_FRAME_COUNT, ENEMY_IDLE_DURATION/ENEMY_IDLE_FRAME_COUNT, &idleTimer);
-            }
-            break;
-        case LOOKING_LEFT:
-            lookLeft.Update(dt);
-            if(lookLeft.Get() >= ENEMY_LOOKING_LEFT_DURATION) {
-                SwitchBellEnemyState(IDLE, ENEMY_IDLE_SPRITE, ENEMY_IDLE_FRAME_COUNT, ENEMY_IDLE_DURATION/ENEMY_IDLE_FRAME_COUNT, &idleTimer);
-            }
-            break;
-        default:
-            break;
+                break;
+            case LOOKING_RIGHT:
+                lookRight.Update(dt);
+                if(lookRight.Get() >= ENEMY_LOOKING_RIGHT_DURATION) {
+                    SwitchBellEnemyState(IDLE, ENEMY_IDLE_SPRITE, ENEMY_IDLE_FRAME_COUNT, ENEMY_IDLE_DURATION/ENEMY_IDLE_FRAME_COUNT, &idleTimer);
+                    sound->Open(BELL_SOUND);
+                    sound->Play(1);
+                }
+                break;
+            case LOOKING_LEFT:
+                lookLeft.Update(dt);
+                if(lookLeft.Get() >= ENEMY_LOOKING_LEFT_DURATION) {
+                    SwitchBellEnemyState(IDLE, ENEMY_IDLE_SPRITE, ENEMY_IDLE_FRAME_COUNT, ENEMY_IDLE_DURATION/ENEMY_IDLE_FRAME_COUNT, &idleTimer);
+                    sound->Open(BELL_SOUND);
+                    sound->Play(1);
+                }
+                break;
+            default:
+                break;
+        }
     }
 }
 
@@ -63,8 +70,15 @@ void BellEnemy::Render() {}
 
 void BellEnemy::NotifyCollision(GameObject& other) {
     if(other.GetComponent("Attack") != NULL) {
+        if(state != IDLE) {
+            sound->Open(ENEMY_HIT_SOUND);
+            sound->Play(1);
+            associated.RequestedDelete();
+        } else {
+            sound->Open(ENEMY_DEFEND_SOUND);
+            sound->Play(1);
+        }
         ((Character*) character->GetComponent("Character").get())->HitKnockBack();
-        associated.RequestedDelete();
     }
 }
 
