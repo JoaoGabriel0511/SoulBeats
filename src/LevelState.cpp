@@ -123,12 +123,12 @@ void LevelState::LoadAssets() {
 
     //Adicionando Inimigo ( AccordionEnemy )
 
-    accordionEnemyGO = new GameObject();
+    /*accordionEnemyGO = new GameObject();
     accordionEnemy = new AccordionEnemy(*accordionEnemyGO, 10, 10, characterGO);
     accordionEnemyGO->box.x = 2500;
     accordionEnemyGO->box.y = 2990;
     accordionEnemyGO->box.z = 4;
-    objectArray.emplace_back(accordionEnemyGO);
+    objectArray.emplace_back(accordionEnemyGO);*/
 
     //Inimigo Adicionado
 
@@ -236,26 +236,38 @@ void LevelState::Update(float dt) {
     State::Update(dt);
     for (int i = tileMapForeCollider->boxes.size() - 1; i >= 0; i--)
     {
-        for (int j = objectArray.size() - 1; j >= 0; j--)
+        if(Camera::IsOnCamera(tileMapForeCollider->boxes[i]))
         {
-            if (objectArray[j]->GetComponent("Collider") != NULL)
+            for (int j = objectArray.size() - 1; j >= 0; j--)
             {
-                if (Collision::IsColliding(((Collider *)objectArray[j]->GetComponent("Collider").get())->box, tileMapForeCollider->boxes[i], objectArray[j]->angleDeg, 0) == true)
+                if(Camera::IsOnCamera(objectArray[j]->box))
                 {
-                    objectArray[j]->NotifyCollisionWithMap(tileMapForeCollider->boxes[i]);
+                    if (objectArray[j]->GetComponent("Collider") != NULL)
+                    {
+                        if (Collision::IsColliding(((Collider *)objectArray[j]->GetComponent("Collider").get())->box, tileMapForeCollider->boxes[i], objectArray[j]->angleDeg, 0) == true)
+                        {
+                            objectArray[j]->NotifyCollisionWithMap(tileMapForeCollider->boxes[i]);
+                        }
+                    }
                 }
             }
         }
     }
     for (int i = tileMapBackCollider->boxes.size() - 1; i >= 0; i--)
     {
-        for (int j = objectArray.size() - 1; j >= 0; j--)
+        if(Camera::IsOnCamera(tileMapBackCollider->boxes[i]))
         {
-            if (objectArray[j]->GetComponent("Collider") != NULL)
+            for (int j = objectArray.size() - 1; j >= 0; j--)
             {
-                if (Collision::IsColliding(((Collider *)objectArray[j]->GetComponent("Collider").get())->box, tileMapBackCollider->boxes[i], objectArray[j]->angleDeg, 0) == true)
+                if(Camera::IsOnCamera(objectArray[j]->box))
                 {
-                    objectArray[j]->NotifyCollisionWithMap(tileMapBackCollider->boxes[i]);
+                    if (objectArray[j]->GetComponent("Collider") != NULL)
+                    {
+                        if (Collision::IsColliding(((Collider *)objectArray[j]->GetComponent("Collider").get())->box, tileMapBackCollider->boxes[i], objectArray[j]->angleDeg, 0) == true)
+                        {
+                            objectArray[j]->NotifyCollisionWithMap(tileMapBackCollider->boxes[i]);
+                        }
+                    }
                 }
             }
         }

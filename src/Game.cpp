@@ -136,7 +136,7 @@ void Game::Run() {
         if(debugger.lookLoopGame) {
             cout<<"LOOP "<< i << " DO JOGO FINALIZADO"<<endl;
         }
-        SDL_Delay(5);
+        SDL_Delay(3);
     }
     while(!stateStack.empty()) {
         stateStack.pop();
