@@ -11,6 +11,8 @@
 #include "Beat.h"
 #include "Character.h"
 #include "BellEnemy.h"
+#include "HarpEnemy.h"
+#include "AccordionEnemy.h"
 #include "TileMap.h"
 #include "TileMapCollider.h"
 #include "TileSet.h"

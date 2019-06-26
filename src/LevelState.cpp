@@ -1,6 +1,7 @@
 #include "../include/LevelState.h"
 
-LevelState::LevelState() : State() {
+LevelState::LevelState() : State()
+{
     Start();
 }
 
@@ -11,8 +12,12 @@ void LevelState::LoadAssets() {
 
     CameraFollower *cameraFollower;
     bg = new GameObject();
-    GameObject* bellEnemyGO;
-    BellEnemy* bellEnemy;
+    GameObject *bellEnemyGO;
+    BellEnemy *bellEnemy;
+    GameObject *harpEnemyGO;
+    HarpEnemy *harpEnemy;
+    GameObject *accordionEnemyGO;
+    AccordionEnemy *accordionEnemy;
     Sprite *levelSprite;
     Music *levelMusic;
     cameraFollower = new CameraFollower(*bg);
@@ -31,7 +36,7 @@ void LevelState::LoadAssets() {
     TileSet *tileSetMontain;
     TileMap *tileMapMontain;
     GameObject *montain = new GameObject();
-    tileSetMontain = new TileSet(317,288,"assets/img/background/Montanhas.png");
+    tileSetMontain = new TileSet(317, 288, "assets/img/background/Montanhas.png");
     tileMapMontain = new TileMap(*montain, "assets/map/MapaMontanha.txt", tileSetMontain, 5, -1024, -600, 1, 1);
     objectArray.emplace_back(montain);
 
@@ -42,7 +47,7 @@ void LevelState::LoadAssets() {
     TileSet *tileSetFlorest2;
     TileMap *tileMapFlorest2;
     GameObject *florest2 = new GameObject();
-    tileSetFlorest2 = new TileSet(512,144,"assets/img/background/Pines2.png");
+    tileSetFlorest2 = new TileSet(512, 144, "assets/img/background/Pines2.png");
     tileMapFlorest2 = new TileMap(*florest2, "assets/map/MapaFloresta2.txt", tileSetFlorest2, 2, -1024, 50, 1.1, 1);
     objectArray.emplace_back(florest2);
 
@@ -53,7 +58,7 @@ void LevelState::LoadAssets() {
     TileSet *tileSetFlorest1_5;
     TileMap *tileMapFlorest1_5;
     GameObject *florest1_5 = new GameObject();
-    tileSetFlorest1_5 = new TileSet(512,144,"assets/img/background/Pines1.5.png");
+    tileSetFlorest1_5 = new TileSet(512, 144, "assets/img/background/Pines1.5.png");
     tileMapFlorest1_5 = new TileMap(*florest1_5, "assets/map/MapaFloresta1.5.txt", tileSetFlorest1_5, 3, -1024, -120, 1.2, 1);
     objectArray.emplace_back(florest1_5);
 
@@ -64,7 +69,7 @@ void LevelState::LoadAssets() {
     TileSet *tileSetFlorest1;
     TileMap *tileMapFlorest1;
     GameObject *florest1 = new GameObject();
-    tileSetFlorest1 = new TileSet(512,144,"assets/img/background/Pines1.png");
+    tileSetFlorest1 = new TileSet(512, 144, "assets/img/background/Pines1.png");
     tileMapFlorest1 = new TileMap(*florest1, "assets/map/MapaFloresta1.txt", tileSetFlorest1, 4, -1024, -50, 1.3, 1);
     objectArray.emplace_back(florest1);
 
@@ -87,7 +92,7 @@ void LevelState::LoadAssets() {
 
     //Adicionando Personagem
 
-    GameObject * characterGO;
+    GameObject *characterGO;
     characterGO = new GameObject();
     characterGO->box.x = 150;
     characterGO->box.y = 3100;
@@ -98,14 +103,32 @@ void LevelState::LoadAssets() {
 
     //Personagem Adicionado
 
-    //Adicionando Inimigo
+    //Adicionando Inimigo ( BellEnemy )
 
     bellEnemyGO = new GameObject();
-    bellEnemy = new BellEnemy(*bellEnemyGO,10,10,characterGO);
+    bellEnemy = new BellEnemy(*bellEnemyGO, 10, 10, characterGO);
     bellEnemyGO->box.x = 1700;
     bellEnemyGO->box.y = 2630;
     bellEnemyGO->box.z = 4;
     objectArray.emplace_back(bellEnemyGO);
+
+    //Adicionando Inimigo ( HarpEnemy )
+
+    harpEnemyGO = new GameObject();
+    harpEnemy = new HarpEnemy(*harpEnemyGO, 10, 10, characterGO);
+    harpEnemyGO->box.x = 2300;
+    harpEnemyGO->box.y = 2590;
+    harpEnemyGO->box.z = 4;
+    objectArray.emplace_back(harpEnemyGO);
+
+    //Adicionando Inimigo ( AccordionEnemy )
+
+    accordionEnemyGO = new GameObject();
+    accordionEnemy = new AccordionEnemy(*accordionEnemyGO, 10, 10, characterGO);
+    accordionEnemyGO->box.x = 2500;
+    accordionEnemyGO->box.y = 2990;
+    accordionEnemyGO->box.z = 4;
+    objectArray.emplace_back(accordionEnemyGO);
 
     //Inimigo Adicionado
 
@@ -163,15 +186,14 @@ void LevelState::LoadAssets() {
     objectArray.emplace_back(tileTerrBackerGO);
 
     //TileMap Decoracao BackGround Adicionada
-
 }
 
-void LevelState::Pause() {
-
+void LevelState::Pause()
+{
 }
 
-void LevelState::Resume() {
-
+void LevelState::Resume()
+{
 }
 
 void LevelState::UpdateMusic(float dt) {
@@ -212,30 +234,40 @@ void LevelState::Update(float dt) {
     TileMapCollider *tileMapForeCollider = ((TileMapCollider*) tileTerrForeGO->GetComponent("TileMapCollider").get());
     TileMapCollider *tileMapBackCollider = ((TileMapCollider*) tileTerrBackGO->GetComponent("TileMapCollider").get());
     State::Update(dt);
-    for(int i = tileMapForeCollider->boxes.size() - 1; i >= 0; i--) {
-        for(int j = objectArray.size()-1; j >= 0 ; j--) {
-            if(objectArray[j]->GetComponent("Collider") != NULL) {
-                if(Collision::IsColliding(((Collider*) objectArray[j]->GetComponent("Collider").get())->box, tileMapForeCollider->boxes[i], objectArray[j]->angleDeg, 0) == true) {
+    for (int i = tileMapForeCollider->boxes.size() - 1; i >= 0; i--)
+    {
+        for (int j = objectArray.size() - 1; j >= 0; j--)
+        {
+            if (objectArray[j]->GetComponent("Collider") != NULL)
+            {
+                if (Collision::IsColliding(((Collider *)objectArray[j]->GetComponent("Collider").get())->box, tileMapForeCollider->boxes[i], objectArray[j]->angleDeg, 0) == true)
+                {
                     objectArray[j]->NotifyCollisionWithMap(tileMapForeCollider->boxes[i]);
                 }
             }
-		}
+        }
     }
-    for(int i = tileMapBackCollider->boxes.size() - 1; i >= 0; i--) {
-        for(int j = objectArray.size()-1; j >= 0 ; j--) {
-            if(objectArray[j]->GetComponent("Collider") != NULL) {
-                if(Collision::IsColliding(((Collider*) objectArray[j]->GetComponent("Collider").get())->box, tileMapBackCollider->boxes[i], objectArray[j]->angleDeg, 0) == true) {
+    for (int i = tileMapBackCollider->boxes.size() - 1; i >= 0; i--)
+    {
+        for (int j = objectArray.size() - 1; j >= 0; j--)
+        {
+            if (objectArray[j]->GetComponent("Collider") != NULL)
+            {
+                if (Collision::IsColliding(((Collider *)objectArray[j]->GetComponent("Collider").get())->box, tileMapBackCollider->boxes[i], objectArray[j]->angleDeg, 0) == true)
+                {
                     objectArray[j]->NotifyCollisionWithMap(tileMapBackCollider->boxes[i]);
                 }
             }
-		}
+        }
     }
-    if(InputManager::GetInstance().QuitRequested()){
+    if (InputManager::GetInstance().QuitRequested())
+    {
         quitRequested = true;
     }
     UpdateMusic(dt);
 }
 
-GameObject* LevelState::GetBeatObject(){
+GameObject *LevelState::GetBeatObject()
+{
     return this->beat;
 }
