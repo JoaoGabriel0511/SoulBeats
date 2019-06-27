@@ -48,329 +48,25 @@ void Character::Update(float dt)
     oldPosition = collider->box;
     oldVelocity = velocity;
     InputManager &input = InputManager::GetInstance();
-    idleTimer.Update(dt);
-    float beforeRiserDuration;
     wasLeftSide = isLeftSide;
-    if (idleTimer.Get() >= IDLE_DURATION && isOnGround && !finishIdle)
-    {
-        if (isLeftSide)
-        {
-            charSprite->SwitchSprite(LITSEN_TO_MUSIC_LEFT_SPRITE, LITSEN_TO_MUSIC_FRAME_COUNT, LISTEN_TO_MUSIC_FRAME_TIME);
-        }
-        else
-        {
-            charSprite->SwitchSprite(LITSEN_TO_MUSIC_RIGHT_SPRITE, LITSEN_TO_MUSIC_FRAME_COUNT, LISTEN_TO_MUSIC_FRAME_TIME);
-        }
-        finishIdle = true;
-    }
-    if (isInvincible)
-    {
-        blinkTimer.Update(dt);
-        if (blinkTimer.Get() >= BLINKING_DURATION)
-        {
-            if (charSprite->isBlinking)
-            {
-                charSprite->isBlinking = false;
-            }
-            else
-            {
-                charSprite->isBlinking = true;
-            }
-            blinkTimer.Restart();
-        }
-        invincibilityTimer.Update(dt);
-        if (invincibilityTimer.Get() >= INVINCIBILITY_DURATION)
-        {
-            charSprite->isBlinking = false;
-            endingInvincibilityTimer.Update(dt);
-            if (endingInvincibilityTimer.Get() >= ENDING_INVINCIBILITY_DURATION)
-            {
-                isInvincible = false;
-            }
-        }
-    }
+    BangUpdate(dt);
+    IsInvincibleUpdate(dt);
     if (gotHit)
     {
-        recoverFromHitTimer.Update(dt);
-        if (isOnGround)
-        {
-            if (recoverFromHitTimer.Get() >= HURT_DURATION)
-            {
-                gotHit = false;
-                gravity = GRAVITY_FALLING;
-                velocity.x = 0;
-                idleTimer.Restart();
-                finishIdle = false;
-                if (isLeftSide)
-                {
-                    charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
-                }
-                else
-                {
-                    charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
-                }
-            }
-        }
+        GotHit(dt);
     }
     else {
         if(recoveringFromHitKnockback){
-            hitRecoverTimer.Update(dt);
-            if(hitRecoverTimer.Get() >= RECOVER_DURATION ) {
-                velocity.x = 0;
-                canCancelKnockBack = true;
-                isStill = true;
-                recoveringFromHitKnockback = false;
-                hitRecoverTimer.Restart();
-                if(isLeftSide) {
-                    charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
-                } else {
-                    charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
-                }
-            }
+            RecoverFromHitKnockback(dt);
         } if(!recoveringFromHitKnockback || canCancelKnockBack) {
             if (isAttacking) {
-                attackTimer.Update(dt);
-                if (attackTimer.Get() >= ATTACK_DURATION) {
-                    velocity.x = 0;
-                    gravity = GRAVITY_FALLING;
-                    associated.box.x = associated.box.x + 2;
-                    attackGO->RequestedDelete();
-                    isAttacking = false;
-                    attackOnBeat = false;
-                    peakDone = true;
-                    if(isOnGround) {
-                        isStill = true;
-                        if(isLeftSide){
-                            charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
-                        } else {
-                            charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
-                        }
-                        idleTimer.Restart();
-                        finishIdle = false;
-                    } else {
-                        if(isLeftSide) {
-                            charSprite->SwitchSprite(FALLING_LEFT_SPRITE, FALLING_FRAME_COUNT, FALLING_FRAME_TIME);
-                        } else {
-                            charSprite->SwitchSprite(FALLING_RIGHT_SPRITE, FALLING_FRAME_COUNT, FALLING_FRAME_TIME);
-                        }
-                    }
-                }
-                isStill = true;
+                AttackUpdate(dt);
             } else {
-                if (input.IsKeyDown(D_KEY)) {
-                    velocity.x = WALKING_SPEED;
-                    if((isStill || (!wasOnGround) || (isLeftSide)) && isOnGround ) {
-                        charSprite->SwitchSprite(WALKING_SPRITE_RIGHT, WALKING_FRAME_COUNT, WALKING_FRAME_TIME);
-                    }
-                    isStill = false;
-                    isLeftSide = false;
-                    if(isOnGround) {
-                        walkingSoundTimer.Update(dt);
-                        if(walkingSoundTimer.Get() >= WALKING_SOUND_TIMER) {
-                            sound->Open(WALKING_SOUND);
-                            sound->Play(1);
-                            walkingSoundTimer.Restart();
-                        }
-                    }
-                    //charSprite->flip = false;
-                } else {
-                    if (input.IsKeyDown(A_KEY)) {
-                        velocity.x = -1 * WALKING_SPEED;
-                        if ((isStill || (!wasOnGround) || (!isLeftSide)) && isOnGround) {
-                            charSprite->SwitchSprite(WALKING_SPRITE_LEFT, WALKING_FRAME_COUNT, WALKING_FRAME_TIME);
-                        }
-                        if(isOnGround) {
-                            walkingSoundTimer.Update(dt);
-                            if(walkingSoundTimer.Get() >= WALKING_SOUND_TIMER) {
-                                sound->Open(WALKING_SOUND);
-                                sound->Play(1);
-                                walkingSoundTimer.Restart();
-                            }
-                        }
-                        isStill = false;
-                        isLeftSide = true;
-                        //charSprite->flip = true;
-                    }
-                }
-                if (input.KeyPress(W_KEY)) {
-                    if (isOnGround) {
-                        walkingSoundTimer.Restart();
-                        if(global_beat->GetOnBeat() == true){
-                            velocity.y = JUMPING_SPEED_ON_BEAT;
-                            jumpedOnBeat = true;
-                            sound->Open(JUMPING_SOUND);
-                            sound->Play(1);
-                        } else {
-                            jumpedOnBeat = false;
-                            velocity.y = JUMPING_SPEED;
-                            sound->Open(JUMPING_SOUND_ON_BEAT);
-                            sound->Play(1);
-                        }
-                        gravity = GRAVITY_RISING;
-                        isRising = true;
-                        isOnGround = false;
-                        beforeRisingDone = false;
-                        if(isLeftSide) {
-                            if( global_beat->GetOnBeat() == true) {
-                                charSprite->SwitchSprite(BEFORE_RISE_LEFT_SPRITE_ON_BEAT,BEFORE_RISE_FRAME_COUNT,BEFORE_RISE_DURATION_ON_BEAT/BEFORE_RISE_FRAME_COUNT);
-                            } else {
-                                charSprite->SwitchSprite(BEFORE_RISE_LEFT_SPRITE,BEFORE_RISE_FRAME_COUNT,BEFORE_RISE_DURATION/BEFORE_RISE_FRAME_COUNT);
-                            }
-                        } else {
-                            if( global_beat->GetOnBeat() == true) {
-                                charSprite->SwitchSprite(BEFORE_RISE_RIGHT_SPRITE_ON_BEAT,BEFORE_RISE_FRAME_COUNT,BEFORE_RISE_DURATION_ON_BEAT/BEFORE_RISE_FRAME_COUNT);
-                            } else {
-                                charSprite->SwitchSprite(BEFORE_RISE_RIGHT_SPRITE,BEFORE_RISE_FRAME_COUNT,BEFORE_RISE_DURATION/BEFORE_RISE_FRAME_COUNT);
-                            }
-                        }
-                        beforeRiseTimer.Restart();
-                    }
-                }
-                if (input.KeyPress(SPACE_KEY)) {
-                    if(canAttack) {
-                        walkingSoundTimer.Restart();
-                        int isLeft = isLeftSide ? -1 : 1;
-                        gravity = 0;
-                        velocity.y = 0;
-                        isAttacking = true;
-                        canAttack = false;
-                        isRising = false;
-                        peakDone = true;
-                        if(global_beat->GetOnBeat() == true){
-                            velocity.x = isLeft * ON_BEAT_ATTACKING_SPEED;
-                            attackOnBeat = true;
-                            sound->Open(ATTACK_SOUND_ON_BEAT);
-                            sound->Play(1);
-                        } else {
-                            velocity.x = isLeft * ATTACKING_SPEED;
-                            sound->Open(ATTACK_SOUND);
-                            sound->Play(1);
-                        }
-                        attackGO = new GameObject();
-                        attackGO->box.z = 4;
-                        if(isLeftSide) {
-                            Attack *attack = new Attack(*attackGO, {2, 2}, {0, 0}, &associated, 20, 25, 25, 76);
-                        } else {
-                            Attack *attack = new Attack(*attackGO, {2, 2}, {0, 0}, &associated, 20, 25, 155, 76);
-                        }
-                        Game::GetInstance().GetCurrentState().AddObject(attackGO);
-                        attackTimer.Restart();
-                        if(isOnGround) {
-                            if(isLeftSide) {
-                                if(global_beat->GetOnBeat() == true) {
-                                    charSprite->SwitchSprite(ATTACK_LEFT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
-                                } else {
-                                    charSprite->SwitchSprite(ATTACK_LEFT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
-                                }
-                            } else {
-                                if(global_beat->GetOnBeat() == true) {
-                                    charSprite->SwitchSprite(ATTACK_RIGHT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
-                                } else {
-                                    charSprite->SwitchSprite(ATTACK_RIGHT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
-                                }
-                            }
-                        } else {
-                            if(isLeftSide) {
-                                if(global_beat->GetOnBeat() == true) {
-                                    charSprite->SwitchSprite(ATTACK_AIR_LEFT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
-                                } else {
-                                    charSprite->SwitchSprite(ATTACK_AIR_LEFT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
-                                }
-                            } else {
-                                if(global_beat->GetOnBeat() == true) {
-                                    charSprite->SwitchSprite(ATTACK_AIR_RIGHT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
-                                } else {
-                                    charSprite->SwitchSprite(ATTACK_AIR_RIGHT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
-                                }
-                            }
-                        }
-                    }
-                }
-                if (input.KeyRelease(D_KEY) || input.KeyRelease(A_KEY)) {
-                    velocity.x = 0;
-                    if(isOnGround) {
-                        walkingSoundTimer.Restart();
-                        if(isLeftSide) {
-                            charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
-                        } else {
-                            charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
-                        }
-                        idleTimer.Restart();
-                        finishIdle = false;
-                        isStill = true;
-                    }
-                }
-                if (isRising || isFalling) {
-                    if(peakDone && isRising) {
-                        beforeRiseTimer.Update(dt);
-                        if(jumpedOnBeat) {
-                            beforeRiserDuration = BEFORE_RISE_DURATION_ON_BEAT;
-                        } else {
-                            beforeRiserDuration = BEFORE_RISE_DURATION;
-                        }
-                        if (beforeRiseTimer.Get() >= beforeRiserDuration && !beforeRisingDone) {
-                            if(isLeftSide) {
-                                charSprite->SwitchSprite(RISING_LEFT_SPRITE, RISING_FRAME_COUNT, RISING_FRAME_TIME);
-                            } else {
-                                charSprite->SwitchSprite(RISING_RIGHT_SPRITE, RISING_FRAME_COUNT, RISING_FRAME_TIME);
-                            }
-                            beforeRiseTimer.Restart();
-                            beforeRisingDone = true;
-                        }
-                    }
-                    if(isRising) {
-                        if(isLeftSide && !wasLeftSide) {
-                            charSprite->SwitchSprite(RISING_LEFT_SPRITE, RISING_FRAME_COUNT, RISING_FRAME_TIME);
-                        } else {
-                            if(!isLeftSide && wasLeftSide) {
-                                charSprite->SwitchSprite(RISING_RIGHT_SPRITE, RISING_FRAME_COUNT, RISING_FRAME_TIME);
-                            }
-                        }
-                    }
-                    if(!peakDone) {
-                        if(isLeftSide && !wasLeftSide) {
-                            charSprite->SwitchSprite(PEAK_LEFT_SPRITE, PEAK_FRAME_COUNT, PEAK_FRAME_TIME);
-                        } else {
-                            if(!isLeftSide && wasLeftSide) {
-                                charSprite->SwitchSprite(PEAK_RIGHT_SPRITE, PEAK_FRAME_COUNT, PEAK_FRAME_TIME);
-                            }
-                        }
-                    }
-                    if(isFalling) {
-                        if(isLeftSide && !wasLeftSide) {
-                            charSprite->SwitchSprite(FALLING_LEFT_SPRITE, FALLING_FRAME_COUNT, FALLING_FRAME_TIME);
-                        } else {
-                            if(!isLeftSide && wasLeftSide) {
-                                charSprite->SwitchSprite(FALLING_RIGHT_SPRITE, FALLING_FRAME_COUNT, FALLING_FRAME_TIME);
-                            }
-                        }
-                    }
-                    if (velocity.y + 3 * gravity >= 0 && isRising) {
-                        if(isLeftSide) {
-                            charSprite->SwitchSprite(PEAK_LEFT_SPRITE, PEAK_FRAME_COUNT, PEAK_FRAME_TIME);
-                        } else {
-                            charSprite->SwitchSprite(PEAK_RIGHT_SPRITE, PEAK_FRAME_COUNT, PEAK_FRAME_TIME);
-                        }
-                        peakDone = false;
-                        gravity = GRAVITY_PEAK;
-                        peakTimer.Restart();
-                        isRising = false;
-                        isFalling = true;
-                    }
-                    if (isFalling && !peakDone && !isRising && !hasChanged) {
-                        peakTimer.Update(dt);
-                        if(peakTimer.Get() >= PEAK_DURATION) {
-                            peakDone = true;
-                            hasChanged = true;
-                            gravity = GRAVITY_FALLING;
-                            if(isLeftSide) {
-                                charSprite->SwitchSprite(FALLING_LEFT_SPRITE, FALLING_FRAME_COUNT, FALLING_FRAME_TIME);
-                            } else {
-                                charSprite->SwitchSprite(FALLING_RIGHT_SPRITE, FALLING_FRAME_COUNT, FALLING_FRAME_TIME);
-                            }
-                        }
-                    }
-                }
+                MoveSideWays(dt);
+                Jump(dt);
+                DoAttack(dt);
+                StopMovingSideWays(dt);
+                ApplyPhysics(dt);
             }
         }
     }
@@ -718,6 +414,350 @@ void Character::SolidSlope1Collision(Rect tileBox) {
                 associated.box.x = tileBox.x + tileBox.w - 75;
             } else {
                 associated.box.y =  posY - associated.box.h - 40;
+            }
+        }
+    }
+}
+
+void Character::BangUpdate(float dt) {
+    idleTimer.Update(dt);
+    if (idleTimer.Get() >= IDLE_DURATION && isOnGround && !finishIdle)
+    {
+        if (isLeftSide)
+        {
+            charSprite->SwitchSprite(LITSEN_TO_MUSIC_LEFT_SPRITE, LITSEN_TO_MUSIC_FRAME_COUNT, LISTEN_TO_MUSIC_FRAME_TIME);
+        }
+        else
+        {
+            charSprite->SwitchSprite(LITSEN_TO_MUSIC_RIGHT_SPRITE, LITSEN_TO_MUSIC_FRAME_COUNT, LISTEN_TO_MUSIC_FRAME_TIME);
+        }
+        finishIdle = true;
+    }
+}
+
+void Character::IsInvincibleUpdate(float dt) {
+    if (isInvincible)
+    {
+        blinkTimer.Update(dt);
+        if (blinkTimer.Get() >= BLINKING_DURATION)
+        {
+            if (charSprite->isBlinking)
+            {
+                charSprite->isBlinking = false;
+            }
+            else
+            {
+                charSprite->isBlinking = true;
+            }
+            blinkTimer.Restart();
+        }
+        invincibilityTimer.Update(dt);
+        if (invincibilityTimer.Get() >= INVINCIBILITY_DURATION)
+        {
+            charSprite->isBlinking = false;
+            endingInvincibilityTimer.Update(dt);
+            if (endingInvincibilityTimer.Get() >= ENDING_INVINCIBILITY_DURATION)
+            {
+                isInvincible = false;
+            }
+        }
+    }
+}
+
+void Character::RecoverFromHitKnockback(float dt) {
+    hitRecoverTimer.Update(dt);
+    if(hitRecoverTimer.Get() >= RECOVER_DURATION ) {
+        velocity.x = 0;
+        canCancelKnockBack = true;
+        isStill = true;
+        recoveringFromHitKnockback = false;
+        hitRecoverTimer.Restart();
+        if(isLeftSide) {
+            charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
+        } else {
+            charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
+        }
+    }
+}
+
+void Character::GotHit(float dt) {
+    recoverFromHitTimer.Update(dt);
+    if (isOnGround)
+    {
+        if (recoverFromHitTimer.Get() >= HURT_DURATION)
+        {
+            gotHit = false;
+            gravity = GRAVITY_FALLING;
+            velocity.x = 0;
+            idleTimer.Restart();
+            finishIdle = false;
+            if (isLeftSide)
+            {
+                charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
+            }
+            else
+            {
+                charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
+            }
+        }
+    }
+}
+
+void Character::AttackUpdate(float dt) {
+    attackTimer.Update(dt);
+    if (attackTimer.Get() >= ATTACK_DURATION) {
+        velocity.x = 0;
+        gravity = GRAVITY_FALLING;
+        associated.box.x = associated.box.x + 2;
+        attackGO->RequestedDelete();
+        isAttacking = false;
+        attackOnBeat = false;
+        peakDone = true;
+        if(isOnGround) {
+            isStill = true;
+            if(isLeftSide){
+                charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
+            } else {
+                charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
+            }
+            idleTimer.Restart();
+            finishIdle = false;
+        } else {
+            if(isLeftSide) {
+                charSprite->SwitchSprite(FALLING_LEFT_SPRITE, FALLING_FRAME_COUNT, FALLING_FRAME_TIME);
+            } else {
+                charSprite->SwitchSprite(FALLING_RIGHT_SPRITE, FALLING_FRAME_COUNT, FALLING_FRAME_TIME);
+            }
+        }
+    }
+    isStill = true;
+}
+
+void Character::MoveSideWays(float dt) {
+    if (InputManager::GetInstance().IsKeyDown(D_KEY)) {
+        velocity.x = WALKING_SPEED;
+        if((isStill || (!wasOnGround) || (isLeftSide)) && isOnGround ) {
+            charSprite->SwitchSprite(WALKING_SPRITE_RIGHT, WALKING_FRAME_COUNT, WALKING_FRAME_TIME);
+        }
+        isStill = false;
+        isLeftSide = false;
+        if(isOnGround) {
+            walkingSoundTimer.Update(dt);
+            if(walkingSoundTimer.Get() >= WALKING_SOUND_TIMER) {
+                sound->Open(WALKING_SOUND);
+                sound->Play(1);
+                walkingSoundTimer.Restart();
+            }
+        }
+        //charSprite->flip = false;
+    } else {
+        if (InputManager::GetInstance().IsKeyDown(A_KEY)) {
+            velocity.x = -1 * WALKING_SPEED;
+            if ((isStill || (!wasOnGround) || (!isLeftSide)) && isOnGround) {
+                charSprite->SwitchSprite(WALKING_SPRITE_LEFT, WALKING_FRAME_COUNT, WALKING_FRAME_TIME);
+            }
+            if(isOnGround) {
+                walkingSoundTimer.Update(dt);
+                if(walkingSoundTimer.Get() >= WALKING_SOUND_TIMER) {
+                    sound->Open(WALKING_SOUND);
+                    sound->Play(1);
+                    walkingSoundTimer.Restart();
+                }
+            }
+            isStill = false;
+            isLeftSide = true;
+            //charSprite->flip = true;
+        }
+    }
+}
+
+void Character::Jump(float dt) {
+    if (InputManager::GetInstance().KeyPress(W_KEY)) {
+        if (isOnGround) {
+            walkingSoundTimer.Restart();
+            if(global_beat->GetOnBeat() == true){
+                velocity.y = JUMPING_SPEED_ON_BEAT;
+                jumpedOnBeat = true;
+                sound->Open(JUMPING_SOUND);
+                sound->Play(1);
+            } else {
+                jumpedOnBeat = false;
+                velocity.y = JUMPING_SPEED;
+                sound->Open(JUMPING_SOUND_ON_BEAT);
+                sound->Play(1);
+            }
+            gravity = GRAVITY_RISING;
+            isRising = true;
+            isOnGround = false;
+            beforeRisingDone = false;
+            if(isLeftSide) {
+                if( global_beat->GetOnBeat() == true) {
+                    charSprite->SwitchSprite(BEFORE_RISE_LEFT_SPRITE_ON_BEAT,BEFORE_RISE_FRAME_COUNT,BEFORE_RISE_DURATION_ON_BEAT/BEFORE_RISE_FRAME_COUNT);
+                } else {
+                    charSprite->SwitchSprite(BEFORE_RISE_LEFT_SPRITE,BEFORE_RISE_FRAME_COUNT,BEFORE_RISE_DURATION/BEFORE_RISE_FRAME_COUNT);
+                }
+            } else {
+                if( global_beat->GetOnBeat() == true) {
+                    charSprite->SwitchSprite(BEFORE_RISE_RIGHT_SPRITE_ON_BEAT,BEFORE_RISE_FRAME_COUNT,BEFORE_RISE_DURATION_ON_BEAT/BEFORE_RISE_FRAME_COUNT);
+                } else {
+                    charSprite->SwitchSprite(BEFORE_RISE_RIGHT_SPRITE,BEFORE_RISE_FRAME_COUNT,BEFORE_RISE_DURATION/BEFORE_RISE_FRAME_COUNT);
+                }
+            }
+            beforeRiseTimer.Restart();
+        }
+    }
+}
+
+void Character::DoAttack(float dt) {
+    if (InputManager::GetInstance().KeyPress(SPACE_KEY)) {
+        if(canAttack) {
+            walkingSoundTimer.Restart();
+            int isLeft = isLeftSide ? -1 : 1;
+            gravity = 0;
+            velocity.y = 0;
+            isAttacking = true;
+            canAttack = false;
+            isRising = false;
+            peakDone = true;
+            if(global_beat->GetOnBeat() == true){
+                velocity.x = isLeft * ON_BEAT_ATTACKING_SPEED;
+                attackOnBeat = true;
+                sound->Open(ATTACK_SOUND_ON_BEAT);
+                sound->Play(1);
+            } else {
+                velocity.x = isLeft * ATTACKING_SPEED;
+                sound->Open(ATTACK_SOUND);
+                sound->Play(1);
+            }
+            attackGO = new GameObject();
+            attackGO->box.z = 4;
+            if(isLeftSide) {
+                Attack *attack = new Attack(*attackGO, {2, 2}, {0, 0}, &associated, 20, 25, 25, 76);
+            } else {
+                Attack *attack = new Attack(*attackGO, {2, 2}, {0, 0}, &associated, 20, 25, 155, 76);
+            }
+            Game::GetInstance().GetCurrentState().AddObject(attackGO);
+            attackTimer.Restart();
+            if(isOnGround) {
+                if(isLeftSide) {
+                    if(global_beat->GetOnBeat() == true) {
+                        charSprite->SwitchSprite(ATTACK_LEFT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
+                    } else {
+                        charSprite->SwitchSprite(ATTACK_LEFT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
+                    }
+                } else {
+                    if(global_beat->GetOnBeat() == true) {
+                        charSprite->SwitchSprite(ATTACK_RIGHT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
+                    } else {
+                        charSprite->SwitchSprite(ATTACK_RIGHT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
+                    }
+                }
+            } else {
+                if(isLeftSide) {
+                    if(global_beat->GetOnBeat() == true) {
+                        charSprite->SwitchSprite(ATTACK_AIR_LEFT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
+                    } else {
+                        charSprite->SwitchSprite(ATTACK_AIR_LEFT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
+                    }
+                } else {
+                    if(global_beat->GetOnBeat() == true) {
+                        charSprite->SwitchSprite(ATTACK_AIR_RIGHT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
+                    } else {
+                        charSprite->SwitchSprite(ATTACK_AIR_RIGHT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void Character::StopMovingSideWays(float dt) {
+    if (InputManager::GetInstance().KeyRelease(D_KEY) || InputManager::GetInstance().KeyRelease(A_KEY)) {
+        velocity.x = 0;
+        if(isOnGround) {
+            walkingSoundTimer.Restart();
+            if(isLeftSide) {
+                charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
+            } else {
+                charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
+            }
+            idleTimer.Restart();
+            finishIdle = false;
+            isStill = true;
+        }
+    }
+}
+
+void Character::ApplyPhysics(float dt) {
+    float beforeRiserDuration;
+    if (isRising || isFalling) {
+        if(peakDone && isRising) {
+            beforeRiseTimer.Update(dt);
+            if(jumpedOnBeat) {
+                beforeRiserDuration = BEFORE_RISE_DURATION_ON_BEAT;
+            } else {
+                beforeRiserDuration = BEFORE_RISE_DURATION;
+            }
+            if (beforeRiseTimer.Get() >= beforeRiserDuration && !beforeRisingDone) {
+                if(isLeftSide) {
+                    charSprite->SwitchSprite(RISING_LEFT_SPRITE, RISING_FRAME_COUNT, RISING_FRAME_TIME);
+                } else {
+                    charSprite->SwitchSprite(RISING_RIGHT_SPRITE, RISING_FRAME_COUNT, RISING_FRAME_TIME);
+                }
+                beforeRiseTimer.Restart();
+                beforeRisingDone = true;
+            }
+        }
+        if(isRising) {
+            if(isLeftSide && !wasLeftSide) {
+                charSprite->SwitchSprite(RISING_LEFT_SPRITE, RISING_FRAME_COUNT, RISING_FRAME_TIME);
+            } else {
+                if(!isLeftSide && wasLeftSide) {
+                    charSprite->SwitchSprite(RISING_RIGHT_SPRITE, RISING_FRAME_COUNT, RISING_FRAME_TIME);
+                }
+            }
+        }
+        if(!peakDone) {
+            if(isLeftSide && !wasLeftSide) {
+                charSprite->SwitchSprite(PEAK_LEFT_SPRITE, PEAK_FRAME_COUNT, PEAK_FRAME_TIME);
+            } else {
+                if(!isLeftSide && wasLeftSide) {
+                    charSprite->SwitchSprite(PEAK_RIGHT_SPRITE, PEAK_FRAME_COUNT, PEAK_FRAME_TIME);
+                }
+            }
+        }
+        if(isFalling) {
+            if(isLeftSide && !wasLeftSide) {
+                charSprite->SwitchSprite(FALLING_LEFT_SPRITE, FALLING_FRAME_COUNT, FALLING_FRAME_TIME);
+            } else {
+                if(!isLeftSide && wasLeftSide) {
+                    charSprite->SwitchSprite(FALLING_RIGHT_SPRITE, FALLING_FRAME_COUNT, FALLING_FRAME_TIME);
+                }
+            }
+        }
+        if (velocity.y + 3 * gravity >= 0 && isRising) {
+            if(isLeftSide) {
+                charSprite->SwitchSprite(PEAK_LEFT_SPRITE, PEAK_FRAME_COUNT, PEAK_FRAME_TIME);
+            } else {
+                charSprite->SwitchSprite(PEAK_RIGHT_SPRITE, PEAK_FRAME_COUNT, PEAK_FRAME_TIME);
+            }
+            peakDone = false;
+            gravity = GRAVITY_PEAK;
+            peakTimer.Restart();
+            isRising = false;
+            isFalling = true;
+        }
+        if (isFalling && !peakDone && !isRising && !hasChanged) {
+            peakTimer.Update(dt);
+            if(peakTimer.Get() >= PEAK_DURATION) {
+                peakDone = true;
+                hasChanged = true;
+                gravity = GRAVITY_FALLING;
+                if(isLeftSide) {
+                    charSprite->SwitchSprite(FALLING_LEFT_SPRITE, FALLING_FRAME_COUNT, FALLING_FRAME_TIME);
+                } else {
+                    charSprite->SwitchSprite(FALLING_RIGHT_SPRITE, FALLING_FRAME_COUNT, FALLING_FRAME_TIME);
+                }
             }
         }
     }

@@ -126,6 +126,16 @@ class Character : public Component {
   bool wasLeftSide;
   bool isOnSlope;
   void LandOnground();
+  void BangUpdate(float dt);
+  void IsInvincibleUpdate(float dt);
+  void GotHit(float dt);
+  void RecoverFromHitKnockback(float dt);
+  void AttackUpdate(float dt);
+  void MoveSideWays(float dt);
+  void Jump(float dt);
+  void DoAttack(float dt);
+  void ApplyPhysics(float dt);
+  void StopMovingSideWays(float dt);
   void SolidGroundCollision(Rect tileBox);
   void SolidSlope1Collision(Rect tileBox);
   void SolidSlope2Collision(Rect tileBox);
