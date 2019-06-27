@@ -5,9 +5,15 @@ LevelState::LevelState() : State()
     Start();
 }
 
-void LevelState::LoadAssets() {
+void LevelState::Start() {
+    State::Start();
+    levelCompleted = false;
     switchedBegininMusic = false;
     switchedDevelopmentMusic = false;
+    beforeFinishLevelTimer.Restart();
+}
+
+void LevelState::LoadAssets() {
     //Adicionando Background
 
     CameraFollower *cameraFollower;
@@ -123,12 +129,12 @@ void LevelState::LoadAssets() {
 
     //Adicionando Inimigo ( AccordionEnemy )
 
-    /*accordionEnemyGO = new GameObject();
+    accordionEnemyGO = new GameObject();
     accordionEnemy = new AccordionEnemy(*accordionEnemyGO, 10, 10, characterGO);
     accordionEnemyGO->box.x = 2500;
     accordionEnemyGO->box.y = 2990;
     accordionEnemyGO->box.z = 4;
-    objectArray.emplace_back(accordionEnemyGO);*/
+    objectArray.emplace_back(accordionEnemyGO);
 
     //Inimigo Adicionado
 
@@ -186,6 +192,20 @@ void LevelState::LoadAssets() {
     objectArray.emplace_back(tileTerrBackerGO);
 
     //TileMap Decoracao BackGround Adicionada
+
+    //Adicionando Goal
+
+    goalGO = new GameObject();
+    Goal *goal;
+    goal = new Goal(*goalGO);
+    goalGO->box.x = 9687;
+    goalGO->box.y = 2900;
+    // goalGO->box.x = 300;
+    // goalGO->box.y = 3000;
+    goalGO->box.z = 4;
+    objectArray.emplace_back(goalGO);
+
+    //Goal adicionado
 }
 
 void LevelState::Pause()
@@ -231,52 +251,67 @@ void LevelState::UpdateMusic(float dt) {
 }
 
 void LevelState::Update(float dt) {
+    VictoryState *victoryState;
     TileMapCollider *tileMapForeCollider = ((TileMapCollider*) tileTerrForeGO->GetComponent("TileMapCollider").get());
     TileMapCollider *tileMapBackCollider = ((TileMapCollider*) tileTerrBackGO->GetComponent("TileMapCollider").get());
-    State::Update(dt);
-    for (int i = tileMapForeCollider->boxes.size() - 1; i >= 0; i--)
-    {
-        if(Camera::IsOnCamera(tileMapForeCollider->boxes[i]))
+    if(!levelCompleted) {
+        State::Update(dt);
+        for (int i = tileMapForeCollider->boxes.size() - 1; i >= 0; i--)
         {
-            for (int j = objectArray.size() - 1; j >= 0; j--)
+            if(Camera::IsOnCamera(tileMapForeCollider->boxes[i]))
             {
-                if(Camera::IsOnCamera(objectArray[j]->box))
+                for (int j = objectArray.size() - 1; j >= 0; j--)
                 {
-                    if (objectArray[j]->GetComponent("Collider") != NULL)
+                    if(Camera::IsOnCamera(objectArray[j]->box))
                     {
-                        if (Collision::IsColliding(((Collider *)objectArray[j]->GetComponent("Collider").get())->box, tileMapForeCollider->boxes[i], objectArray[j]->angleDeg, 0) == true)
+                        if (objectArray[j]->GetComponent("Collider") != NULL)
                         {
-                            objectArray[j]->NotifyCollisionWithMap(tileMapForeCollider->boxes[i]);
+                            if (Collision::IsColliding(((Collider *)objectArray[j]->GetComponent("Collider").get())->box, tileMapForeCollider->boxes[i], objectArray[j]->angleDeg, 0) == true)
+                            {
+                                objectArray[j]->NotifyCollisionWithMap(tileMapForeCollider->boxes[i]);
+                            }
                         }
                     }
                 }
             }
         }
-    }
-    for (int i = tileMapBackCollider->boxes.size() - 1; i >= 0; i--)
-    {
-        if(Camera::IsOnCamera(tileMapBackCollider->boxes[i]))
+        for (int i = tileMapBackCollider->boxes.size() - 1; i >= 0; i--)
         {
-            for (int j = objectArray.size() - 1; j >= 0; j--)
+            if(Camera::IsOnCamera(tileMapBackCollider->boxes[i]))
             {
-                if(Camera::IsOnCamera(objectArray[j]->box))
+                for (int j = objectArray.size() - 1; j >= 0; j--)
                 {
-                    if (objectArray[j]->GetComponent("Collider") != NULL)
+                    if(Camera::IsOnCamera(objectArray[j]->box))
                     {
-                        if (Collision::IsColliding(((Collider *)objectArray[j]->GetComponent("Collider").get())->box, tileMapBackCollider->boxes[i], objectArray[j]->angleDeg, 0) == true)
+                        if (objectArray[j]->GetComponent("Collider") != NULL)
                         {
-                            objectArray[j]->NotifyCollisionWithMap(tileMapBackCollider->boxes[i]);
+                            if (Collision::IsColliding(((Collider *)objectArray[j]->GetComponent("Collider").get())->box, tileMapBackCollider->boxes[i], objectArray[j]->angleDeg, 0) == true)
+                            {
+                                objectArray[j]->NotifyCollisionWithMap(tileMapBackCollider->boxes[i]);
+                            }
                         }
                     }
                 }
             }
         }
+        UpdateMusic(dt);
+    } else {
+        ((Music*) bg->GetComponent("Music").get())->Stop(0);
+        Camera::UnFollow();
+        goalGO->Update(dt);
+        beforeFinishLevelTimer.Update(dt);
+        if(beforeFinishLevelTimer.Get() >= BEFORE_FINISH_LEVEL_TIME ) {
+            popRequested = true;
+            victoryState = new VictoryState();
+            bg->RequestedDelete();
+            Game::GetInstance().Push(victoryState);
+            for(int k = 0; k < objectArray.size(); k++) {
+                if(objectArray[k]->IsDead() == true) {
+                    objectArray.erase(objectArray.begin() + k);
+                }
+	        }
+        }
     }
-    if (InputManager::GetInstance().QuitRequested())
-    {
-        quitRequested = true;
-    }
-    UpdateMusic(dt);
 }
 
 GameObject *LevelState::GetBeatObject()

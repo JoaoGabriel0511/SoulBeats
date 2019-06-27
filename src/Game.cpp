@@ -108,7 +108,9 @@ void Game::Run() {
             }
         }
         if(storedState != NULL) {
-            stateStack.top()->Pause();
+            if(!stateStack.empty()) {
+                stateStack.top()->Pause();
+            }
             stateStack.push(storedState);
             stateStack.top()->Start();
             storedState = NULL;

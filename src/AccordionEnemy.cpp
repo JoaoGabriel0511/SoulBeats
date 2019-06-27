@@ -4,7 +4,7 @@ AccordionEnemy::AccordionEnemy(GameObject &associated, int movingDistance, int m
 {
     this->character = character;
     Collider *collider;
-    collider = new Collider(associated, {2, 2}, {-140, 0});
+    collider = new Collider(associated, {2, 2}, {-120, -40}, {0, 20});
     Start();
 }
 

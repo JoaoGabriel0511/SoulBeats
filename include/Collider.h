@@ -6,8 +6,10 @@
 class Collider : public Component{
     Vect2 scale;
     Vect2 offset;
+    Vect2 posOffset;
     public:
         Collider(GameObject& associated, Vect2 scale, Vect2 offset);
+        Collider(GameObject& associated, Vect2 scale, Vect2 offset, Vect2 posOffset);
         Collider(GameObject& associated);
         Rect box;
         void Update(float dt);
