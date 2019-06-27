@@ -10,11 +10,17 @@
 #include <SDL2/SDL.h>
 #endif // DEBUG
 
-
+Collider::Collider(GameObject& associated, Vect2 scale, Vect2 offset, Vect2 posOffset) : Component(associated) {
+    this->scale = scale;
+    this->offset = offset;
+    this->posOffset = posOffset;
+}
 
 Collider::Collider(GameObject& associated, Vect2 scale, Vect2 offset) : Component(associated) {
     this->scale = scale;
     this->offset = offset;
+    this->posOffset.x = 0;
+    this->posOffset.y = 0;
 }
 
 Collider::Collider(GameObject& associated) : Component(associated) {
@@ -22,6 +28,8 @@ Collider::Collider(GameObject& associated) : Component(associated) {
     this->scale.y = 1;
     this->offset.x = 0;
     this->offset.y = 0;
+    this->posOffset.x = 0;
+    this->posOffset.y = 0;
 }
 
 void Collider::Update(float dt) {
@@ -30,8 +38,8 @@ void Collider::Update(float dt) {
     box.w = box.w * scale.x;
     box.w = box.w + offset.x;
     box.h = box.h + offset.y;
-    box.x = box.x - offset.x/2;
-    box.y = box.y - offset.y/2;
+    box.x = (box.x - offset.x/2) + posOffset.x;
+    box.y = (box.y - offset.y/2) + posOffset.y;
 }
 
 // Copie o conteúdo dessa função para dentro da sua e adapte o nome das funções para as suas.

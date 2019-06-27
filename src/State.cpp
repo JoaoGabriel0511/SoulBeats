@@ -45,6 +45,9 @@ void State::Pause() {}
 void State::Resume() {}
 
 void State::Update(float dt) {
+	if (InputManager::GetInstance().QuitRequested()) {
+        quitRequested = true;
+    }
 	Camera::Update(dt);
 	UpdateArray(dt);
 }

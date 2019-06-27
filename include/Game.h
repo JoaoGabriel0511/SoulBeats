@@ -24,7 +24,6 @@ class Game {
     float height;
     void CalculateDeltaTime();
     stack<State*> stateStack;
-    
     public:
         Game(string title, int width, int height);
         ~Game();
