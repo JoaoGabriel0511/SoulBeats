@@ -10,10 +10,10 @@ bin/LevelState.o: src/LevelState.cpp src/../include/LevelState.h \
  src/../include/Collider.h src/../include/CameraFollower.h \
  src/../include/Beat.h src/../include/Character.h src/../include/Attack.h \
  src/../include/BellEnemy.h src/../include/HarpEnemy.h \
- src/../include/AccordionEnemy.h src/../include/TileMap.h \
- src/../include/TileSet.h src/../include/TileMapCollider.h \
- src/../include/Goal.h src/../include/LevelState.h \
- src/../include/VictoryState.h
+ src/../include/AccordionEnemy.h src/../include/Collectable.h \
+ src/../include/TileMap.h src/../include/TileSet.h \
+ src/../include/TileMapCollider.h src/../include/Goal.h \
+ src/../include/LevelState.h src/../include/VictoryState.h
 
 src/../include/LevelState.h:
 
@@ -66,6 +66,8 @@ src/../include/BellEnemy.h:
 src/../include/HarpEnemy.h:
 
 src/../include/AccordionEnemy.h:
+
+src/../include/Collectable.h:
 
 src/../include/TileMap.h:
 
