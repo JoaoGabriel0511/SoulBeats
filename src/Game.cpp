@@ -12,7 +12,6 @@ using namespace std;
 
 Game* Game::instance;
 Beat* global_beat;
-bool global_hit_flag = false;
 
 Game& Game::GetInstance() {
     if(instance != NULL) {
@@ -99,6 +98,7 @@ void Game::Run() {
     Debugger debugger = Debugger::GetInstance();
     if(storedState != NULL) {
         stateStack.push(storedState);
+        stateStack.top()->Start();
         storedState = NULL;
     }
     while(stateStack.top()->QuitRequested() == false && !stateStack.empty()) {
@@ -109,7 +109,9 @@ void Game::Run() {
             }
         }
         if(storedState != NULL) {
-            stateStack.top()->Pause();
+            if(!stateStack.empty()) {
+                stateStack.top()->Pause();
+            }
             stateStack.push(storedState);
             stateStack.top()->Start();
             storedState = NULL;
@@ -137,7 +139,7 @@ void Game::Run() {
         if(debugger.lookLoopGame) {
             cout<<"LOOP "<< i << " DO JOGO FINALIZADO"<<endl;
         }
-        SDL_Delay(5);
+        SDL_Delay(3);
     }
     while(!stateStack.empty()) {
         stateStack.pop();

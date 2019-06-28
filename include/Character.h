@@ -34,10 +34,13 @@
 #define BEFORE_RISE_DURATION 0.2
 #define PEAK_DURATION 0.4
 #define WALKING_SPEED 400
+#define WALKING_SOUND "assets/audio/SFX/Passo1.wav"
 #define ON_BEAT_ATTACKING_SPEED 1000
 #define ATTACKING_SPEED 800
-#define JUMPING_SPEED -930
-#define JUMPING_SPEED_ON_BEAT -1100
+#define JUMPING_SOUND "assets/audio/SFX/PuloForte1.wav"
+#define JUMPING_SOUND_ON_BEAT "assets/audio/SFX/PuloFraco1.wav"
+#define JUMPING_SPEED -1100
+#define JUMPING_SPEED_ON_BEAT -1350
 #define GRAVITY_RISING 25
 #define GRAVITY_PEAK 8
 #define GRAVITY_FALLING 25
@@ -54,6 +57,8 @@
 #define INVINCIBILITY_DURATION 0.7
 #define ENDING_INVINCIBILITY_DURATION 0.15
 #define BLINKING_DURATION 0.05
+#define ATTACK_SOUND "assets/audio/SFX/GolpeFraco1.wav"
+#define ATTACK_SOUND_ON_BEAT "assets/audio/SFX/GolpeForte1.wav"
 #define ATTACK_RIGHT_SPRITE "assets/img/char/SoulBeatsCharAttack.png"
 #define ATTACK_RIGHT_SPRITE_ON_BEAT "assets/img/char/SoulBeatsCharAttackBEAT.png"
 #define ATTACK_LEFT_SPRITE "assets/img/char/SoulBeatsCharAttackL.png"
@@ -72,6 +77,14 @@
 #define HIT_RECOVER_TIME 0.2
 #define MAX_CHARACTER_HEIGHT 3700.00
 #define DEATH_SCREEN_TIME 0.5
+#define RECOVER_SPRITE_RIGHT "assets/img/char/SoulBeatsCharBounce.png"
+#define RECOVER_SPRITE_RIGHT_ON_BEAT "assets/img/char/SoulBeatsCharBounceBEAT.png"
+#define RECOVER_SPRITE_LEFT_ON_BEAT "assets/img/char/SoulBeatsCharBounceLeftBEAT.png"
+#define RECOVER_SPRITE_LEFT "assets/img/char/SoulBeatsCharBounceL.png"
+#define RECOVER_FRAME_COUNT 6
+#define HIT_DEFLECT_SPEED 250
+#define RECOVER_DURATION 0.5
+#define WALKING_SOUND_TIMER 0.3
 #include "Component.h"
 #include "Sprite.h"
 #include "Attack.h"
@@ -92,15 +105,19 @@ class Character : public Component {
   bool gotHit;
   bool finishIdle;
   bool landingDone;
+  bool attackOnBeat;
+  bool canCancelKnockBack;
   bool isInvincible;
   bool isAttacking;
   bool hasChanged;
   bool canAttack;
   bool jumpedOnBeat;
+  bool playingWalkingSound;
   bool recoveringFromHitKnockback;
   bool isDead;
-  
+
   Timer beforeRiseTimer;
+  Timer walkingSoundTimer;
   Timer recoverFromHitTimer;
   Timer peakTimer;
   Timer blinkTimer;
@@ -112,13 +129,28 @@ class Character : public Component {
   Timer hitRecoverTimer;
   Timer deathTimer;
 
+  Sound *sound;
   float gravity;
   GameObject *attackGO;
   bool isLeftSide;
   bool wasLeftSide;
+  bool isOnSlope;
   void LandOnground();
+  void BangUpdate(float dt);
+  void IsInvincibleUpdate(float dt);
+  void GotHit(float dt);
+  void RecoverFromHitKnockback(float dt);
+  void AttackUpdate(float dt);
+  void MoveSideWays(float dt);
+  void Jump(float dt);
+  void DoAttack(float dt);
+  void ApplyPhysics(float dt);
+  void StopMovingSideWays(float dt);
   void SolidGroundCollision(Rect tileBox);
-  void SolidSlopeCollision(Rect tileBox);
+  void SolidSlope1Collision(Rect tileBox);
+  void SolidSlope2Collision(Rect tileBox);
+  void LightSlope1Collision(Rect tileBox);
+  void LightSlope2Collision(Rect tileBox);
   void LightGroundCollision(Rect tileBox);
   int hp;
   
@@ -126,6 +158,8 @@ class Character : public Component {
     Character(GameObject &associated);
     void Update(float dt);
     void Start();
+    bool AttackOnBeat();
+    void HitKnockBack();
     bool Is(string type);
     void NotifyCollision(GameObject &other);
     void NotifYCollisionWithMap(Rect Tilebox);

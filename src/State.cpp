@@ -37,14 +37,17 @@ weak_ptr<GameObject> State::GetObjectPtr(GameObject *go) {
 
 void State::Start() {
 	started = true;
-	StartArray();
 	LoadAssets();
+	StartArray();
 }
 
 void State::Pause() {}
 void State::Resume() {}
 
 void State::Update(float dt) {
+	if (InputManager::GetInstance().QuitRequested()) {
+        quitRequested = true;
+    }
 	Camera::Update(dt);
 	UpdateArray(dt);
 }
@@ -74,12 +77,18 @@ void State::UpdateArray(float dt) {
         objectArray[i]->Update(dt);
     }
 	for(int i = objectArray.size() - 1; i >= 0 ; i--) {
-		if(objectArray[i]->GetComponent("Collider") != NULL) {
-			for(int j = i-1; j >= 0 ; j--) {
-				if(objectArray[j]->GetComponent("Collider") != NULL) {
-					if(Collision::IsColliding(((Collider*) objectArray[i]->GetComponent("Collider").get())->box, ((Collider*) objectArray[j]->GetComponent("Collider").get())->box, objectArray[i]->angleDeg, objectArray[j]->angleDeg) == true) {
-						objectArray[i]->NotifyCollision(*objectArray[j].get());
-						objectArray[j]->NotifyCollision(*objectArray[i].get());
+		if(Camera::IsOnCamera(objectArray[i]->box))
+        {
+			if(objectArray[i]->GetComponent("Collider") != NULL) {
+				for(int j = i-1; j >= 0 ; j--) {
+					if(Camera::IsOnCamera(objectArray[j]->box))
+                	{
+						if(objectArray[j]->GetComponent("Collider") != NULL) {
+							if(Collision::IsColliding(((Collider*) objectArray[i]->GetComponent("Collider").get())->box, ((Collider*) objectArray[j]->GetComponent("Collider").get())->box, objectArray[i]->angleDeg, objectArray[j]->angleDeg) == true) {
+								objectArray[i]->NotifyCollision(*objectArray[j].get());
+								objectArray[j]->NotifyCollision(*objectArray[i].get());
+							}
+						}
 					}
 				}
 			}

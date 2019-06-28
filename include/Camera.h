@@ -14,6 +14,7 @@ class Camera {
         static bool IsOnCamera(Rect box, float paralaxX, float paralaxY);
         static Vect2 pos;
         static Vect2 speed;
+        static bool debug;
 };
 
 #endif

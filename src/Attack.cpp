@@ -3,7 +3,6 @@
 Attack::Attack(GameObject &associated, Vect2 scale, Vect2 offset, GameObject *attackOrigin, int width, int height, float offsetX, float offsetY) : Component(associated){
     Collider *collider = new Collider(associated, scale, offset);
     this->attackOrigin = attackOrigin;
-    Start();
     associated.box.h = height;
     associated.box.w = width;
     this->offsetX = offsetX;

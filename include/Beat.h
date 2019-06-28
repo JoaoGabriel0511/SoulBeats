@@ -2,11 +2,11 @@
 #define BEAT_H
 #define IDLE_HEART_SPRITE "assets/img/heart/HeartStill.png"
 #define BEATING_HEART_SPRITE "assets/img/heart/Heart.png"
-#define BEAT_FALSE_LIMIT 2.0
-#define BEAT_TRUE_LIMIT 0.5
+#define BEATING_HEART_BG "assets/img/heart/Interface do coração.png"
+#define BEAT_FALSE_LIMIT 0.4
+#define BEAT_TRUE_LIMIT 0.2
 #define STILL_FRAME_COUNT 1
 #define FRAME_COUNT 8
-#define FRAME_TIME 0.08
 #include "Component.h"
 #include "Sprite.h"
 #include "Timer.h"
@@ -16,9 +16,9 @@ class Beat : public Component {
     Timer trueTimer;
     Timer falseTimer;
     bool onBeat;
-
+    GameObject *heartBackground;
     public:
-        Beat(GameObject& associated);
+        Beat(GameObject& associated, GameObject* heartBackground);
         void Update(float dt);
         void Start();
         void Render();
