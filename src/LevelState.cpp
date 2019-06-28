@@ -38,6 +38,13 @@ void LevelState::LoadAssets() {
     AccordionEnemy *accordionEnemy1;
     GameObject *accordionEnemy2GO;
     AccordionEnemy *accordionEnemy2;
+    GameObject *bellEnemyGO;
+    BellEnemy *bellEnemy;
+
+    GameObject *collectable1GO;
+    Collectable *collectable1;
+    GameObject *collectable2GO;
+    Collectable *collectable2;
 
     Sprite *levelSprite;
     Music *levelMusic;
@@ -97,7 +104,7 @@ void LevelState::LoadAssets() {
     //Floresta 1 Adicionada
 
     //// Beat Game Object
-    GameObject* heartBackground = new GameObject();
+    GameObject *heartBackground = new GameObject();
     new Sprite(*heartBackground, BEATING_HEART_BG, 1, 1);
     heartBackground->box.x = 901;
     heartBackground->box.y = 31;
@@ -107,7 +114,7 @@ void LevelState::LoadAssets() {
     beat->box.x = 900;
     beat->box.y = 30;
     beat->box.z = 6;
-    Beat* beat_component = new Beat(*beat, heartBackground);
+    Beat *beat_component = new Beat(*beat, heartBackground);
     global_beat = beat_component;
     objectArray.emplace_back(beat);
 
@@ -220,6 +227,30 @@ void LevelState::LoadAssets() {
     accordionEnemy2GO->box.y = 2570;
     accordionEnemy2GO->box.z = 4;
     objectArray.emplace_back(accordionEnemy2GO);
+    //Adicionando Coletável ( Collectable )
+
+    collectable1GO = new GameObject();
+    collectable1 = new Collectable(*collectable1GO, 10, 10, characterGO);
+    collectable1GO->box.x = 1691;
+    collectable1GO->box.y = 3036;
+    collectable1GO->box.z = 4;
+    objectArray.emplace_back(collectable1GO);
+
+    //Adicionando Coletável ( Collectable )
+
+    collectable1GO = new GameObject();
+    collectable1 = new Collectable(*collectable1GO, 10, 10, characterGO);
+    collectable1GO->box.x = 4149;
+    collectable1GO->box.y = 3036;
+    collectable1GO->box.z = 4;
+    objectArray.emplace_back(collectable1GO);
+
+    /*accordionEnemyGO = new GameObject();
+    accordionEnemy = new AccordionEnemy(*accordionEnemyGO, 10, 10, characterGO);
+    accordionEnemyGO->box.x = 2500;
+    accordionEnemyGO->box.y = 2990;
+    accordionEnemyGO->box.z = 4;
+    objectArray.emplace_back(accordionEnemyGO);*/
 
     //Inimigo Adicionado
 
@@ -301,28 +332,35 @@ void LevelState::Resume()
 {
 }
 
-void LevelState::UpdateMusic(float dt) {
+void LevelState::UpdateMusic(float dt)
+{
     beginingMusicTimer.Update(dt);
-    if(beginingMusicTimer.Get() >= BEGINING_MUSIC_TIME){
-        if(!switchedBegininMusic) {
+    if (beginingMusicTimer.Get() >= BEGINING_MUSIC_TIME)
+    {
+        if (!switchedBegininMusic)
+        {
             switchedBegininMusic = true;
-            ((Music*) bg->GetComponent("Music").get())->Open(DEVELOPMENT_MUSIC);
-            ((Music*) bg->GetComponent("Music").get())->Play(-1);
+            ((Music *)bg->GetComponent("Music").get())->Open(DEVELOPMENT_MUSIC);
+            ((Music *)bg->GetComponent("Music").get())->Play(-1);
         }
         developmentMusicTimer.Update(dt);
-        if(developmentMusicTimer.Get() >= DEVELOPMENT_MUSIC_TIME) {
-            if(!switchedDevelopmentMusic) {
+        if (developmentMusicTimer.Get() >= DEVELOPMENT_MUSIC_TIME)
+        {
+            if (!switchedDevelopmentMusic)
+            {
                 switchedDevelopmentMusic = true;
-                ((Music*) bg->GetComponent("Music").get())->Open(MAIN_MUSIC);
-                ((Music*) bg->GetComponent("Music").get())->Play(-1);
+                ((Music *)bg->GetComponent("Music").get())->Open(MAIN_MUSIC);
+                ((Music *)bg->GetComponent("Music").get())->Play(-1);
             }
             mainMusicTimer.Update(dt);
-            if(mainMusicTimer.Get() >= MAIN_MUSIC_TIME) {
-                ((Music*) bg->GetComponent("Music").get())->Stop(0);
+            if (mainMusicTimer.Get() >= MAIN_MUSIC_TIME)
+            {
+                ((Music *)bg->GetComponent("Music").get())->Stop(0);
                 musicStopTimer.Update(dt);
-                if(musicStopTimer.Get() >= STOP_MUSIC_TIME) {
-                    ((Music*) bg->GetComponent("Music").get())->Open(BEGINING_MUSIC);
-                    ((Music*) bg->GetComponent("Music").get())->Play(-1);
+                if (musicStopTimer.Get() >= STOP_MUSIC_TIME)
+                {
+                    ((Music *)bg->GetComponent("Music").get())->Open(BEGINING_MUSIC);
+                    ((Music *)bg->GetComponent("Music").get())->Play(-1);
                     mainMusicTimer.Restart();
                     developmentMusicTimer.Restart();
                     beginingMusicTimer.Restart();
