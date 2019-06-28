@@ -2,7 +2,6 @@
 
 Beat::Beat(GameObject& associated, GameObject* heartBackground) : Component(associated){
     this->heartBackground = heartBackground;
-    Start();
 }
 
 void Beat::Start(){

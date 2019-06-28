@@ -146,6 +146,7 @@ class Character : public Component {
     Character(GameObject &associated);
     void Update(float dt);
     void Start();
+    bool AttackOnBeat();
     void HitKnockBack();
     bool Is(string type);
     void NotifyCollision(GameObject &other);

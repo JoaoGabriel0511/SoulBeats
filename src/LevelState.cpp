@@ -2,7 +2,6 @@
 
 LevelState::LevelState() : State()
 {
-    Start();
 }
 
 void LevelState::Start() {
@@ -112,10 +111,10 @@ void LevelState::LoadAssets() {
     //Adicionando Inimigo ( BellEnemy )
 
     bellEnemyGO = new GameObject();
-    bellEnemy = new BellEnemy(*bellEnemyGO, 10, 10, characterGO);
     bellEnemyGO->box.x = 1700;
     bellEnemyGO->box.y = 2630;
     bellEnemyGO->box.z = 4;
+    bellEnemy = new BellEnemy(*bellEnemyGO, 10, 10, characterGO);
     objectArray.emplace_back(bellEnemyGO);
 
     //Adicionando Inimigo ( HarpEnemy )
@@ -131,8 +130,8 @@ void LevelState::LoadAssets() {
 
     accordionEnemyGO = new GameObject();
     accordionEnemy = new AccordionEnemy(*accordionEnemyGO, 10, 10, characterGO);
-    accordionEnemyGO->box.x = 2500;
-    accordionEnemyGO->box.y = 2990;
+    accordionEnemyGO->box.x = 300;
+    accordionEnemyGO->box.y = 3100;
     accordionEnemyGO->box.z = 4;
     objectArray.emplace_back(accordionEnemyGO);
 

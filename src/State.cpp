@@ -37,8 +37,8 @@ weak_ptr<GameObject> State::GetObjectPtr(GameObject *go) {
 
 void State::Start() {
 	started = true;
-	StartArray();
 	LoadAssets();
+	StartArray();
 }
 
 void State::Pause() {}

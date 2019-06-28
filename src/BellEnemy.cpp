@@ -5,7 +5,6 @@ BellEnemy::BellEnemy(GameObject& associated, int movingDistance, int movingSpeed
     Collider* collider;
     sound = new Sound(associated);
     collider = new Collider(associated, {2,2}, {-140,0});
-    Start();
 }
 
 bool BellEnemy::Is(string type) {
@@ -19,9 +18,17 @@ bool BellEnemy::Is(string type) {
 void BellEnemy::Start() {
     state = IDLE;
     idleTimer.Restart();
+    hp = 2;
     side = RIGHT;
     bellEnemySprite = new Sprite(associated,ENEMY_IDLE_SPRITE,ENEMY_IDLE_FRAME_COUNT,ENEMY_IDLE_DURATION/ENEMY_IDLE_FRAME_COUNT);
     bellEnemySprite->SetScale({2,2});
+    lifeBar = new GameObject();
+    lifeBarSprite = new Sprite(*lifeBar, FULL_LIFE_BAR);
+    lifeBarSprite->SetScale({2,2});
+    lifeBar->box.x = associated.box.x + 63;
+    lifeBar->box.y = associated.box.y - 50;
+    lifeBar->box.z = 5;
+    Game::GetInstance().GetCurrentStatePointer()->AddObject(lifeBar);
 }
 
 void BellEnemy::Update(float dt) {
@@ -73,15 +80,27 @@ void BellEnemy::NotifyCollision(GameObject& other) {
         if(state != IDLE) {
             sound->Open(ENEMY_HIT_SOUND);
             sound->Play(1);
-            associated.RequestedDelete();
+            if(((Character*) character->GetComponent("Character").get())->AttackOnBeat()) {
+                hp-=2;
+            } else {
+                hp--;
+            }
+            if(hp == 1) {
+                lifeBarSprite->SwitchSprite(HALF_LIFE_BAR, 1, 0);
+            }
+            if(hp <= 0) {
+                associated.RequestedDelete();
+            }
         } else {
             sound->Open(ENEMY_DEFEND_SOUND);
             sound->Play(1);
         }
         ((Character*) character->GetComponent("Character").get())->HitKnockBack();
+        sound->Open(BELL_SOUND);
     }
 }
 
 BellEnemy::~BellEnemy() {
+    lifeBar->RequestedDelete();
     character = NULL;
 }

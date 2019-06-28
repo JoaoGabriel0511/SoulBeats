@@ -19,6 +19,9 @@
 #define ENEMY_VELOCITY_Y 1
 #define ENEMY_HIT_SOUND "assets/audio/SFX/GolpeForte2.wav"
 #define HARP_SOUND "assets/audio/SFX/Harp1.wav"
+#define FULL_LIFE_BAR "assets/img/enemies/LifeBar/VidaInimigosFull.png"
+#define TWO_THIRDS_LIFE_BAR "assets/img/enemies/LifeBar/VidaInimigos2terços.png"
+#define ONE_THIRD_LIFE_BAR "assets/img/enemies/LifeBar/VidaInimigos1terço.png"
 
 class HarpEnemy : public Component
 {
@@ -49,6 +52,9 @@ class HarpEnemy : public Component
     GameObject *character;
     Vect2 velocity;
     Rect initalPos;
+    int hp;
+    GameObject *lifeBar;
+    Sprite *lifeBarSprite;
     void SwitchHarpEnemyState(HarpEnemyState state, string sprite, int frameCount, float frameTime, Timer *timer);
 
   public:

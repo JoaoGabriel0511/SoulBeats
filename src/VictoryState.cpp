@@ -1,7 +1,6 @@
 #include "../include/VictoryState.h"
 
 VictoryState::VictoryState() : State() {
-    Start();
 }
 
 void VictoryState::Start() {

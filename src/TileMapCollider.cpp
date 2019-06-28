@@ -3,7 +3,6 @@
 
 TileMapCollider::TileMapCollider(GameObject& associated, TileMap *tileMap) : Component(associated) {
     this->tileMap = tileMap;
-    Start();
 }
 
 void TileMapCollider::Start() {

@@ -98,6 +98,7 @@ void Game::Run() {
     Debugger debugger = Debugger::GetInstance();
     if(storedState != NULL) {
         stateStack.push(storedState);
+        stateStack.top()->Start();
         storedState = NULL;
     }
     while(stateStack.top()->QuitRequested() == false && !stateStack.empty()) {

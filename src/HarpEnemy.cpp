@@ -6,7 +6,6 @@ HarpEnemy::HarpEnemy(GameObject &associated, int movingDistance, int movingSpeed
     Collider *collider;
     //initalPos = associated.box;
     collider = new Collider(associated, {2, 2}, {-70, -80});
-    Start();
 }
 
 bool HarpEnemy::Is(string type)
@@ -22,11 +21,19 @@ bool HarpEnemy::Is(string type)
 void HarpEnemy::Start()
 {
     state = LOOKING_UP;
+    hp = 3;
     switchSides.Restart();
     sound = new Sound(associated, HARP_SOUND);
     harpEnemySprite = new Sprite(associated, ENEMY_IDLE_SPRITE, ENEMY_IDLE_FRAME_COUNT, ENEMY_IDLE_DURATION / ENEMY_IDLE_FRAME_COUNT);
     harpEnemySprite->SetScale({2, 2});
     velocity = {-1 * ENEMY_VELOCITY_X, -1 * ENEMY_VELOCITY_Y};
+    lifeBar = new GameObject();
+    lifeBarSprite = new Sprite(*lifeBar, FULL_LIFE_BAR);
+    lifeBarSprite->SetScale({2,2});
+    lifeBar->box.x = associated.box.x + 35;
+    lifeBar->box.y = associated.box.y - 20;
+    lifeBar->box.z = 5;
+    Game::GetInstance().GetCurrentStatePointer()->AddObject(lifeBar);
 }
 
 void HarpEnemy::Update(float dt)
@@ -72,6 +79,8 @@ void HarpEnemy::Update(float dt)
             velocity.x = ENEMY_VELOCITY_X;
         }
     }
+    lifeBar->box.x = associated.box.x + 35;
+    lifeBar->box.y = associated.box.y - 20;
     associated.box += velocity;
 }
 
@@ -90,12 +99,27 @@ void HarpEnemy::NotifyCollision(GameObject &other)
     {
         sound->Open(ENEMY_HIT_SOUND);
         sound->Play(1);
-        associated.RequestedDelete();
+        if(((Character*) character->GetComponent("Character").get())->AttackOnBeat()) {
+            hp-=2;
+        } else {
+            hp--;
+        }
+        if(hp == 1) {
+            lifeBarSprite->SwitchSprite(ONE_THIRD_LIFE_BAR, 1, 0);
+        }
+        if(hp == 2) {
+            lifeBarSprite->SwitchSprite(TWO_THIRDS_LIFE_BAR, 1, 0);
+        }
+        if(hp <= 0) {
+            associated.RequestedDelete();
+        }
         ((Character*) character->GetComponent("Character").get())->HitKnockBack();
+        sound->Open(HARP_SOUND);
     }
 }
 
 HarpEnemy::~HarpEnemy()
 {
+    lifeBar->RequestedDelete();
     character = NULL;
 }

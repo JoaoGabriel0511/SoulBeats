@@ -15,9 +15,13 @@
 #define ENEMY_HIT_SOUND "assets/audio/SFX/GolpeForte2.wav"
 #define ENEMY_DEFEND_SOUND "assets/audio/SFX/GolpeIneficaz1.wav"
 #define BELL_SOUND "assets/audio/SFX/Sino1.wav"
+#define FULL_LIFE_BAR "assets/img/enemies/LifeBar/VidaInimigosFull.png"
+#define HALF_LIFE_BAR "assets/img/enemies/LifeBar/VidaInimigos1meio.png"
 
 class BellEnemy : public Component {
     float distance;
+    GameObject *lifeBar;
+    Sprite *lifeBarSprite;
     enum BellEnemyState { IDLE, LOOKING_RIGHT, LOOKING_LEFT, MOVING_RIGHT, MOVING_LEFT };
     enum Side {LEFT,RIGHT};
     BellEnemyState state;
@@ -30,6 +34,7 @@ class BellEnemy : public Component {
     Timer lookLeft;
     GameObject *character;
     Sound *sound;
+    int hp;
     void SwitchBellEnemyState(BellEnemyState state, string sprite, int frameCount, float frameTime, Timer * timer);
     public:
         BellEnemy(GameObject& associated, int movingDistance, int movingSpeed, GameObject *character);

@@ -7,7 +7,6 @@ Character::Character(GameObject &associated) : Component(associated)
 {
     Collider *collider;
     collider = new Collider(associated, {2, 2}, {-140, -60});
-    Start();
 }
 
 void Character::Start()
@@ -761,4 +760,8 @@ void Character::ApplyPhysics(float dt) {
             }
         }
     }
+}
+
+bool Character::AttackOnBeat() {
+    return attackOnBeat;
 }
