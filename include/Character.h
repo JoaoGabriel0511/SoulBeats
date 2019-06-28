@@ -70,6 +70,8 @@
 #define LISTEN_TO_MUSIC_FRAME_TIME 0.08333
 #define IDLE_DURATION 10
 #define HIT_RECOVER_TIME 0.2
+#define MAX_CHARACTER_HEIGHT 3700.00
+#define DEATH_SCREEN_TIME 0.5
 #include "Component.h"
 #include "Sprite.h"
 #include "Attack.h"
@@ -108,6 +110,7 @@ class Character : public Component {
   Timer invincibilityTimer;
   Timer endingInvincibilityTimer;
   Timer hitRecoverTimer;
+  Timer deathTimer;
 
   float gravity;
   GameObject *attackGO;

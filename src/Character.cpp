@@ -47,6 +47,21 @@ void Character::Update(float dt) {
     float beforeRiserDuration;
     wasLeftSide = isLeftSide;
 
+    // cout << "Character position on update: (" << associated.box.x << "," << associated.box.y << ")" << endl; 
+
+    if(associated.box.y >= MAX_CHARACTER_HEIGHT){
+        Camera::UnFollow();
+        cout << "Character passed the height limit" << endl;
+        deathTimer.Update(dt);
+        if(deathTimer.Get() >= DEATH_SCREEN_TIME){
+            LevelState* levelState;
+            levelState = new LevelState();
+            Game::GetInstance().Push(levelState);
+        }
+
+        
+    }
+
     if (hp <= 0){
         isDead = true;
     }
@@ -515,5 +530,5 @@ void Character::SolidSlopeCollision(Rect tileBox) {
             }
             LandOnground();
         }
-    }
+    }   
 }

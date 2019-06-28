@@ -15,6 +15,7 @@ class LevelState : public State {
     GameObject *tileTerrForeGO;
     GameObject *tileTerrBackGO;
     GameObject* beat;
+
     public:
         LevelState();
         void Pause();
