@@ -14,6 +14,7 @@
 #include "BellEnemy.h"
 #include "HarpEnemy.h"
 #include "AccordionEnemy.h"
+#include "Collectable.h"
 #include "TileMap.h"
 #include "TileMapCollider.h"
 #include "TileSet.h"

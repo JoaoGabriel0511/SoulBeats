@@ -12,7 +12,7 @@ Character::Character(GameObject &associated) : Component(associated)
 void Character::Start()
 {
     charSprite = new Sprite(associated, IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
-    charSprite->SetScale({2,2});
+    charSprite->SetScale({2, 2});
     sound = new Sound(associated);
     isStill = true;
     isRising = false;
@@ -116,9 +116,12 @@ bool Character::Is(string type)
 
 void Character::NotifyCollision(GameObject &other)
 {
+
+
     if (!isInvincible)
     {
-        if (other.GetComponent("BellEnemy") != NULL || other.GetComponent("HarpEnemy") != NULL || other.GetComponent("AccordionEnemy") != NULL)
+
+        if ( other.GetComponent("BellEnemy") != NULL || other.GetComponent("HarpEnemy") != NULL || other.GetComponent("AccordionEnemy") != NULL)
         {
             if (other.box.x > associated.box.x)
             {
@@ -131,7 +134,9 @@ void Character::NotifyCollision(GameObject &other)
             if (!isOnGround)
             {
                 velocity.y = HURT_BOUNCING_SPEED;
-            } else {
+            }
+            else
+            {
                 walkingSoundTimer.Restart();
             }
             gravity = HURT_GRAVITY;
@@ -181,29 +186,44 @@ void Character::NotifYCollisionWithMap(Rect tileBox)
     {
         LightGroundCollision(tileBox);
     }
-    if(tileBox.z == 101 || tileBox.z == 102 || tileBox.z == 103 || tileBox.z == 148 || tileBox.z == 104 ||
-       tileBox.z == 67 || tileBox.z == 68 || tileBox.z == 57 || tileBox.z == 58 || tileBox.z == 66 || tileBox.z == 84){
-        if(tileBox.z == 67) {
-           LightSlope1Collision(tileBox);
-           isOnSlope == true;
-        } else {
-            if(tileBox.z == 66) {
+    if (tileBox.z == 101 || tileBox.z == 102 || tileBox.z == 103 || tileBox.z == 148 || tileBox.z == 104 ||
+        tileBox.z == 67 || tileBox.z == 68 || tileBox.z == 57 || tileBox.z == 58 || tileBox.z == 66 || tileBox.z == 84)
+    {
+        if (tileBox.z == 67)
+        {
+            LightSlope1Collision(tileBox);
+            isOnSlope == true;
+        }
+        else
+        {
+            if (tileBox.z == 66)
+            {
                 LightSlope2Collision(tileBox);
                 isOnSlope = true;
-            } else {
+            }
+            else
+            {
                 LightGroundCollision(tileBox);
                 isOnSlope = false;
             }
         }
-    } else {
-        if(tileBox.z == 7) {
+    }
+    else
+    {
+        if (tileBox.z == 7)
+        {
             SolidSlope1Collision(tileBox);
             isOnSlope = true;
-        } else {
-            if(tileBox.z == 6) {
+        }
+        else
+        {
+            if (tileBox.z == 6)
+            {
                 SolidSlope2Collision(tileBox);
                 isOnSlope = true;
-            } else {
+            }
+            else
+            {
                 SolidGroundCollision(tileBox);
                 isOnSlope = false;
             }
@@ -367,7 +387,8 @@ void Character::LightSlope2Collision(Rect tileBox) {
     }
 }
 
-void Character::HitKnockBack() {
+void Character::HitKnockBack()
+{
     attackGO->RequestedDelete();
     if(attackOnBeat) {
         if (isLeftSide) {
@@ -395,70 +416,88 @@ void Character::HitKnockBack() {
     recoveringFromHitKnockback = true;
 }
 
-void Character::LightSlope1Collision(Rect tileBox) {
+void Character::LightSlope1Collision(Rect tileBox)
+{
     float posX;
     float posY;
     float tang;
-    Collider *collider = ((Collider*) associated.GetComponent("Collider").get());
-    tang = (float)(tileBox.h)/(float)(tileBox.w + 40);
+    Collider *collider = ((Collider *)associated.GetComponent("Collider").get());
+    tang = (float)(tileBox.h) / (float)(tileBox.w + 40);
     posX = tileBox.x + tileBox.w + 40 - collider->box.x;
     posY = posX * tang;
     posY = tileBox.y + tileBox.h - posY;
-    if(velocity.y > 0) {
-        if((collider->box.y + collider->box.h - 25 >= posY) && (collider->box.x + collider->box.w > tileBox.x) && (collider->box.x < tileBox.x + tileBox.w)) {
+    if (velocity.y > 0)
+    {
+        if ((collider->box.y + collider->box.h - 25 >= posY) && (collider->box.x + collider->box.w > tileBox.x) && (collider->box.x < tileBox.x + tileBox.w))
+        {
             associated.box.y = posY - associated.box.h - 20;
             LandOnground();
         }
     }
-    if((velocity.x <= 0) && (collider->box.x > tileBox.x) && (collider->box.y + 70 < posY + tileBox.h)) {
-        if((collider->box.y + collider->box.h - 42 > posY)) {
-            if(isOnSlope) {
+    if ((velocity.x <= 0) && (collider->box.x > tileBox.x) && (collider->box.y + 70 < posY + tileBox.h))
+    {
+        if ((collider->box.y + collider->box.h - 42 > posY))
+        {
+            if (isOnSlope)
+            {
                 velocity.x = 0;
                 associated.box.x = tileBox.x + tileBox.w - 75;
-            } else {
-                associated.box.y =  posY - associated.box.h - 40;
+            }
+            else
+            {
+                associated.box.y = posY - associated.box.h - 40;
             }
         }
     }
 }
 
-
-void Character::SolidSlope1Collision(Rect tileBox) {
-
-    if (!isDead) {
-        float posX;
-        float posY;
-        float tang;
-        Collider *collider = ((Collider*) associated.GetComponent("Collider").get());
-        tang = (float)(tileBox.h)/(float)(tileBox.w + 40);
-        posX = tileBox.x + tileBox.w + 40 - collider->box.x;
-        posY = posX * tang;
-        posY = tileBox.y + tileBox.h - posY;
-        if(velocity.y > 0) {
-            if((collider->box.y + collider->box.h - 25 >= posY) && (collider->box.x + collider->box.w > tileBox.x) && (collider->box.x < tileBox.x + tileBox.w)) {
+void Character::SolidSlope1Collision(Rect tileBox)
+{
+    float posX;
+    float posY;
+    float tang;
+    Collider *collider = ((Collider *)associated.GetComponent("Collider").get());
+    tang = (float)(tileBox.h) / (float)(tileBox.w + 40);
+    posX = tileBox.x + tileBox.w + 40 - collider->box.x;
+    posY = posX * tang;
+    posY = tileBox.y + tileBox.h - posY;
+    if(!isDead) {
+        if (velocity.y > 0)
+        {
+            if ((collider->box.y + collider->box.h - 25 >= posY) && (collider->box.x + collider->box.w > tileBox.x) && (collider->box.x < tileBox.x + tileBox.w))
+            {
                 associated.box.y = posY - associated.box.h - 20;
                 LandOnground();
             }
         }
-        if(velocity.y <= 0) {
-            if((collider->box.y >= posY) && (collider->box.x + collider->box.w > tileBox.x + 24) && (collider->box.x < tileBox.x + tileBox.w - 24)) {
+        if (velocity.y <= 0)
+        {
+            if ((collider->box.y >= posY) && (collider->box.x + collider->box.w > tileBox.x + 24) && (collider->box.x < tileBox.x + tileBox.w - 24))
+            {
                 velocity.y = 0;
                 associated.box.y = posY + tileBox.h - 45;
             }
         }
-        if((velocity.x >= 0) && (collider->box.x < tileBox.x)) {
-            if((collider->box.y + collider->box.h - 60 > posY) && (collider->box.y + 50 < posY + tileBox.h)) {
+        if ((velocity.x >= 0) && (collider->box.x < tileBox.x))
+        {
+            if ((collider->box.y + collider->box.h - 60 > posY) && (collider->box.y + 50 < posY + tileBox.h))
+            {
                 velocity.x = 0;
                 associated.box.x = tileBox.x - associated.box.w - 35;
             }
         }
-        if((velocity.x <= 0) && (collider->box.x > tileBox.x) && (collider->box.y + 40 < posY + tileBox.h)) {
-            if((collider->box.y + collider->box.h - 42 > posY)) {
-                if(isOnSlope) {
+        if ((velocity.x <= 0) && (collider->box.x > tileBox.x) && (collider->box.y + 40 < posY + tileBox.h))
+        {
+            if ((collider->box.y + collider->box.h - 42 > posY))
+            {
+                if (isOnSlope)
+                {
                     velocity.x = 0;
                     associated.box.x = tileBox.x + tileBox.w - 75;
-                } else {
-                    associated.box.y =  posY - associated.box.h - 40;
+                }
+                else
+                {
+                    associated.box.y = posY - associated.box.h - 40;
                 }
             }
         }
