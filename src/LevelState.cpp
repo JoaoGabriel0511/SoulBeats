@@ -5,7 +5,8 @@ LevelState::LevelState() : State()
     Start();
 }
 
-void LevelState::LoadAssets() {
+void LevelState::LoadAssets()
+{
     switchedBegininMusic = false;
     switchedDevelopmentMusic = false;
     //Adicionando Background
@@ -14,10 +15,16 @@ void LevelState::LoadAssets() {
     bg = new GameObject();
     GameObject *bellEnemyGO;
     BellEnemy *bellEnemy;
+
     GameObject *harpEnemyGO;
     HarpEnemy *harpEnemy;
+
     GameObject *accordionEnemyGO;
     AccordionEnemy *accordionEnemy;
+
+    GameObject *collectableGO;
+    Collectable *collectable;
+
     Sprite *levelSprite;
     Music *levelMusic;
     cameraFollower = new CameraFollower(*bg);
@@ -76,7 +83,7 @@ void LevelState::LoadAssets() {
     //Floresta 1 Adicionada
 
     //// Beat Game Object
-    GameObject* heartBackground = new GameObject();
+    GameObject *heartBackground = new GameObject();
     new Sprite(*heartBackground, BEATING_HEART_BG, 1, 1);
     heartBackground->box.x = 901;
     heartBackground->box.y = 31;
@@ -86,7 +93,7 @@ void LevelState::LoadAssets() {
     beat->box.x = 900;
     beat->box.y = 30;
     beat->box.z = 6;
-    Beat* beat_component = new Beat(*beat, heartBackground);
+    Beat *beat_component = new Beat(*beat, heartBackground);
     global_beat = beat_component;
     objectArray.emplace_back(beat);
 
@@ -122,6 +129,15 @@ void LevelState::LoadAssets() {
     objectArray.emplace_back(harpEnemyGO);
 
     //Adicionando Inimigo ( AccordionEnemy )
+
+    //Adicionando Coletável ( Collectable )
+
+    collectableGO = new GameObject();
+    collectable = new Collectable(*collectableGO, 10, 10, characterGO);
+    collectableGO->box.x = 2700;
+    collectableGO->box.y = 3060;
+    collectableGO->box.z = 4;
+    objectArray.emplace_back(collectableGO);
 
     /*accordionEnemyGO = new GameObject();
     accordionEnemy = new AccordionEnemy(*accordionEnemyGO, 10, 10, characterGO);
@@ -196,28 +212,35 @@ void LevelState::Resume()
 {
 }
 
-void LevelState::UpdateMusic(float dt) {
+void LevelState::UpdateMusic(float dt)
+{
     beginingMusicTimer.Update(dt);
-    if(beginingMusicTimer.Get() >= BEGINING_MUSIC_TIME){
-        if(!switchedBegininMusic) {
+    if (beginingMusicTimer.Get() >= BEGINING_MUSIC_TIME)
+    {
+        if (!switchedBegininMusic)
+        {
             switchedBegininMusic = true;
-            ((Music*) bg->GetComponent("Music").get())->Open(DEVELOPMENT_MUSIC);
-            ((Music*) bg->GetComponent("Music").get())->Play(-1);
+            ((Music *)bg->GetComponent("Music").get())->Open(DEVELOPMENT_MUSIC);
+            ((Music *)bg->GetComponent("Music").get())->Play(-1);
         }
         developmentMusicTimer.Update(dt);
-        if(developmentMusicTimer.Get() >= DEVELOPMENT_MUSIC_TIME) {
-            if(!switchedDevelopmentMusic) {
+        if (developmentMusicTimer.Get() >= DEVELOPMENT_MUSIC_TIME)
+        {
+            if (!switchedDevelopmentMusic)
+            {
                 switchedDevelopmentMusic = true;
-                ((Music*) bg->GetComponent("Music").get())->Open(MAIN_MUSIC);
-                ((Music*) bg->GetComponent("Music").get())->Play(-1);
+                ((Music *)bg->GetComponent("Music").get())->Open(MAIN_MUSIC);
+                ((Music *)bg->GetComponent("Music").get())->Play(-1);
             }
             mainMusicTimer.Update(dt);
-            if(mainMusicTimer.Get() >= MAIN_MUSIC_TIME) {
-                ((Music*) bg->GetComponent("Music").get())->Stop(0);
+            if (mainMusicTimer.Get() >= MAIN_MUSIC_TIME)
+            {
+                ((Music *)bg->GetComponent("Music").get())->Stop(0);
                 musicStopTimer.Update(dt);
-                if(musicStopTimer.Get() >= STOP_MUSIC_TIME) {
-                    ((Music*) bg->GetComponent("Music").get())->Open(BEGINING_MUSIC);
-                    ((Music*) bg->GetComponent("Music").get())->Play(-1);
+                if (musicStopTimer.Get() >= STOP_MUSIC_TIME)
+                {
+                    ((Music *)bg->GetComponent("Music").get())->Open(BEGINING_MUSIC);
+                    ((Music *)bg->GetComponent("Music").get())->Play(-1);
                     mainMusicTimer.Restart();
                     developmentMusicTimer.Restart();
                     beginingMusicTimer.Restart();
@@ -230,17 +253,18 @@ void LevelState::UpdateMusic(float dt) {
     }
 }
 
-void LevelState::Update(float dt) {
-    TileMapCollider *tileMapForeCollider = ((TileMapCollider*) tileTerrForeGO->GetComponent("TileMapCollider").get());
-    TileMapCollider *tileMapBackCollider = ((TileMapCollider*) tileTerrBackGO->GetComponent("TileMapCollider").get());
+void LevelState::Update(float dt)
+{
+    TileMapCollider *tileMapForeCollider = ((TileMapCollider *)tileTerrForeGO->GetComponent("TileMapCollider").get());
+    TileMapCollider *tileMapBackCollider = ((TileMapCollider *)tileTerrBackGO->GetComponent("TileMapCollider").get());
     State::Update(dt);
     for (int i = tileMapForeCollider->boxes.size() - 1; i >= 0; i--)
     {
-        if(Camera::IsOnCamera(tileMapForeCollider->boxes[i]))
+        if (Camera::IsOnCamera(tileMapForeCollider->boxes[i]))
         {
             for (int j = objectArray.size() - 1; j >= 0; j--)
             {
-                if(Camera::IsOnCamera(objectArray[j]->box))
+                if (Camera::IsOnCamera(objectArray[j]->box))
                 {
                     if (objectArray[j]->GetComponent("Collider") != NULL)
                     {
@@ -255,11 +279,11 @@ void LevelState::Update(float dt) {
     }
     for (int i = tileMapBackCollider->boxes.size() - 1; i >= 0; i--)
     {
-        if(Camera::IsOnCamera(tileMapBackCollider->boxes[i]))
+        if (Camera::IsOnCamera(tileMapBackCollider->boxes[i]))
         {
             for (int j = objectArray.size() - 1; j >= 0; j--)
             {
-                if(Camera::IsOnCamera(objectArray[j]->box))
+                if (Camera::IsOnCamera(objectArray[j]->box))
                 {
                     if (objectArray[j]->GetComponent("Collider") != NULL)
                     {

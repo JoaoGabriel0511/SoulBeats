@@ -13,7 +13,7 @@ Character::Character(GameObject &associated) : Component(associated)
 void Character::Start()
 {
     charSprite = new Sprite(associated, IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
-    charSprite->SetScale({2,2});
+    charSprite->SetScale({2, 2});
     sound = new Sound(associated);
     isStill = true;
     isRising = false;
@@ -112,25 +112,35 @@ void Character::Update(float dt)
             }
         }
     }
-    else {
-        if(recoveringFromHitKnockback){
+    else
+    {
+        if (recoveringFromHitKnockback)
+        {
             hitRecoverTimer.Update(dt);
-            if(hitRecoverTimer.Get() >= RECOVER_DURATION ) {
+            if (hitRecoverTimer.Get() >= RECOVER_DURATION)
+            {
                 velocity.x = 0;
                 canCancelKnockBack = true;
                 isStill = true;
                 recoveringFromHitKnockback = false;
                 hitRecoverTimer.Restart();
-                if(isLeftSide) {
+                if (isLeftSide)
+                {
                     charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
-                } else {
+                }
+                else
+                {
                     charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
                 }
             }
-        } if(!recoveringFromHitKnockback || canCancelKnockBack) {
-            if (isAttacking) {
+        }
+        if (!recoveringFromHitKnockback || canCancelKnockBack)
+        {
+            if (isAttacking)
+            {
                 attackTimer.Update(dt);
-                if (attackTimer.Get() >= ATTACK_DURATION) {
+                if (attackTimer.Get() >= ATTACK_DURATION)
+                {
                     velocity.x = 0;
                     gravity = GRAVITY_FALLING;
                     associated.box.x = associated.box.x + 2;
@@ -138,50 +148,71 @@ void Character::Update(float dt)
                     isAttacking = false;
                     attackOnBeat = false;
                     peakDone = true;
-                    if(isOnGround) {
+                    if (isOnGround)
+                    {
                         isStill = true;
-                        if(isLeftSide){
+                        if (isLeftSide)
+                        {
                             charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
-                        } else {
+                        }
+                        else
+                        {
                             charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
                         }
                         idleTimer.Restart();
                         finishIdle = false;
-                    } else {
-                        if(isLeftSide) {
+                    }
+                    else
+                    {
+                        if (isLeftSide)
+                        {
                             charSprite->SwitchSprite(FALLING_LEFT_SPRITE, FALLING_FRAME_COUNT, FALLING_FRAME_TIME);
-                        } else {
+                        }
+                        else
+                        {
                             charSprite->SwitchSprite(FALLING_RIGHT_SPRITE, FALLING_FRAME_COUNT, FALLING_FRAME_TIME);
                         }
                     }
                 }
                 isStill = true;
-            } else {
-                if (input.IsKeyDown(D_KEY)) {
+            }
+            else
+            {
+                if (input.IsKeyDown(D_KEY))
+                {
                     velocity.x = WALKING_SPEED;
-                    if((isStill || (!wasOnGround) || (isLeftSide)) && isOnGround ) {
+                    if ((isStill || (!wasOnGround) || (isLeftSide)) && isOnGround)
+                    {
                         charSprite->SwitchSprite(WALKING_SPRITE_RIGHT, WALKING_FRAME_COUNT, WALKING_FRAME_TIME);
                     }
                     isStill = false;
                     isLeftSide = false;
-                    if(isOnGround) {
+                    if (isOnGround)
+                    {
                         walkingSoundTimer.Update(dt);
-                        if(walkingSoundTimer.Get() >= WALKING_SOUND_TIMER) {
+                        if (walkingSoundTimer.Get() >= WALKING_SOUND_TIMER)
+                        {
                             sound->Open(WALKING_SOUND);
                             sound->Play(1);
                             walkingSoundTimer.Restart();
                         }
                     }
                     //charSprite->flip = false;
-                } else {
-                    if (input.IsKeyDown(A_KEY)) {
+                }
+                else
+                {
+                    if (input.IsKeyDown(A_KEY))
+                    {
                         velocity.x = -1 * WALKING_SPEED;
-                        if ((isStill || (!wasOnGround) || (!isLeftSide)) && isOnGround) {
+                        if ((isStill || (!wasOnGround) || (!isLeftSide)) && isOnGround)
+                        {
                             charSprite->SwitchSprite(WALKING_SPRITE_LEFT, WALKING_FRAME_COUNT, WALKING_FRAME_TIME);
                         }
-                        if(isOnGround) {
+                        if (isOnGround)
+                        {
                             walkingSoundTimer.Update(dt);
-                            if(walkingSoundTimer.Get() >= WALKING_SOUND_TIMER) {
+                            if (walkingSoundTimer.Get() >= WALKING_SOUND_TIMER)
+                            {
                                 sound->Open(WALKING_SOUND);
                                 sound->Play(1);
                                 walkingSoundTimer.Restart();
@@ -192,15 +223,20 @@ void Character::Update(float dt)
                         //charSprite->flip = true;
                     }
                 }
-                if (input.KeyPress(W_KEY)) {
-                    if (isOnGround) {
+                if (input.KeyPress(W_KEY))
+                {
+                    if (isOnGround)
+                    {
                         walkingSoundTimer.Restart();
-                        if(global_beat->GetOnBeat() == true){
+                        if (global_beat->GetOnBeat() == true)
+                        {
                             velocity.y = JUMPING_SPEED_ON_BEAT;
                             jumpedOnBeat = true;
                             sound->Open(JUMPING_SOUND);
                             sound->Play(1);
-                        } else {
+                        }
+                        else
+                        {
                             jumpedOnBeat = false;
                             velocity.y = JUMPING_SPEED;
                             sound->Open(JUMPING_SOUND_ON_BEAT);
@@ -210,24 +246,35 @@ void Character::Update(float dt)
                         isRising = true;
                         isOnGround = false;
                         beforeRisingDone = false;
-                        if(isLeftSide) {
-                            if( global_beat->GetOnBeat() == true) {
-                                charSprite->SwitchSprite(BEFORE_RISE_LEFT_SPRITE_ON_BEAT,BEFORE_RISE_FRAME_COUNT,BEFORE_RISE_DURATION_ON_BEAT/BEFORE_RISE_FRAME_COUNT);
-                            } else {
-                                charSprite->SwitchSprite(BEFORE_RISE_LEFT_SPRITE,BEFORE_RISE_FRAME_COUNT,BEFORE_RISE_DURATION/BEFORE_RISE_FRAME_COUNT);
+                        if (isLeftSide)
+                        {
+                            if (global_beat->GetOnBeat() == true)
+                            {
+                                charSprite->SwitchSprite(BEFORE_RISE_LEFT_SPRITE_ON_BEAT, BEFORE_RISE_FRAME_COUNT, BEFORE_RISE_DURATION_ON_BEAT / BEFORE_RISE_FRAME_COUNT);
                             }
-                        } else {
-                            if( global_beat->GetOnBeat() == true) {
-                                charSprite->SwitchSprite(BEFORE_RISE_RIGHT_SPRITE_ON_BEAT,BEFORE_RISE_FRAME_COUNT,BEFORE_RISE_DURATION_ON_BEAT/BEFORE_RISE_FRAME_COUNT);
-                            } else {
-                                charSprite->SwitchSprite(BEFORE_RISE_RIGHT_SPRITE,BEFORE_RISE_FRAME_COUNT,BEFORE_RISE_DURATION/BEFORE_RISE_FRAME_COUNT);
+                            else
+                            {
+                                charSprite->SwitchSprite(BEFORE_RISE_LEFT_SPRITE, BEFORE_RISE_FRAME_COUNT, BEFORE_RISE_DURATION / BEFORE_RISE_FRAME_COUNT);
+                            }
+                        }
+                        else
+                        {
+                            if (global_beat->GetOnBeat() == true)
+                            {
+                                charSprite->SwitchSprite(BEFORE_RISE_RIGHT_SPRITE_ON_BEAT, BEFORE_RISE_FRAME_COUNT, BEFORE_RISE_DURATION_ON_BEAT / BEFORE_RISE_FRAME_COUNT);
+                            }
+                            else
+                            {
+                                charSprite->SwitchSprite(BEFORE_RISE_RIGHT_SPRITE, BEFORE_RISE_FRAME_COUNT, BEFORE_RISE_DURATION / BEFORE_RISE_FRAME_COUNT);
                             }
                         }
                         beforeRiseTimer.Restart();
                     }
                 }
-                if (input.KeyPress(SPACE_KEY)) {
-                    if(canAttack) {
+                if (input.KeyPress(SPACE_KEY))
+                {
+                    if (canAttack)
+                    {
                         walkingSoundTimer.Restart();
                         int isLeft = isLeftSide ? -1 : 1;
                         gravity = 0;
@@ -236,63 +283,95 @@ void Character::Update(float dt)
                         canAttack = false;
                         isRising = false;
                         peakDone = true;
-                        if(global_beat->GetOnBeat() == true){
+                        if (global_beat->GetOnBeat() == true)
+                        {
                             velocity.x = isLeft * ON_BEAT_ATTACKING_SPEED;
                             attackOnBeat = true;
                             sound->Open(ATTACK_SOUND_ON_BEAT);
                             sound->Play(1);
-                        } else {
+                        }
+                        else
+                        {
                             velocity.x = isLeft * ATTACKING_SPEED;
                             sound->Open(ATTACK_SOUND);
                             sound->Play(1);
                         }
                         attackGO = new GameObject();
                         attackGO->box.z = 4;
-                        if(isLeftSide) {
+                        if (isLeftSide)
+                        {
                             Attack *attack = new Attack(*attackGO, {2, 2}, {0, 0}, &associated, 50, 25, -6, 76);
-                        } else {
+                        }
+                        else
+                        {
                             Attack *attack = new Attack(*attackGO, {2, 2}, {0, 0}, &associated, 50, 25, 126, 76);
                         }
                         Game::GetInstance().GetCurrentState().AddObject(attackGO);
                         attackTimer.Restart();
-                        if(isOnGround) {
-                            if(isLeftSide) {
-                                if(global_beat->GetOnBeat() == true) {
-                                    charSprite->SwitchSprite(ATTACK_LEFT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
-                                } else {
-                                    charSprite->SwitchSprite(ATTACK_LEFT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
+                        if (isOnGround)
+                        {
+                            if (isLeftSide)
+                            {
+                                if (global_beat->GetOnBeat() == true)
+                                {
+                                    charSprite->SwitchSprite(ATTACK_LEFT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION / ATTACK_FRAME_COUNT + 0.1);
                                 }
-                            } else {
-                                if(global_beat->GetOnBeat() == true) {
-                                    charSprite->SwitchSprite(ATTACK_RIGHT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
-                                } else {
-                                    charSprite->SwitchSprite(ATTACK_RIGHT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
+                                else
+                                {
+                                    charSprite->SwitchSprite(ATTACK_LEFT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION / ATTACK_FRAME_COUNT + 0.1);
                                 }
                             }
-                        } else {
-                            if(isLeftSide) {
-                                if(global_beat->GetOnBeat() == true) {
-                                    charSprite->SwitchSprite(ATTACK_AIR_LEFT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
-                                } else {
-                                    charSprite->SwitchSprite(ATTACK_AIR_LEFT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
+                            else
+                            {
+                                if (global_beat->GetOnBeat() == true)
+                                {
+                                    charSprite->SwitchSprite(ATTACK_RIGHT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION / ATTACK_FRAME_COUNT + 0.1);
                                 }
-                            } else {
-                                if(global_beat->GetOnBeat() == true) {
-                                    charSprite->SwitchSprite(ATTACK_AIR_RIGHT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
-                                } else {
-                                    charSprite->SwitchSprite(ATTACK_AIR_RIGHT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
+                                else
+                                {
+                                    charSprite->SwitchSprite(ATTACK_RIGHT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION / ATTACK_FRAME_COUNT + 0.1);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (isLeftSide)
+                            {
+                                if (global_beat->GetOnBeat() == true)
+                                {
+                                    charSprite->SwitchSprite(ATTACK_AIR_LEFT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION / ATTACK_FRAME_COUNT + 0.1);
+                                }
+                                else
+                                {
+                                    charSprite->SwitchSprite(ATTACK_AIR_LEFT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION / ATTACK_FRAME_COUNT + 0.1);
+                                }
+                            }
+                            else
+                            {
+                                if (global_beat->GetOnBeat() == true)
+                                {
+                                    charSprite->SwitchSprite(ATTACK_AIR_RIGHT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION / ATTACK_FRAME_COUNT + 0.1);
+                                }
+                                else
+                                {
+                                    charSprite->SwitchSprite(ATTACK_AIR_RIGHT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION / ATTACK_FRAME_COUNT + 0.1);
                                 }
                             }
                         }
                     }
                 }
-                if (input.KeyRelease(D_KEY) || input.KeyRelease(A_KEY)) {
+                if (input.KeyRelease(D_KEY) || input.KeyRelease(A_KEY))
+                {
                     velocity.x = 0;
-                    if(isOnGround) {
+                    if (isOnGround)
+                    {
                         walkingSoundTimer.Restart();
-                        if(isLeftSide) {
+                        if (isLeftSide)
+                        {
                             charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
-                        } else {
+                        }
+                        else
+                        {
                             charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
                         }
                         idleTimer.Restart();
@@ -300,55 +379,83 @@ void Character::Update(float dt)
                         isStill = true;
                     }
                 }
-                if (isRising || isFalling) {
-                    if(peakDone && isRising) {
+                if (isRising || isFalling)
+                {
+                    if (peakDone && isRising)
+                    {
                         beforeRiseTimer.Update(dt);
-                        if(jumpedOnBeat) {
+                        if (jumpedOnBeat)
+                        {
                             beforeRiserDuration = BEFORE_RISE_DURATION_ON_BEAT;
-                        } else {
+                        }
+                        else
+                        {
                             beforeRiserDuration = BEFORE_RISE_DURATION;
                         }
-                        if (beforeRiseTimer.Get() >= beforeRiserDuration && !beforeRisingDone) {
-                            if(isLeftSide) {
+                        if (beforeRiseTimer.Get() >= beforeRiserDuration && !beforeRisingDone)
+                        {
+                            if (isLeftSide)
+                            {
                                 charSprite->SwitchSprite(RISING_LEFT_SPRITE, RISING_FRAME_COUNT, RISING_FRAME_TIME);
-                            } else {
+                            }
+                            else
+                            {
                                 charSprite->SwitchSprite(RISING_RIGHT_SPRITE, RISING_FRAME_COUNT, RISING_FRAME_TIME);
                             }
                             beforeRiseTimer.Restart();
                             beforeRisingDone = true;
                         }
                     }
-                    if(isRising) {
-                        if(isLeftSide && !wasLeftSide) {
+                    if (isRising)
+                    {
+                        if (isLeftSide && !wasLeftSide)
+                        {
                             charSprite->SwitchSprite(RISING_LEFT_SPRITE, RISING_FRAME_COUNT, RISING_FRAME_TIME);
-                        } else {
-                            if(!isLeftSide && wasLeftSide) {
+                        }
+                        else
+                        {
+                            if (!isLeftSide && wasLeftSide)
+                            {
                                 charSprite->SwitchSprite(RISING_RIGHT_SPRITE, RISING_FRAME_COUNT, RISING_FRAME_TIME);
                             }
                         }
                     }
-                    if(!peakDone) {
-                        if(isLeftSide && !wasLeftSide) {
+                    if (!peakDone)
+                    {
+                        if (isLeftSide && !wasLeftSide)
+                        {
                             charSprite->SwitchSprite(PEAK_LEFT_SPRITE, PEAK_FRAME_COUNT, PEAK_FRAME_TIME);
-                        } else {
-                            if(!isLeftSide && wasLeftSide) {
+                        }
+                        else
+                        {
+                            if (!isLeftSide && wasLeftSide)
+                            {
                                 charSprite->SwitchSprite(PEAK_RIGHT_SPRITE, PEAK_FRAME_COUNT, PEAK_FRAME_TIME);
                             }
                         }
                     }
-                    if(isFalling) {
-                        if(isLeftSide && !wasLeftSide) {
+                    if (isFalling)
+                    {
+                        if (isLeftSide && !wasLeftSide)
+                        {
                             charSprite->SwitchSprite(FALLING_LEFT_SPRITE, FALLING_FRAME_COUNT, FALLING_FRAME_TIME);
-                        } else {
-                            if(!isLeftSide && wasLeftSide) {
+                        }
+                        else
+                        {
+                            if (!isLeftSide && wasLeftSide)
+                            {
                                 charSprite->SwitchSprite(FALLING_RIGHT_SPRITE, FALLING_FRAME_COUNT, FALLING_FRAME_TIME);
                             }
                         }
                     }
-                    if (velocity.y + 3 * gravity >= 0 && isRising) {
-                        if(isLeftSide) {
+                    if (velocity.y + 3 * gravity >= 0 && isRising)
+                    {
+                        if (isLeftSide)
+                        {
                             charSprite->SwitchSprite(PEAK_LEFT_SPRITE, PEAK_FRAME_COUNT, PEAK_FRAME_TIME);
-                        } else {
+                        }
+                        else
+                        {
                             charSprite->SwitchSprite(PEAK_RIGHT_SPRITE, PEAK_FRAME_COUNT, PEAK_FRAME_TIME);
                         }
                         peakDone = false;
@@ -357,15 +464,20 @@ void Character::Update(float dt)
                         isRising = false;
                         isFalling = true;
                     }
-                    if (isFalling && !peakDone && !isRising && !hasChanged) {
+                    if (isFalling && !peakDone && !isRising && !hasChanged)
+                    {
                         peakTimer.Update(dt);
-                        if(peakTimer.Get() >= PEAK_DURATION) {
+                        if (peakTimer.Get() >= PEAK_DURATION)
+                        {
                             peakDone = true;
                             hasChanged = true;
                             gravity = GRAVITY_FALLING;
-                            if(isLeftSide) {
+                            if (isLeftSide)
+                            {
                                 charSprite->SwitchSprite(FALLING_LEFT_SPRITE, FALLING_FRAME_COUNT, FALLING_FRAME_TIME);
-                            } else {
+                            }
+                            else
+                            {
                                 charSprite->SwitchSprite(FALLING_RIGHT_SPRITE, FALLING_FRAME_COUNT, FALLING_FRAME_TIME);
                             }
                         }
@@ -398,9 +510,12 @@ bool Character::Is(string type)
 
 void Character::NotifyCollision(GameObject &other)
 {
+
+
     if (!isInvincible)
     {
-        if (other.GetComponent("BellEnemy") != NULL || other.GetComponent("HarpEnemy") != NULL || other.GetComponent("AccordionEnemy") != NULL)
+
+        if ( other.GetComponent("BellEnemy") != NULL || other.GetComponent("HarpEnemy") != NULL || other.GetComponent("AccordionEnemy") != NULL)
         {
             if (other.box.x > associated.box.x)
             {
@@ -413,7 +528,9 @@ void Character::NotifyCollision(GameObject &other)
             if (!isOnGround)
             {
                 velocity.y = HURT_BOUNCING_SPEED;
-            } else {
+            }
+            else
+            {
                 walkingSoundTimer.Restart();
             }
             gravity = HURT_GRAVITY;
@@ -462,29 +579,44 @@ void Character::NotifYCollisionWithMap(Rect tileBox)
     {
         LightGroundCollision(tileBox);
     }
-    if(tileBox.z == 101 || tileBox.z == 102 || tileBox.z == 103 || tileBox.z == 148 || tileBox.z == 104 ||
-       tileBox.z == 67 || tileBox.z == 68 || tileBox.z == 57 || tileBox.z == 58 || tileBox.z == 66 || tileBox.z == 84){
-        if(tileBox.z == 67) {
-           LightSlope1Collision(tileBox);
-           isOnSlope == true;
-        } else {
-            if(tileBox.z == 66) {
+    if (tileBox.z == 101 || tileBox.z == 102 || tileBox.z == 103 || tileBox.z == 148 || tileBox.z == 104 ||
+        tileBox.z == 67 || tileBox.z == 68 || tileBox.z == 57 || tileBox.z == 58 || tileBox.z == 66 || tileBox.z == 84)
+    {
+        if (tileBox.z == 67)
+        {
+            LightSlope1Collision(tileBox);
+            isOnSlope == true;
+        }
+        else
+        {
+            if (tileBox.z == 66)
+            {
                 LightSlope2Collision(tileBox);
                 isOnSlope = true;
-            } else {
+            }
+            else
+            {
                 LightGroundCollision(tileBox);
                 isOnSlope = false;
             }
         }
-    } else {
-        if(tileBox.z == 7) {
+    }
+    else
+    {
+        if (tileBox.z == 7)
+        {
             SolidSlope1Collision(tileBox);
             isOnSlope = true;
-        } else {
-            if(tileBox.z == 6) {
+        }
+        else
+        {
+            if (tileBox.z == 6)
+            {
                 SolidSlope2Collision(tileBox);
                 isOnSlope = true;
-            } else {
+            }
+            else
+            {
                 SolidGroundCollision(tileBox);
                 isOnSlope = false;
             }
@@ -571,84 +703,108 @@ void Character::LandOnground()
     velocity.y = 0;
 }
 
-void Character::SolidSlope2Collision(Rect tileBox) {
+void Character::SolidSlope2Collision(Rect tileBox)
+{
     float posX;
     float posY;
     float tang;
-    Collider *collider = ((Collider*) associated.GetComponent("Collider").get());
-    tang = (float)(tileBox.h)/(float)(tileBox.w + 40);
+    Collider *collider = ((Collider *)associated.GetComponent("Collider").get());
+    tang = (float)(tileBox.h) / (float)(tileBox.w + 40);
     posX = collider->box.x + collider->box.w - (tileBox.x - 40);
     posY = posX * tang;
     posY = tileBox.y + tileBox.h - posY;
-    if(velocity.y > 0) {
-        if((collider->box.y + collider->box.h >= posY) && (collider->box.x + collider->box.w > tileBox.x) && (collider->box.x < tileBox.x + tileBox.w)) {
+    if (velocity.y > 0)
+    {
+        if ((collider->box.y + collider->box.h >= posY) && (collider->box.x + collider->box.w > tileBox.x) && (collider->box.x < tileBox.x + tileBox.w))
+        {
             associated.box.y = posY - associated.box.h - 20;
             LandOnground();
         }
     }
-    if(velocity.y <= 0) {
-        if((collider->box.y >= posY) && (collider->box.x + collider->box.w > tileBox.x + 24) && (collider->box.x < tileBox.x + tileBox.w - 24)) {
+    if (velocity.y <= 0)
+    {
+        if ((collider->box.y >= posY) && (collider->box.x + collider->box.w > tileBox.x + 24) && (collider->box.x < tileBox.x + tileBox.w - 24))
+        {
             velocity.y = 0;
             associated.box.y = posY + tileBox.h - 45;
         }
     }
-    if((velocity.x >= 0) && (collider->box.x < tileBox.x)) {
-        if((collider->box.y + collider->box.h - 60 > posY) && (collider->box.y + 50 < posY + tileBox.h)) {
-            if(isOnSlope) {
+    if ((velocity.x >= 0) && (collider->box.x < tileBox.x))
+    {
+        if ((collider->box.y + collider->box.h - 60 > posY) && (collider->box.y + 50 < posY + tileBox.h))
+        {
+            if (isOnSlope)
+            {
                 velocity.x = 0;
                 associated.box.x = tileBox.x - associated.box.w - 35;
-            } else {
-                associated.box.y =  posY - associated.box.h - 40;
+            }
+            else
+            {
+                associated.box.y = posY - associated.box.h - 40;
             }
         }
     }
-    if((velocity.x <= 0) && (collider->box.x > tileBox.x) && (collider->box.y + 40 < posY + tileBox.h)) {
-        if((collider->box.y + collider->box.h - 40 > posY)) {
+    if ((velocity.x <= 0) && (collider->box.x > tileBox.x) && (collider->box.y + 40 < posY + tileBox.h))
+    {
+        if ((collider->box.y + collider->box.h - 40 > posY))
+        {
             velocity.x = 0;
             associated.box.x = tileBox.x + tileBox.w - 75;
         }
     }
 }
 
-void Character::LightSlope2Collision(Rect tileBox) {
+void Character::LightSlope2Collision(Rect tileBox)
+{
     float posX;
     float posY;
     float tang;
-    Collider *collider = ((Collider*) associated.GetComponent("Collider").get());
-    tang = (float)(tileBox.h)/(float)(tileBox.w + 40);
+    Collider *collider = ((Collider *)associated.GetComponent("Collider").get());
+    tang = (float)(tileBox.h) / (float)(tileBox.w + 40);
     posX = collider->box.x + collider->box.w - (tileBox.x - 40);
     posY = posX * tang;
     posY = tileBox.y + tileBox.h - posY;
-    if(velocity.y > 0) {
-        if((collider->box.y + collider->box.h - 25 >= posY) && (collider->box.x + collider->box.w > tileBox.x) && (collider->box.x < tileBox.x + tileBox.w)) {
+    if (velocity.y > 0)
+    {
+        if ((collider->box.y + collider->box.h - 25 >= posY) && (collider->box.x + collider->box.w > tileBox.x) && (collider->box.x < tileBox.x + tileBox.w))
+        {
             associated.box.y = posY - associated.box.h - 20;
             LandOnground();
         }
     }
-    if((velocity.x >= 0) && (collider->box.x < tileBox.x)) {
-        if((collider->box.y + collider->box.h - 60 > posY) && (collider->box.y + 80 < posY + tileBox.h)) {
-            if(isOnSlope) {
+    if ((velocity.x >= 0) && (collider->box.x < tileBox.x))
+    {
+        if ((collider->box.y + collider->box.h - 60 > posY) && (collider->box.y + 80 < posY + tileBox.h))
+        {
+            if (isOnSlope)
+            {
                 velocity.x = 0;
                 associated.box.x = tileBox.x - associated.box.w - 35;
-            } else {
-                associated.box.y =  posY - associated.box.h - 40;
+            }
+            else
+            {
+                associated.box.y = posY - associated.box.h - 40;
             }
         }
     }
 }
 
-void Character::HitKnockBack() {
+void Character::HitKnockBack()
+{
     attackGO->RequestedDelete();
-    if (isLeftSide) {
+    if (isLeftSide)
+    {
         velocity.x = HURT_DEFLECT_SPEED;
         charSprite->SwitchSprite(RECOVER_SPRITE_LEFT, RECOVER_FRAME_COUNT, RECOVER_DURATION / RECOVER_FRAME_COUNT);
     }
-    else {
+    else
+    {
         velocity.x = -1 * HURT_DEFLECT_SPEED;
         charSprite->SwitchSprite(RECOVER_SPRITE_RIGHT, RECOVER_FRAME_COUNT, RECOVER_DURATION / RECOVER_FRAME_COUNT);
     }
     isAttacking = false;
-    if(attackOnBeat == true) {
+    if (attackOnBeat == true)
+    {
         canCancelKnockBack = true;
     }
     attackOnBeat = false;
@@ -656,68 +812,87 @@ void Character::HitKnockBack() {
     recoveringFromHitKnockback = true;
 }
 
-void Character::LightSlope1Collision(Rect tileBox) {
+void Character::LightSlope1Collision(Rect tileBox)
+{
     float posX;
     float posY;
     float tang;
-    Collider *collider = ((Collider*) associated.GetComponent("Collider").get());
-    tang = (float)(tileBox.h)/(float)(tileBox.w + 40);
+    Collider *collider = ((Collider *)associated.GetComponent("Collider").get());
+    tang = (float)(tileBox.h) / (float)(tileBox.w + 40);
     posX = tileBox.x + tileBox.w + 40 - collider->box.x;
     posY = posX * tang;
     posY = tileBox.y + tileBox.h - posY;
-    if(velocity.y > 0) {
-        if((collider->box.y + collider->box.h - 25 >= posY) && (collider->box.x + collider->box.w > tileBox.x) && (collider->box.x < tileBox.x + tileBox.w)) {
+    if (velocity.y > 0)
+    {
+        if ((collider->box.y + collider->box.h - 25 >= posY) && (collider->box.x + collider->box.w > tileBox.x) && (collider->box.x < tileBox.x + tileBox.w))
+        {
             associated.box.y = posY - associated.box.h - 20;
             LandOnground();
         }
     }
-    if((velocity.x <= 0) && (collider->box.x > tileBox.x) && (collider->box.y + 70 < posY + tileBox.h)) {
-        if((collider->box.y + collider->box.h - 42 > posY)) {
-            if(isOnSlope) {
+    if ((velocity.x <= 0) && (collider->box.x > tileBox.x) && (collider->box.y + 70 < posY + tileBox.h))
+    {
+        if ((collider->box.y + collider->box.h - 42 > posY))
+        {
+            if (isOnSlope)
+            {
                 velocity.x = 0;
                 associated.box.x = tileBox.x + tileBox.w - 75;
-            } else {
-                associated.box.y =  posY - associated.box.h - 40;
+            }
+            else
+            {
+                associated.box.y = posY - associated.box.h - 40;
             }
         }
     }
 }
 
-
-void Character::SolidSlope1Collision(Rect tileBox) {
+void Character::SolidSlope1Collision(Rect tileBox)
+{
     float posX;
     float posY;
     float tang;
-    Collider *collider = ((Collider*) associated.GetComponent("Collider").get());
-    tang = (float)(tileBox.h)/(float)(tileBox.w + 40);
+    Collider *collider = ((Collider *)associated.GetComponent("Collider").get());
+    tang = (float)(tileBox.h) / (float)(tileBox.w + 40);
     posX = tileBox.x + tileBox.w + 40 - collider->box.x;
     posY = posX * tang;
     posY = tileBox.y + tileBox.h - posY;
-    if(velocity.y > 0) {
-        if((collider->box.y + collider->box.h - 25 >= posY) && (collider->box.x + collider->box.w > tileBox.x) && (collider->box.x < tileBox.x + tileBox.w)) {
+    if (velocity.y > 0)
+    {
+        if ((collider->box.y + collider->box.h - 25 >= posY) && (collider->box.x + collider->box.w > tileBox.x) && (collider->box.x < tileBox.x + tileBox.w))
+        {
             associated.box.y = posY - associated.box.h - 20;
             LandOnground();
         }
     }
-    if(velocity.y <= 0) {
-        if((collider->box.y >= posY) && (collider->box.x + collider->box.w > tileBox.x + 24) && (collider->box.x < tileBox.x + tileBox.w - 24)) {
+    if (velocity.y <= 0)
+    {
+        if ((collider->box.y >= posY) && (collider->box.x + collider->box.w > tileBox.x + 24) && (collider->box.x < tileBox.x + tileBox.w - 24))
+        {
             velocity.y = 0;
             associated.box.y = posY + tileBox.h - 45;
         }
     }
-    if((velocity.x >= 0) && (collider->box.x < tileBox.x)) {
-        if((collider->box.y + collider->box.h - 60 > posY) && (collider->box.y + 50 < posY + tileBox.h)) {
+    if ((velocity.x >= 0) && (collider->box.x < tileBox.x))
+    {
+        if ((collider->box.y + collider->box.h - 60 > posY) && (collider->box.y + 50 < posY + tileBox.h))
+        {
             velocity.x = 0;
             associated.box.x = tileBox.x - associated.box.w - 35;
         }
     }
-    if((velocity.x <= 0) && (collider->box.x > tileBox.x) && (collider->box.y + 40 < posY + tileBox.h)) {
-        if((collider->box.y + collider->box.h - 42 > posY)) {
-            if(isOnSlope) {
+    if ((velocity.x <= 0) && (collider->box.x > tileBox.x) && (collider->box.y + 40 < posY + tileBox.h))
+    {
+        if ((collider->box.y + collider->box.h - 42 > posY))
+        {
+            if (isOnSlope)
+            {
                 velocity.x = 0;
                 associated.box.x = tileBox.x + tileBox.w - 75;
-            } else {
-                associated.box.y =  posY - associated.box.h - 40;
+            }
+            else
+            {
+                associated.box.y = posY - associated.box.h - 40;
             }
         }
     }

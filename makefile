@@ -6,7 +6,7 @@ RUN = ./
 
 DEP_FLAGS = -MT $@ -MMD -MP -MF $(DEP_PATH)/$*.d
 
-DIRECTIVES = -std=c++11 -fPIC -no-pie -Wall -Wno-narrowing -Wextra -pedantic -std=c++11 -O3 -Wshadow -Wformat=2 -Wfloat-equal -Wconversion -Wcast-qual -Wcast-align -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -c -I $(HEADER_PATH)
+DIRECTIVES = -std=c++11 -fPIC  -Wall -Wno-narrowing -Wextra -pedantic -std=c++11 -O3 -Wshadow -Wformat=2 -Wfloat-equal -Wconversion -Wcast-qual -Wcast-align -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -c -I $(HEADER_PATH)
 
 LIBS = -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lm
 
