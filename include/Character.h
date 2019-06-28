@@ -75,9 +75,12 @@
 #define LISTEN_TO_MUSIC_FRAME_TIME 0.08333
 #define IDLE_DURATION 10
 #define RECOVER_SPRITE_RIGHT "assets/img/char/SoulBeatsCharBounce.png"
+#define RECOVER_SPRITE_RIGHT_ON_BEAT "assets/img/char/SoulBeatsCharBounceBEAT.png"
+#define RECOVER_SPRITE_LEFT_ON_BEAT "assets/img/char/SoulBeatsCharBounceLeftBEAT.png"
 #define RECOVER_SPRITE_LEFT "assets/img/char/SoulBeatsCharBounceL.png"
 #define RECOVER_FRAME_COUNT 6
-#define RECOVER_DURATION 0.25
+#define HIT_DEFLECT_SPEED 250
+#define RECOVER_DURATION 0.5
 #define WALKING_SOUND_TIMER 0.3
 #include "Component.h"
 #include "Sprite.h"

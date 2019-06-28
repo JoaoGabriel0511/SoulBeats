@@ -190,7 +190,7 @@ void Character::NotifYCollisionWithMap(Rect tileBox)
 void Character::SolidGroundCollision(Rect tileBox)
 {
     Collider *collider = ((Collider *)associated.GetComponent("Collider").get());
-    if (velocity.y > 0)
+    if (velocity.y > 0 || isAttacking || gotHit)
     {
         if ((collider->box.y + collider->box.h - 50 <= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 24) && (collider->box.x < tileBox.x + tileBox.w - 24))
         {
@@ -243,10 +243,12 @@ void Character::LandOnground()
     {
         if (isLeftSide)
         {
+            cout<<__LINE__<<"::"<<__FILE__<<endl;
             charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
         }
         else
         {
+            cout<<__LINE__<<"::"<<__FILE__<<endl;
             charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
         }
         idleTimer.Restart();
@@ -334,18 +336,27 @@ void Character::LightSlope2Collision(Rect tileBox) {
 
 void Character::HitKnockBack() {
     attackGO->RequestedDelete();
-    if (isLeftSide) {
-        velocity.x = HURT_DEFLECT_SPEED;
-        charSprite->SwitchSprite(RECOVER_SPRITE_LEFT, RECOVER_FRAME_COUNT, RECOVER_DURATION / RECOVER_FRAME_COUNT);
-    }
-    else {
-        velocity.x = -1 * HURT_DEFLECT_SPEED;
-        charSprite->SwitchSprite(RECOVER_SPRITE_RIGHT, RECOVER_FRAME_COUNT, RECOVER_DURATION / RECOVER_FRAME_COUNT);
+    if(attackOnBeat) {
+        if (isLeftSide) {
+            velocity.x = HIT_DEFLECT_SPEED;
+            charSprite->SwitchSprite(RECOVER_SPRITE_LEFT_ON_BEAT, RECOVER_FRAME_COUNT, RECOVER_DURATION / RECOVER_FRAME_COUNT);
+        }
+        else {
+            velocity.x = -1 * HIT_DEFLECT_SPEED;
+            charSprite->SwitchSprite(RECOVER_SPRITE_RIGHT_ON_BEAT, RECOVER_FRAME_COUNT, RECOVER_DURATION / RECOVER_FRAME_COUNT);
+        }
+        canCancelKnockBack = true;
+    } else {
+        if (isLeftSide) {
+            velocity.x = HIT_DEFLECT_SPEED;
+            charSprite->SwitchSprite(RECOVER_SPRITE_LEFT, RECOVER_FRAME_COUNT, RECOVER_DURATION / RECOVER_FRAME_COUNT);
+        }
+        else {
+            velocity.x = -1 * HIT_DEFLECT_SPEED;
+            charSprite->SwitchSprite(RECOVER_SPRITE_RIGHT, RECOVER_FRAME_COUNT, RECOVER_DURATION / RECOVER_FRAME_COUNT);
+        }
     }
     isAttacking = false;
-    if(attackOnBeat == true) {
-        canCancelKnockBack = true;
-    }
     attackOnBeat = false;
     hitRecoverTimer.Restart();
     recoveringFromHitKnockback = true;
@@ -467,8 +478,9 @@ void Character::RecoverFromHitKnockback(float dt) {
     hitRecoverTimer.Update(dt);
     if(hitRecoverTimer.Get() >= RECOVER_DURATION ) {
         velocity.x = 0;
-        canCancelKnockBack = true;
         isStill = true;
+        canAttack = true;
+        attackTimer.Restart();
         recoveringFromHitKnockback = false;
         hitRecoverTimer.Restart();
         if(isLeftSide) {
@@ -548,6 +560,8 @@ void Character::MoveSideWays(float dt) {
                 walkingSoundTimer.Restart();
             }
         }
+        canCancelKnockBack = false;
+        recoveringFromHitKnockback = false;
         //charSprite->flip = false;
     } else {
         if (InputManager::GetInstance().IsKeyDown(A_KEY)) {
@@ -564,6 +578,8 @@ void Character::MoveSideWays(float dt) {
                 }
             }
             isStill = false;
+            canCancelKnockBack = false;
+            recoveringFromHitKnockback = false;
             isLeftSide = true;
             //charSprite->flip = true;
         }
@@ -604,6 +620,8 @@ void Character::Jump(float dt) {
             }
             beforeRiseTimer.Restart();
         }
+        canCancelKnockBack = false;
+        recoveringFromHitKnockback = false;
     }
 }
 
@@ -666,6 +684,8 @@ void Character::DoAttack(float dt) {
                     }
                 }
             }
+            canCancelKnockBack = false;
+            recoveringFromHitKnockback = false;
         }
     }
 }
