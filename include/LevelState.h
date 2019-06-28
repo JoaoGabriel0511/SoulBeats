@@ -27,6 +27,7 @@ class LevelState : public State {
     GameObject *tileTerrBackGO;
     GameObject *beat;
     GameObject *goalGO;
+    GameObject *characterGO;
     Timer beginingMusicTimer;
     Timer developmentMusicTimer;
     Timer mainMusicTimer;
@@ -35,6 +36,9 @@ class LevelState : public State {
     void UpdateMusic(float dt);
     bool switchedBegininMusic;
     bool switchedDevelopmentMusic;
+    void LevelCycle(float dt);
+    void UpdateCameraFocus(float dt);
+    void VictoryCycle(float dt);
     public:
         LevelState();
         void Pause();

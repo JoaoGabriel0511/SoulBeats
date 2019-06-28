@@ -15,6 +15,8 @@ class Camera {
         static Vect2 pos;
         static Vect2 speed;
         static bool debug;
+        static bool followX;
+        static bool followY;
 };
 
 #endif

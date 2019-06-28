@@ -24,7 +24,7 @@ void TileMapCollider::Start() {
                 || index == 39 || index == 19 || index == 49 || index == 86 || index == 85 || index == 69
                 || index == 87 || index == 56 || index == 72 || index == 101 || index == 102 || index == 103
                 || index == 104 || index == 66 || index == 84 || index == 67 || index == 68 || index == 57
-                || index == 58 || index == 148 || index == 7) {
+                || index == 58 || index == 7) {
                     auxh = tileMap->GetTileSet()->GetHeight() * tileMap->GetScale();
                     auxw = tileMap->GetTileSet()->GetWidth() * tileMap->GetScale();
                     box.h = auxh;

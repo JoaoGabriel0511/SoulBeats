@@ -119,9 +119,8 @@ void LevelState::LoadAssets() {
 
     //Adicionando Personagem
 
-    GameObject *characterGO;
     characterGO = new GameObject();
-    characterGO->box.x = 150;
+    characterGO->box.x = 594;
     characterGO->box.y = 3100;
     characterGO->box.z = 4;
     new Character(*characterGO);
@@ -373,67 +372,91 @@ void LevelState::UpdateMusic(float dt)
 }
 
 void LevelState::Update(float dt) {
-    VictoryState *victoryState;
-    TileMapCollider *tileMapForeCollider = ((TileMapCollider*) tileTerrForeGO->GetComponent("TileMapCollider").get());
-    TileMapCollider *tileMapBackCollider = ((TileMapCollider*) tileTerrBackGO->GetComponent("TileMapCollider").get());
     if(!levelCompleted) {
-        State::Update(dt);
-        for (int i = tileMapForeCollider->boxes.size() - 1; i >= 0; i--)
-        {
-            if(Camera::IsOnCamera(tileMapForeCollider->boxes[i]))
-            {
-                for (int j = objectArray.size() - 1; j >= 0; j--)
-                {
-                    if(Camera::IsOnCamera(objectArray[j]->box))
-                    {
-                        if (objectArray[j]->GetComponent("Collider") != NULL)
-                        {
-                            if (Collision::IsColliding(((Collider *)objectArray[j]->GetComponent("Collider").get())->box, tileMapForeCollider->boxes[i], objectArray[j]->angleDeg, 0) == true)
-                            {
-                                objectArray[j]->NotifyCollisionWithMap(tileMapForeCollider->boxes[i]);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        for (int i = tileMapBackCollider->boxes.size() - 1; i >= 0; i--)
-        {
-            if(Camera::IsOnCamera(tileMapBackCollider->boxes[i]))
-            {
-                for (int j = objectArray.size() - 1; j >= 0; j--)
-                {
-                    if(Camera::IsOnCamera(objectArray[j]->box))
-                    {
-                        if (objectArray[j]->GetComponent("Collider") != NULL)
-                        {
-                            if (Collision::IsColliding(((Collider *)objectArray[j]->GetComponent("Collider").get())->box, tileMapBackCollider->boxes[i], objectArray[j]->angleDeg, 0) == true)
-                            {
-                                objectArray[j]->NotifyCollisionWithMap(tileMapBackCollider->boxes[i]);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        UpdateMusic(dt);
+        LevelCycle(dt);
     } else {
-        ((Music*) bg->GetComponent("Music").get())->Stop(0);
-        Camera::UnFollow();
-        goalGO->Update(dt);
-        beforeFinishLevelTimer.Update(dt);
-        if(beforeFinishLevelTimer.Get() >= BEFORE_FINISH_LEVEL_TIME ) {
-            popRequested = true;
-            victoryState = new VictoryState();
-            bg->RequestedDelete();
-            Game::GetInstance().Push(victoryState);
-            for(int k = 0; k < objectArray.size(); k++) {
-                if(objectArray[k]->IsDead() == true) {
-                    objectArray.erase(objectArray.begin() + k);
-                }
-	        }
+        VictoryCycle(dt);
+    }
+}
+
+
+void LevelState::VictoryCycle(float dt) {
+    VictoryState *victoryState;
+    ((Music*) bg->GetComponent("Music").get())->Stop(0);
+    Camera::UnFollow();
+    goalGO->Update(dt);
+    beforeFinishLevelTimer.Update(dt);
+    if(beforeFinishLevelTimer.Get() >= BEFORE_FINISH_LEVEL_TIME ) {
+        popRequested = true;
+        victoryState = new VictoryState();
+        bg->RequestedDelete();
+        Game::GetInstance().Push(victoryState);
+        for(int k = 0; k < objectArray.size(); k++) {
+            if(objectArray[k]->IsDead() == true) {
+                objectArray.erase(objectArray.begin() + k);
+            }
         }
     }
+}
+
+void LevelState::UpdateCameraFocus(float dt) {
+    if(characterGO->box.x >= 594) {
+        Camera::followX = true;
+    } else {
+        Camera::followX = false;
+    }
+    if(characterGO->box.y <=  3100) {
+        Camera::followY = true;
+    } else {
+        Camera::followY = false;
+    }
+}
+
+
+void LevelState::LevelCycle(float dt) {
+    TileMapCollider *tileMapForeCollider = ((TileMapCollider*) tileTerrForeGO->GetComponent("TileMapCollider").get());
+    TileMapCollider *tileMapBackCollider = ((TileMapCollider*) tileTerrBackGO->GetComponent("TileMapCollider").get());
+    State::Update(dt);
+    UpdateCameraFocus(dt);
+    for (int i = tileMapForeCollider->boxes.size() - 1; i >= 0; i--)
+    {
+        if(Camera::IsOnCamera(tileMapForeCollider->boxes[i]))
+        {
+            for (int j = objectArray.size() - 1; j >= 0; j--)
+            {
+                if(Camera::IsOnCamera(objectArray[j]->box))
+                {
+                    if (objectArray[j]->GetComponent("Collider") != NULL)
+                    {
+                        if (Collision::IsColliding(((Collider *)objectArray[j]->GetComponent("Collider").get())->box, tileMapForeCollider->boxes[i], objectArray[j]->angleDeg, 0) == true)
+                        {
+                            objectArray[j]->NotifyCollisionWithMap(tileMapForeCollider->boxes[i]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    for (int i = tileMapBackCollider->boxes.size() - 1; i >= 0; i--)
+    {
+        if(Camera::IsOnCamera(tileMapBackCollider->boxes[i]))
+        {
+            for (int j = objectArray.size() - 1; j >= 0; j--)
+            {
+                if(Camera::IsOnCamera(objectArray[j]->box))
+                {
+                    if (objectArray[j]->GetComponent("Collider") != NULL)
+                    {
+                        if (Collision::IsColliding(((Collider *)objectArray[j]->GetComponent("Collider").get())->box, tileMapBackCollider->boxes[i], objectArray[j]->angleDeg, 0) == true)
+                        {
+                            objectArray[j]->NotifyCollisionWithMap(tileMapBackCollider->boxes[i]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    UpdateMusic(dt);
 }
 
 GameObject *LevelState::GetBeatObject()

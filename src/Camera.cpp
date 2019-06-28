@@ -5,6 +5,8 @@ GameObject * Camera::focus;
 Vect2 Camera::pos;
 Vect2 Camera::speed;
 bool Camera::debug = false;
+bool Camera::followX = true;
+bool Camera::followY = true;
 
 void Camera::Follow(GameObject * focus){
     Camera::focus = focus;
@@ -75,7 +77,11 @@ void Camera::Update(float dt) {
             pos = pos + speed;
         }
     } else {
-        pos.x = -1 * (focus->box.x - (GameInfo::GetInstance().WIDTH / 2));
-        pos.y = -1 * (focus->box.y - (GameInfo::GetInstance().HEIGHT / 2));
+        if(followX) {
+            pos.x = -1 * (focus->box.x - (GameInfo::GetInstance().WIDTH / 2));
+        }
+        if(followY) {
+            pos.y = -1 * (focus->box.y - (GameInfo::GetInstance().HEIGHT / 2)) + 50;
+        }
     }
 }
