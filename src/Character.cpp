@@ -58,6 +58,12 @@ void Character::Update(float dt)
         if(recoveringFromHitKnockback){
             RecoverFromHitKnockback(dt);
         } if(!recoveringFromHitKnockback || canCancelKnockBack) {
+            if(canCancelKnockBack && !isOnGround) {
+                isFalling = true;
+                peakDone = false;
+                isRising = false;
+                hasChanged = false;
+            }
             if (isAttacking) {
                 AttackUpdate(dt);
             } else {
@@ -118,7 +124,7 @@ void Character::NotifyCollision(GameObject &other)
             {
                 isAttacking = false;
                 attackOnBeat = false;
-                associated.box.x = associated.box.x + 2;
+                //associated.box.x = associated.box.x + 2;
                 attackGO->RequestedDelete();
             }
             invincibilityTimer.Restart();
@@ -483,6 +489,12 @@ void Character::RecoverFromHitKnockback(float dt) {
         attackTimer.Restart();
         recoveringFromHitKnockback = false;
         hitRecoverTimer.Restart();
+        if(!isOnGround) {
+            isFalling = true;
+            peakDone = false;
+            isRising = false;
+            hasChanged = false;
+        }
         if(isLeftSide) {
             charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
         } else {
