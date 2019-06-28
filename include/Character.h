@@ -96,6 +96,7 @@ class Character : public Component {
   bool canAttack;
   bool jumpedOnBeat;
   bool recoveringFromHitKnockback;
+  bool isDead;
   
   Timer beforeRiseTimer;
   Timer recoverFromHitTimer;
@@ -116,6 +117,8 @@ class Character : public Component {
   void SolidGroundCollision(Rect tileBox);
   void SolidSlopeCollision(Rect tileBox);
   void LightGroundCollision(Rect tileBox);
+  int hp;
+  
   public:
     Character(GameObject &associated);
     void Update(float dt);

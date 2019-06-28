@@ -8,6 +8,7 @@
 #include "TileMapCollider.h"
 #include "TileSet.h"
 #include "Game.h"
+#include "UserInterface.h"
 
 class LevelState : public State {
     GameObject *bg;

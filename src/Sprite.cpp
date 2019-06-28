@@ -160,6 +160,7 @@ void Sprite::Render() {
 }
 
 void Sprite::Render(float x, float y, float w, float h) {
+    // cout << "Rendering at (" << x << "," << y << ")" << endl;
     SDL_Rect dstRect{ int(x), int(y), w*scale.y, h*scale.y };
     if(flip) {
         SDL_RenderCopyEx(Game::GetInstance().GetRenderer(), texture.get(), &clipRect, &dstRect, associated.angleDeg, NULL, SDL_FLIP_HORIZONTAL);

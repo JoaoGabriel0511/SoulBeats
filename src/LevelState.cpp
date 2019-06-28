@@ -151,6 +151,7 @@ void LevelState::LoadAssets() {
 
     //TileMap Decoracao BackGround Adicionada
 
+
 }
 
 void LevelState::Pause() {

@@ -12,6 +12,7 @@ Character::Character(GameObject &associated) : Component(associated){
 void Character::Start() {
     charSprite = new Sprite(associated, IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
     charSprite->SetScale({2,2});
+    hp = 3;
     isStill = true;
     isRising = false;
     isFalling = false;
@@ -28,6 +29,7 @@ void Character::Start() {
     finishIdle = false;
     hasChanged = false;
     jumpedOnBeat = false;
+    isDead = false;
     recoveringFromHitKnockback = false;
     wasLeftSide = isLeftSide;
     wasOnGround = isOnGround;
@@ -44,6 +46,10 @@ void Character::Update(float dt) {
     idleTimer.Update(dt);
     float beforeRiserDuration;
     wasLeftSide = isLeftSide;
+
+    if (hp <= 0){
+        isDead = true;
+    }
 
     if(recoveringFromHitKnockback){
         hitRecoverTimer.Update(dt);
@@ -369,34 +375,37 @@ bool Character::Is(string type) {
 }
 
 void Character::NotifyCollision(GameObject &other) {
-    if (!isInvincible) {
-        if (other.GetComponent("BellEnemy") != NULL) {
-            if (other.box.x > associated.box.x) {
-                velocity.x = -1 * HURT_DEFLECT_SPEED;
+    if(!isDead){
+        if (!isInvincible) {
+            if (other.GetComponent("BellEnemy") != NULL) {
+                if (other.box.x > associated.box.x) {
+                    velocity.x = -1 * HURT_DEFLECT_SPEED;
+                }
+                else {
+                    velocity.x = HURT_DEFLECT_SPEED;
+                }
+                if(!isOnGround) {
+                    velocity.y = HURT_BOUNCING_SPEED;
+                }
+                gravity = HURT_GRAVITY;
+                gotHit = true;
+                hp -= 1;
+                isInvincible = true;
+                if(isAttacking) {
+                    isAttacking = false;
+                    associated.box.x = associated.box.x + 2;
+                    attackGO->RequestedDelete();
+                }
+                invincibilityTimer.Restart();
+                endingInvincibilityTimer.Restart();
+                blinkTimer.Restart();
+                if(isLeftSide) {
+                    charSprite->SwitchSprite(HURT_SPRITE_LEFT, HURT_FRAME_COUNT, HURT_FRAME_TIME);
+                } else {
+                    charSprite->SwitchSprite(HURT_SPRITE_RIGHT, HURT_FRAME_COUNT, HURT_FRAME_TIME);
+                }
+                recoverFromHitTimer.Restart();
             }
-            else {
-                velocity.x = HURT_DEFLECT_SPEED;
-            }
-            if(!isOnGround) {
-                velocity.y = HURT_BOUNCING_SPEED;
-            }
-            gravity = HURT_GRAVITY;
-            gotHit = true;
-            isInvincible = true;
-            if(isAttacking) {
-                isAttacking = false;
-                associated.box.x = associated.box.x + 2;
-                attackGO->RequestedDelete();
-            }
-            invincibilityTimer.Restart();
-            endingInvincibilityTimer.Restart();
-            blinkTimer.Restart();
-            if(isLeftSide) {
-                charSprite->SwitchSprite(HURT_SPRITE_LEFT, HURT_FRAME_COUNT, HURT_FRAME_TIME);
-            } else {
-                charSprite->SwitchSprite(HURT_SPRITE_RIGHT, HURT_FRAME_COUNT, HURT_FRAME_TIME);
-            }
-            recoverFromHitTimer.Restart();
         }
     }
 }
@@ -405,14 +414,14 @@ void Character::NotifYCollisionWithMap(Rect tileBox) {
     Rect pastPosition;
     Collider *collider = ((Collider*) associated.GetComponent("Collider").get());
     if(Debugger::GetInstance().lookCharCollision) {
-        cout<<"collider->box.x: "<<collider->box.x<<endl;
-        cout<<"collider->box.y: "<<collider->box.y<<endl;
-        cout<<"collider->box.w: "<<collider->box.w<<endl;
-        cout<<"collider->box.h: "<<collider->box.h<<endl;
-        cout<<"box.x: "<<tileBox.x<<endl;
-        cout<<"box.y: "<<tileBox.y<<endl;
-        cout<<"box.w: "<<tileBox.w<<endl;
-        cout<<"box.h: "<<tileBox.h<<endl;
+        // cout<<"collider->box.x: "<<collider->box.x<<endl;
+        // cout<<"collider->box.y: "<<collider->box.y<<endl;
+        // cout<<"collider->box.w: "<<collider->box.w<<endl;
+        // cout<<"collider->box.h: "<<collider->box.h<<endl;
+        // cout<<"box.x: "<<tileBox.x<<endl;
+        // cout<<"box.y: "<<tileBox.y<<endl;
+        // cout<<"box.w: "<<tileBox.w<<endl;
+        // cout<<"box.h: "<<tileBox.h<<endl;
     }
     if(tileBox.z == 101 || tileBox.z == 102 || tileBox.z == 103 || tileBox.z == 148 || tileBox.z == 104 ||
        tileBox.z == 67 || tileBox.z == 68 || tileBox.z == 57 || tileBox.z == 58 || tileBox.z == 66 || tileBox.z == 84){
@@ -427,76 +436,84 @@ void Character::NotifYCollisionWithMap(Rect tileBox) {
 }
 
 void Character::SolidGroundCollision(Rect tileBox) {
-    Collider *collider = ((Collider*) associated.GetComponent("Collider").get());
-    if(velocity.y > 0) {
-        if((collider->box.y + collider->box.h - 50 <= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 24) && (collider->box.x < tileBox.x + tileBox.w - 24)) {
-            LandOnground();
-            associated.box.y = tileBox.y - associated.box.h - 45;
+    if(!isDead){
+        Collider *collider = ((Collider*) associated.GetComponent("Collider").get());
+        if(velocity.y > 0) {
+            if((collider->box.y + collider->box.h - 50 <= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 24) && (collider->box.x < tileBox.x + tileBox.w - 24)) {
+                LandOnground();
+                associated.box.y = tileBox.y - associated.box.h - 45;
+            }
         }
-    }
-    if(velocity.y <= 0) {
-        if((collider->box.y >= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 24) && (collider->box.x < tileBox.x + tileBox.w - 24)) {
-            velocity.y = 0;
-            associated.box.y = tileBox.y + tileBox.h - 45;
+        if(velocity.y <= 0) {
+            if((collider->box.y >= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 24) && (collider->box.x < tileBox.x + tileBox.w - 24)) {
+                velocity.y = 0;
+                associated.box.y = tileBox.y + tileBox.h - 45;
+            }
         }
-    }
-    if((velocity.x >= 0) && (collider->box.x < tileBox.x)) {
-        if((collider->box.y + collider->box.h - 50 > tileBox.y) && (collider->box.y + 50 < tileBox.y + tileBox.h)) {
-            velocity.x = 0;
-            associated.box.x = tileBox.x - associated.box.w - 35;
+        if((velocity.x >= 0) && (collider->box.x < tileBox.x)) {
+            if((collider->box.y + collider->box.h - 50 > tileBox.y) && (collider->box.y + 50 < tileBox.y + tileBox.h)) {
+                velocity.x = 0;
+                associated.box.x = tileBox.x - associated.box.w - 35;
+            }
         }
-    }
-    if((velocity.x <= 0) && (collider->box.x > tileBox.x) && (collider->box.y + 40 < tileBox.y + tileBox.h)) {
-        if((collider->box.y + collider->box.h - 40 > tileBox.y)) {
-            velocity.x = 0;
-            associated.box.x = tileBox.x + tileBox.w - 75;
+        if((velocity.x <= 0) && (collider->box.x > tileBox.x) && (collider->box.y + 40 < tileBox.y + tileBox.h)) {
+            if((collider->box.y + collider->box.h - 40 > tileBox.y)) {
+                velocity.x = 0;
+                associated.box.x = tileBox.x + tileBox.w - 75;
+            }
         }
     }
 }
 
 void Character::LightGroundCollision(Rect tileBox) {
+    if(!isDead){
     Collider *collider = ((Collider*) associated.GetComponent("Collider").get());
-    if(velocity.y > 0) {
-        if((collider->box.y + collider->box.h - 25 <= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 12) && (collider->box.x < tileBox.x + tileBox.w - 12)) {
-            LandOnground();
-            associated.box.y = tileBox.y - associated.box.h - 45;
+        if(velocity.y > 0) {
+            if((collider->box.y + collider->box.h - 25 <= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 12) && (collider->box.x < tileBox.x + tileBox.w - 12)) {
+                LandOnground();
+                associated.box.y = tileBox.y - associated.box.h - 45;
+            }
         }
     }
 }
 
 void Character::LandOnground() {
-    if(!wasOnGround) {
-        if(isLeftSide){
-            charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
-        } else {
-            charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
+    if(!isDead){
+        if(!wasOnGround) {
+            if(isLeftSide){
+                charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
+            } else {
+                charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
+            }
+            idleTimer.Restart();
+            finishIdle = false;
         }
-        idleTimer.Restart();
-        finishIdle = false;
+        isOnGround = true;
+        canAttack = true;
+        isFalling = false;
+        isRising = false;
+        peakDone = true;
+        hasChanged = false;
+        if(!wasOnGround){
+            isStill = true;
+        }
+        gravity = GRAVITY_FALLING;
+        velocity.y = 0;
     }
-    isOnGround = true;
-    canAttack = true;
-    isFalling = false;
-    isRising = false;
-    peakDone = true;
-    hasChanged = false;
-    if(!wasOnGround){
-        isStill = true;
-    }
-    gravity = GRAVITY_FALLING;
-    velocity.y = 0;
 }
 
 void Character::SolidSlopeCollision(Rect tileBox) {
-    float posX;
-    float posY;
-    Collider *collider = ((Collider*) associated.GetComponent("Collider").get());
-    if(velocity.y > 0) {
-        posY = tileBox.y + (tileBox.h / (tileBox.x / collider->box.x));
-        if((collider->box.y + collider->box.h - 25 <= posY)) {
-            velocity.y = 0;
-            associated.box.y = posY - associated.box.h;
+    if(!isDead){
+        float posX;
+        float posY;
+        Collider *collider = ((Collider*) associated.GetComponent("Collider").get());
+        if(velocity.y > 0) {
+            posY = tileBox.y + (tileBox.h / (tileBox.x / collider->box.x));
+            if((collider->box.y + collider->box.h - 25 <= posY)) {
+                velocity.y = 0;
+                associated.box.y = posY - associated.box.h;
+            }
+            LandOnground();
         }
-        LandOnground();
     }
 }

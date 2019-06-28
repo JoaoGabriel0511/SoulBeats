@@ -11,7 +11,7 @@ bin/Character.o: src/Character.cpp src/../include/Character.h \
  src/../include/LevelState.h src/../include/Beat.h \
  src/../include/Character.h src/../include/BellEnemy.h \
  src/../include/TileMap.h src/../include/TileSet.h \
- src/../include/TileMapCollider.h
+ src/../include/TileMapCollider.h src/../include/UserInterface.h
 
 src/../include/Character.h:
 
@@ -70,3 +70,5 @@ src/../include/TileMap.h:
 src/../include/TileSet.h:
 
 src/../include/TileMapCollider.h:
+
+src/../include/UserInterface.h:

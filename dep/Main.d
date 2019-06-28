@@ -9,7 +9,8 @@ bin/Main.o: src/Main.cpp src/../include/Game.h src/../include/GameData.h \
  src/../include/CameraFollower.h src/../include/LevelState.h \
  src/../include/Beat.h src/../include/Character.h src/../include/Attack.h \
  src/../include/BellEnemy.h src/../include/TileMap.h \
- src/../include/TileSet.h src/../include/TileMapCollider.h
+ src/../include/TileSet.h src/../include/TileMapCollider.h \
+ src/../include/UserInterface.h
 
 src/../include/Game.h:
 
@@ -66,3 +67,5 @@ src/../include/TileMap.h:
 src/../include/TileSet.h:
 
 src/../include/TileMapCollider.h:
+
+src/../include/UserInterface.h:
