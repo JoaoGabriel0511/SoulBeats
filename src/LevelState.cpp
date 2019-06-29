@@ -120,10 +120,12 @@ void LevelState::LoadAssets() {
     //Adicionando Personagem
 
     characterGO = new GameObject();
-    characterGO->box.x = 594;
+    characterGO->box.x = 500;
     characterGO->box.y = 3100;
     characterGO->box.z = 4;
     new Character(*characterGO);
+    Camera::followX = true;
+    Camera::followY = true;
     Camera::Follow(characterGO);
     objectArray.emplace_back(characterGO);
 
@@ -400,7 +402,7 @@ void LevelState::VictoryCycle(float dt) {
 }
 
 void LevelState::UpdateCameraFocus(float dt) {
-    if(characterGO->box.x >= 594) {
+    if(characterGO->box.x >= 500) {
         Camera::followX = true;
     } else {
         Camera::followX = false;

@@ -16,6 +16,7 @@ void Character::Start()
     sound = new Sound(associated);
     isStill = true;
     isRising = false;
+    isDead = false;
     isFalling = false;
     beforeRisingDone = true;
     peakDone = true;

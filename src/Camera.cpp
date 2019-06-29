@@ -78,7 +78,7 @@ void Camera::Update(float dt) {
         }
     } else {
         if(followX) {
-            pos.x = -1 * (focus->box.x - (GameInfo::GetInstance().WIDTH / 2));
+            pos.x = -1 * (focus->box.x - (GameInfo::GetInstance().WIDTH / 2)) - 100;
         }
         if(followY) {
             pos.y = -1 * (focus->box.y - (GameInfo::GetInstance().HEIGHT / 2)) + 50;
