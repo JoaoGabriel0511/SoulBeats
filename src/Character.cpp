@@ -57,7 +57,7 @@ void Character::Update(float dt)
         isDead = true;
         Camera::UnFollow();
     }
-    
+
     if(associated.box.y >= MAX_CHARACTER_HEIGHT){
         cout << "Character passed the height limit" << endl;
         deathTimer.Update(dt);
@@ -65,7 +65,7 @@ void Character::Update(float dt)
             LevelState* levelState;
             levelState = new LevelState();
             Game::GetInstance().Push(levelState);
-        }   
+        }
     }
 
     if (gotHit)
@@ -276,7 +276,7 @@ void Character::LightGroundCollision(Rect tileBox)
 
     if (!isDead){
         Collider *collider = ((Collider *)associated.GetComponent("Collider").get());
-        if (velocity.y > 0)
+        if (velocity.y > 0 || isAttacking || gotHit)
         {
             if ((collider->box.y + collider->box.h - 25 <= tileBox.y) && (collider->box.x + collider->box.w > tileBox.x + 12) && (collider->box.x < tileBox.x + tileBox.w - 12))
             {
@@ -289,7 +289,7 @@ void Character::LightGroundCollision(Rect tileBox)
 
 void Character::LandOnground()
 {
-    if (!wasOnGround)
+    if (!wasOnGround && !isAttacking && !gotHit)
     {
         if (isLeftSide)
         {
@@ -328,7 +328,7 @@ void Character::SolidSlope2Collision(Rect tileBox) {
         posX = collider->box.x + collider->box.w - (tileBox.x - 40);
         posY = posX * tang;
         posY = tileBox.y + tileBox.h - posY;
-        if(velocity.y > 0) {
+        if (velocity.y > 0 || isAttacking || gotHit) {
             if((collider->box.y + collider->box.h >= posY) && (collider->box.x + collider->box.w > tileBox.x) && (collider->box.x < tileBox.x + tileBox.w)) {
                 associated.box.y = posY - associated.box.h - 20;
                 LandOnground();
@@ -369,7 +369,7 @@ void Character::LightSlope2Collision(Rect tileBox) {
         posX = collider->box.x + collider->box.w - (tileBox.x - 40);
         posY = posX * tang;
         posY = tileBox.y + tileBox.h - posY;
-        if(velocity.y > 0) {
+        if (velocity.y > 0 || isAttacking || gotHit) {
             if((collider->box.y + collider->box.h - 25 >= posY) && (collider->box.x + collider->box.w > tileBox.x) && (collider->box.x < tileBox.x + tileBox.w)) {
                 associated.box.y = posY - associated.box.h - 20;
                 LandOnground();
@@ -427,7 +427,7 @@ void Character::LightSlope1Collision(Rect tileBox)
     posX = tileBox.x + tileBox.w + 40 - collider->box.x;
     posY = posX * tang;
     posY = tileBox.y + tileBox.h - posY;
-    if (velocity.y > 0)
+    if (velocity.y > 0 || isAttacking || gotHit)
     {
         if ((collider->box.y + collider->box.h - 25 >= posY) && (collider->box.x + collider->box.w > tileBox.x) && (collider->box.x < tileBox.x + tileBox.w))
         {
@@ -463,7 +463,7 @@ void Character::SolidSlope1Collision(Rect tileBox)
     posY = posX * tang;
     posY = tileBox.y + tileBox.h - posY;
     if(!isDead) {
-        if (velocity.y > 0)
+        if (velocity.y > 0 || isAttacking || gotHit)
         {
             if ((collider->box.y + collider->box.h - 25 >= posY) && (collider->box.x + collider->box.w > tileBox.x) && (collider->box.x < tileBox.x + tileBox.w))
             {
