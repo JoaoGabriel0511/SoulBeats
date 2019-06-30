@@ -13,6 +13,7 @@ class GameObject{
     public:
         double angleDeg;
         GameObject();
+        GameObject(Rect box);
         bool started;
         ~GameObject();
         void Update(float dt);

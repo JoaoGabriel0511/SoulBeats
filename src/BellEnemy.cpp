@@ -1,9 +1,10 @@
 #include "../include/BellEnemy.h"
 
-BellEnemy::BellEnemy(GameObject& associated, int movingDistance, int movingSpeed, GameObject * character) : Component(associated) {
+BellEnemy::BellEnemy(GameObject& associated, int movingDistance, int movingSpeed, GameObject * character, int index) : Component(associated) {
     this->character = character;
     Collider* collider;
     sound = new Sound(associated);
+    this->index = index;
     collider = new Collider(associated, {2,2}, {-140,0});
 }
 
@@ -89,6 +90,9 @@ void BellEnemy::NotifyCollision(GameObject& other) {
                 lifeBarSprite->SwitchSprite(HALF_LIFE_BAR, 1, 0);
             }
             if(hp <= 0) {
+                cout<<__FILE__<<"::"<<__LINE__<<endl;
+                LevelData::GetInstance().enemyData[index]->wasKilled = true;
+                cout<<__FILE__<<"::"<<__LINE__<<endl;
                 associated.RequestedDelete();
             }
         } else {

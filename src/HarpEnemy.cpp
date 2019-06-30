@@ -1,9 +1,10 @@
 #include "../include/HarpEnemy.h"
 
-HarpEnemy::HarpEnemy(GameObject &associated, int movingDistance, int movingSpeed, GameObject *character) : Component(associated)
+HarpEnemy::HarpEnemy(GameObject &associated, int movingDistance, int movingSpeed, GameObject *character, int index) : Component(associated)
 {
     this->character = character;
     Collider *collider;
+    this->index = index;
     //initalPos = associated.box;
     collider = new Collider(associated, {2, 2}, {-70, -80});
 }
@@ -111,6 +112,7 @@ void HarpEnemy::NotifyCollision(GameObject &other)
             lifeBarSprite->SwitchSprite(TWO_THIRDS_LIFE_BAR, 1, 0);
         }
         if(hp <= 0) {
+            LevelData::GetInstance().enemyData[index]->wasKilled = true;
             associated.RequestedDelete();
         }
         ((Character*) character->GetComponent("Character").get())->HitKnockBack();

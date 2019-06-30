@@ -69,8 +69,8 @@
 #define ATTACK_AIR_LEFT_SPRITE_ON_BEAT "assets/img/char/SoulBeatsCharAttackAirLBEAT.png"
 #define ATTACK_FRAME_COUNT 5
 #define ATTACK_DURATION 0.3
-#define LITSEN_TO_MUSIC_RIGHT_SPRITE "assets/img/char/SoulBeatsCharBang.png"
-#define LITSEN_TO_MUSIC_LEFT_SPRITE "assets/img/char/SoulBeatsCharBangL.png"
+#define LITSEN_TO_MUSIC_RIGHT_SPRITE "assets/img/char/SoulBeatsCharHeadbangSwordless.png"
+#define LITSEN_TO_MUSIC_LEFT_SPRITE "assets/img/char/SoulBeatsCharHeadbangSwordlessLeft.png"
 #define LITSEN_TO_MUSIC_FRAME_COUNT 8
 #define LISTEN_TO_MUSIC_FRAME_TIME 0.08333
 #define IDLE_DURATION 10
