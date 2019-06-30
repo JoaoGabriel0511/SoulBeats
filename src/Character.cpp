@@ -293,12 +293,10 @@ void Character::LandOnground()
     {
         if (isLeftSide)
         {
-            cout<<__LINE__<<"::"<<__FILE__<<endl;
             charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
         }
         else
         {
-            cout<<__LINE__<<"::"<<__FILE__<<endl;
             charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
         }
         idleTimer.Restart();

@@ -7,6 +7,13 @@ GameObject::GameObject() {
     angleDeg = 0;
 }
 
+GameObject::GameObject(Rect box) {
+    isDead = false;
+    started = false;
+    angleDeg = 0;
+    this->box = box;
+}
+
 GameObject::~GameObject() {
     int components_size = components.size();
     for (int i = components_size - 1; i >= 0 ; i--) {

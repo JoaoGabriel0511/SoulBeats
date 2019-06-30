@@ -13,6 +13,7 @@ using namespace std;
 class tileMap;
 
 class State {
+    virtual void StartData() = 0;
     public:
         virtual weak_ptr<GameObject> AddObject(GameObject *go);
         virtual weak_ptr<GameObject> GetObjectPtr(GameObject *go);

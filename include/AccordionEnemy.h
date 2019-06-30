@@ -4,6 +4,7 @@
 #include "Sprite.h"
 #include "Character.h"
 #include "Sound.h"
+#include "LevelState.h"
 #define ENEMY_IDLE_SPRITE "assets/img/enemies/Accordion/SanfonaIdle.png"
 #define ENEMY_CHARGING_SPRITE "assets/img/enemies/Accordion/SanfonaCharge.png"
 #define ENEMY_JUMP_SPRITE "assets/img/enemies/Accordion/SanfonaJump.png"
@@ -55,8 +56,9 @@ class AccordionEnemy : public Component
     GameObject *lifeBar;
     Sprite *lifeBarSprite;
     int hp;
+    int index;
   public:
-    AccordionEnemy(GameObject &associated, int movingDistance, int movingSpeed, GameObject *character);
+    AccordionEnemy(GameObject &associated, int movingDistance, int movingSpeed, GameObject *character, int index);
     ~AccordionEnemy();
     void Update(float dt);
     void Render();

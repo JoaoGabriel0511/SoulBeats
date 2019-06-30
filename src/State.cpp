@@ -37,12 +37,15 @@ weak_ptr<GameObject> State::GetObjectPtr(GameObject *go) {
 
 void State::Start() {
 	started = true;
+	StartData();
 	LoadAssets();
 	StartArray();
 }
 
 void State::Pause() {}
 void State::Resume() {}
+
+void State::StartData() {}
 
 void State::Update(float dt) {
 	if (InputManager::GetInstance().QuitRequested()) {

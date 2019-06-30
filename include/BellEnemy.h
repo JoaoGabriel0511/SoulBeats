@@ -3,6 +3,7 @@
 #include "Component.h"
 #include "Sprite.h"
 #include "Character.h"
+#include "LevelData.h"
 #define ENEMY_IDLE_SPRITE "assets/img/enemies/BelIdlel.png"
 #define ENEMY_IDLE_FRAME_COUNT 9
 #define ENEMY_IDLE_DURATION 0.747
@@ -34,10 +35,11 @@ class BellEnemy : public Component {
     Timer lookLeft;
     GameObject *character;
     Sound *sound;
+    int index;
     int hp;
     void SwitchBellEnemyState(BellEnemyState state, string sprite, int frameCount, float frameTime, Timer * timer);
     public:
-        BellEnemy(GameObject& associated, int movingDistance, int movingSpeed, GameObject *character);
+        BellEnemy(GameObject& associated, int movingDistance, int movingSpeed, GameObject *character, int index);
         ~BellEnemy();
         void Update(float dt);
         void Render();
