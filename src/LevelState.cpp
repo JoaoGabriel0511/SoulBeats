@@ -3,6 +3,24 @@
 LevelState::LevelState() : State(){
 }
 
+void LevelState::StartData() {
+    if(LevelData::GetInstance().isNewLevel) {
+        LevelData::GetInstance().checkPointData.emplace_back(new CheckPointData(false, {3580,2440}));
+        LevelData::GetInstance().checkPointData.emplace_back(new CheckPointData(false, {7484,2630}));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {1700,2630}, EnemyData::BELL));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {4908,2640}, EnemyData::BELL));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {5187,2900}, EnemyData::BELL));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {8636,3025}, EnemyData::BELL));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {2750,2610}, EnemyData::HARP));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {4285,2486}, EnemyData::HARP));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {7000,2770}, EnemyData::HARP));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {4321,3085}, EnemyData::ACCORDION));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {7287,2570}, EnemyData::ACCORDION));
+        LevelData::GetInstance().isNewLevel = false;
+    }
+    LevelData::GetInstance().Start();
+}
+
 void LevelState::Start() {
     State::Start();
     levelCompleted = false;
@@ -44,6 +62,11 @@ void LevelState::LoadAssets() {
     Collectable *collectable1;
     GameObject *collectable2GO;
     Collectable *collectable2;
+
+    GameObject *checkPoint1GO;
+    CheckPoint *checkPoint1;
+    GameObject *checkPoint2GO;
+    CheckPoint *checkPoint2;
 
     Sprite *levelSprite;
     Music *levelMusic;
@@ -117,11 +140,30 @@ void LevelState::LoadAssets() {
     global_beat = beat_component;
     objectArray.emplace_back(beat);
 
+    //Adicionando CheckPoints
+
+    for(int i = 0; i < LevelData::GetInstance().checkPointData.size(); i++) {
+        GameObject * checkPointGO;
+        checkPointGO = new GameObject();
+        checkPointGO->box.x = LevelData::GetInstance().checkPointData[i]->GetCheckPointPos().x;
+        checkPointGO->box.y = LevelData::GetInstance().checkPointData[i]->GetCheckPointPos().y;
+        checkPointGO->box.z = 4;
+        new CheckPoint(*checkPointGO, i);
+        objectArray.emplace_back(checkPointGO);
+    }
+
+    //CheckPoints Adicionados
+
     //Adicionando Personagem
 
     characterGO = new GameObject();
-    characterGO->box.x = 500;
-    characterGO->box.y = 3100;
+    if(LevelData::GetInstance().pos == NULL) {
+        characterGO->box.x = 500;
+        characterGO->box.y = 3100;
+    } else {
+        characterGO->box.x = LevelData::GetInstance().pos->x - 100;
+        characterGO->box.y = LevelData::GetInstance().pos->y - 95;
+    }
     characterGO->box.z = 4;
     new Character(*characterGO);
     Camera::followX = true;
@@ -130,8 +172,9 @@ void LevelState::LoadAssets() {
     objectArray.emplace_back(characterGO);
 
     //Personagem Adicionado
-
-    //Adicionando Inimigo ( BellEnemy )
+    
+    //Adicionando Inimigos
+    /*//Adicionando Inimigo ( BellEnemy )
 
     bellEnemy1GO = new GameObject();
     bellEnemy1GO->box.x = 1700;
@@ -226,7 +269,31 @@ void LevelState::LoadAssets() {
     accordionEnemy2GO->box.x = 7287;
     accordionEnemy2GO->box.y = 2570;
     accordionEnemy2GO->box.z = 4;
-    objectArray.emplace_back(accordionEnemy2GO);
+    objectArray.emplace_back(accordionEnemy2GO);*/
+
+    for(int i = 0; i < LevelData::GetInstance().enemyData.size(); i++) {
+        if(LevelData::GetInstance().enemyData[i]->isDead == false) {
+            GameObject *enemyGO;
+            enemyGO = new GameObject();
+            enemyGO->box.x = LevelData::GetInstance().enemyData[i]->GetEnemyPos().x;
+            enemyGO->box.y = LevelData::GetInstance().enemyData[i]->GetEnemyPos().y;
+            enemyGO->box.z = 4;
+            if(LevelData::GetInstance().enemyData[i]->type == EnemyData::BELL) {
+                new BellEnemy(*enemyGO, 10, 10, characterGO, i);
+            } else {
+                if(LevelData::GetInstance().enemyData[i]->type == EnemyData::HARP) {
+                    new HarpEnemy(*enemyGO, 10, 10, characterGO, i);
+                } else {
+                    if(LevelData::GetInstance().enemyData[i]->type == EnemyData::ACCORDION){
+                        new AccordionEnemy(*enemyGO, 10, 10, characterGO, i);
+                    }
+                }
+            }
+            objectArray.emplace_back(enemyGO);
+        }
+    }
+
+    //Inimigos Adicionandos
     //Adicionando Coletável ( Collectable )
 
     collectable1GO = new GameObject();
@@ -380,7 +447,6 @@ void LevelState::Update(float dt) {
         VictoryCycle(dt);
     }
 }
-
 
 void LevelState::VictoryCycle(float dt) {
     VictoryState *victoryState;

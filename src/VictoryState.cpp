@@ -4,6 +4,7 @@ VictoryState::VictoryState() : State() {
 }
 
 void VictoryState::Start() {
+    LevelData::GetInstance().clear();
     State::Start();
 }
 
@@ -25,3 +26,5 @@ void VictoryState::LoadAssets() {
 void VictoryState::Pause() {}
 
 void VictoryState::Resume() {}
+
+void VictoryState::StartData() {}

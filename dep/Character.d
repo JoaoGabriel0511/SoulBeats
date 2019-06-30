@@ -10,10 +10,12 @@ bin/Character.o: src/Character.cpp src/../include/Character.h \
  src/../include/Timer.h src/../include/Attack.h include/Game.h \
  src/../include/LevelState.h src/../include/Beat.h \
  src/../include/Character.h src/../include/BellEnemy.h \
- src/../include/HarpEnemy.h src/../include/AccordionEnemy.h \
+ src/../include/LevelData.h src/../include/CheckPointData.h \
+ src/../include/EnemyData.h src/../include/HarpEnemy.h \
+ src/../include/AccordionEnemy.h src/../include/LevelState.h \
  src/../include/Collectable.h src/../include/TileMap.h \
  src/../include/TileSet.h src/../include/TileMapCollider.h \
- src/../include/Goal.h src/../include/LevelState.h \
+ src/../include/Goal.h src/../include/CheckPoint.h \
  src/../include/VictoryState.h
 
 src/../include/Character.h:
@@ -68,9 +70,17 @@ src/../include/Character.h:
 
 src/../include/BellEnemy.h:
 
+src/../include/LevelData.h:
+
+src/../include/CheckPointData.h:
+
+src/../include/EnemyData.h:
+
 src/../include/HarpEnemy.h:
 
 src/../include/AccordionEnemy.h:
+
+src/../include/LevelState.h:
 
 src/../include/Collectable.h:
 
@@ -82,6 +92,6 @@ src/../include/TileMapCollider.h:
 
 src/../include/Goal.h:
 
-src/../include/LevelState.h:
+src/../include/CheckPoint.h:
 
 src/../include/VictoryState.h:

@@ -25,23 +25,23 @@ void TileMap::Load(string file){
     ifstream myFile;
     string line;
     myFile.open(file);
-    cout<<"Lendo o tileMap: "<<endl;
+    //cout<<"Lendo o tileMap: "<<endl;
     while(getline(myFile,line)){
         if(row == 0){
             mapWidth = stoi(line.substr(0,3));
             mapHeight = stoi(line.substr(4,7));
             mapDepth = stoi(line.substr(8,9));
-            cout<<stoi(line.substr(0,3))<<" "<<stoi(line.substr(4,7))<<" "<<stoi(line.substr(8,9))<<endl;
+            //cout<<stoi(line.substr(0,3))<<" "<<stoi(line.substr(4,7))<<" "<<stoi(line.substr(8,9))<<endl;
         }
         if(row > 1) {
             for(int i = 0; i < 4 * mapWidth; i = i + 4) {
-                if(stoi(line.substr(i,i+3)) < 10) {
-                    cout<<0;
+                /*if(stoi(line.substr(i,i+3)) < 10) {
+                    //cout<<0;
                 }
                 if(stoi(line.substr(i,i+3)) < 100) {
-                    cout<<0;
-                }
-                cout<< stoi(line.substr(i,i+3))<< " ";
+                    //cout<<0;
+                }*/
+                //cout<< stoi(line.substr(i,i+3))<< " ";
                 tileMatrix.push_back(stoi(line.substr(i,i+3))-1);
             }
             cout<<endl;

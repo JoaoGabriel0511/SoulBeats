@@ -3,6 +3,7 @@
 #include "Component.h"
 #include "Sprite.h"
 #include "Character.h"
+#include "LevelData.h"
 #define ENEMY_IDLE_SPRITE "assets/img/enemies/Harp/HarpNormal.png"
 #define ENEMY_IDLE_FRAME_COUNT 16
 #define ENEMY_IDLE_DURATION 0.447
@@ -55,10 +56,11 @@ class HarpEnemy : public Component
     int hp;
     GameObject *lifeBar;
     Sprite *lifeBarSprite;
+    int index;
     void SwitchHarpEnemyState(HarpEnemyState state, string sprite, int frameCount, float frameTime, Timer *timer);
 
   public:
-    HarpEnemy(GameObject &associated, int movingDistance, int movingSpeed, GameObject *character);
+    HarpEnemy(GameObject &associated, int movingDistance, int movingSpeed, GameObject *character, int index);
     ~HarpEnemy();
     void Update(float dt);
     void Render();

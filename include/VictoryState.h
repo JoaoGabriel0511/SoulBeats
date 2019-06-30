@@ -3,6 +3,7 @@
 #define VICTORY_BG_SPRITE "assets/img/background/Results.png"
 #define VICTORY_BG_MUSIC "assets/audio/TelaDeResultados.wav"
 #include "State.h"
+#include "LevelData.h"
 
 class VictoryState : public State {
     GameObject *bg;
@@ -11,6 +12,7 @@ class VictoryState : public State {
         VictoryState();
         void Pause();
         void Resume();
+        void StartData();
         void Start();
         void LoadAssets();
 };

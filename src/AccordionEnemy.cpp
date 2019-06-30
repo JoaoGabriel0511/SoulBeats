@@ -1,11 +1,12 @@
 #include "../include/AccordionEnemy.h"
 
-AccordionEnemy::AccordionEnemy(GameObject &associated, int movingDistance, int movingSpeed, GameObject *character) : Component(associated)
+AccordionEnemy::AccordionEnemy(GameObject &associated, int movingDistance, int movingSpeed, GameObject *character, int index) : Component(associated)
 {
     this->character = character;
     Collider *collider;
     collider = new Collider(associated, {2, 2}, {-120, -40}, {0, 20});
     velocityY = 0;
+    this->index = index;
 }
 
 bool AccordionEnemy::Is(string type)
@@ -125,6 +126,7 @@ void AccordionEnemy::NotifyCollision(GameObject &other)
             lifeBarSprite->SwitchSprite(THREE_FOURTHS_LIFE_BAR, 1, 0);
         }
         if(hp <= 0) {
+            LevelData::GetInstance().enemyData[index]->wasKilled = true;
             associated.RequestedDelete();
         }
         ((Character*) character->GetComponent("Character").get())->HitKnockBack();

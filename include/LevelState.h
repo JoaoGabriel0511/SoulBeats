@@ -20,6 +20,8 @@
 #include "TileSet.h"
 #include "Game.h"
 #include "Goal.h"
+#include "CheckPoint.h"
+#include "LevelData.h"
 #include "VictoryState.h"
 class LevelState : public State {
     GameObject *bg;
@@ -33,6 +35,7 @@ class LevelState : public State {
     Timer mainMusicTimer;
     Timer musicStopTimer;
     Timer beforeFinishLevelTimer;
+    void StartData();
     void UpdateMusic(float dt);
     bool switchedBegininMusic;
     bool switchedDevelopmentMusic;

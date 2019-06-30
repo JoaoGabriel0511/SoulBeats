@@ -9,11 +9,13 @@ bin/LevelState.o: src/LevelState.cpp src/../include/LevelState.h \
  src/../include/Sound.h src/../include/Collision.h \
  src/../include/Collider.h src/../include/CameraFollower.h \
  src/../include/Beat.h src/../include/Character.h src/../include/Attack.h \
- src/../include/BellEnemy.h src/../include/HarpEnemy.h \
- src/../include/AccordionEnemy.h src/../include/Collectable.h \
+ src/../include/BellEnemy.h src/../include/LevelData.h \
+ src/../include/CheckPointData.h src/../include/EnemyData.h \
+ src/../include/HarpEnemy.h src/../include/AccordionEnemy.h \
+ src/../include/LevelState.h src/../include/Collectable.h \
  src/../include/TileMap.h src/../include/TileSet.h \
  src/../include/TileMapCollider.h src/../include/Goal.h \
- src/../include/LevelState.h src/../include/VictoryState.h
+ src/../include/CheckPoint.h src/../include/VictoryState.h
 
 src/../include/LevelState.h:
 
@@ -63,9 +65,17 @@ src/../include/Attack.h:
 
 src/../include/BellEnemy.h:
 
+src/../include/LevelData.h:
+
+src/../include/CheckPointData.h:
+
+src/../include/EnemyData.h:
+
 src/../include/HarpEnemy.h:
 
 src/../include/AccordionEnemy.h:
+
+src/../include/LevelState.h:
 
 src/../include/Collectable.h:
 
@@ -77,6 +87,6 @@ src/../include/TileMapCollider.h:
 
 src/../include/Goal.h:
 
-src/../include/LevelState.h:
+src/../include/CheckPoint.h:
 
 src/../include/VictoryState.h:
