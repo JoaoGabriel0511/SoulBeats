@@ -7,6 +7,10 @@ Character::Character(GameObject &associated) : Component(associated)
 {
     Collider *collider;
     collider = new Collider(associated, {2, 2}, {-140, -60});
+    lifeBarGO = new GameObject();
+    lifeBarGO->box.z = 6;
+    lifeBar = new LifeBar(*lifeBarGO);
+    Game::GetInstance().GetCurrentStatePointer()->AddObject(lifeBarGO);
 }
 
 void Character::Start()
@@ -38,7 +42,6 @@ void Character::Start()
     wasLeftSide = isLeftSide;
     wasOnGround = isOnGround;
     gravity = GRAVITY_FALLING;
-    hp = 3;
     idleTimer.Restart();
     walkingSoundTimer.Restart();
 }
@@ -53,7 +56,7 @@ void Character::Update(float dt)
     BangUpdate(dt);
     IsInvincibleUpdate(dt);
 
-    if(hp <= 0){
+    if(lifeBar->HP() <= 0){
         isDead = true;
         Camera::UnFollow();
     }
@@ -142,7 +145,7 @@ void Character::NotifyCollision(GameObject &other)
             }
             gravity = HURT_GRAVITY;
             gotHit = true;
-            hp -= 1;
+            lifeBar->LoseHP();
             isInvincible = true;
             if (isAttacking)
             {

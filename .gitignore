@@ -1,5 +1,8 @@
 # Ignore folder named '.vscode'
 .vscode/
+.idea/
 bin/
 dep/
 *.out
+*.xml
+*.iml
