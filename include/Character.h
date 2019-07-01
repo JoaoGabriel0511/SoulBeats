@@ -88,6 +88,7 @@
 #include "Component.h"
 #include "Sprite.h"
 #include "Attack.h"
+#include "LifeBar.h"
 
 class Character : public Component {
   Vect2 velocity;
@@ -153,6 +154,9 @@ class Character : public Component {
   void LightSlope2Collision(Rect tileBox);
   void LightGroundCollision(Rect tileBox);
   int hp;
+  GameObject *lifeBarGO;
+  LifeBar* lifeBar;
+
   
   public:
     Character(GameObject &associated);

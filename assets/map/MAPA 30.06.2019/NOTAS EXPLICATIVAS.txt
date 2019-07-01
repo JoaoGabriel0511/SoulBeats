@@ -1,0 +1,27 @@
+NOTAS EXPLICATIVAS:
+
+- Largura: 270 tiles, Altura: 60 tiles
+
+- A ordem, de mais perto da câmera até mais longe, é:
+Objetos e inimigos
+Decoração Foreground
+Terreno Foreground
+Terreno Background
+Decoração Background
+Decoração Backgrounder
+Terreno Backgrounder
+
+- As duas primeiras camadas são APENAS REFERÊNCIA, já que elas contém objetos, inimigos, e, no caso de algumas plantas, animações.
+
+- As plantas animadas estão na parte sprite sheets do drive. Se não está lá, é estática e pode deixar como está no .csv
+
+- Caso necessário, lembrar das seguinte regras sobre as camadas das decorações:
+Pedras e plantas(exceto arbustos) ficam em decoração foreground
+Pilares, ruínas e arbustos ficam em decoração background
+Pinheiros ficam em decoração backgrounder
+
+- Novamente, os objetos e inimigos "repetidos" numa mesma área representam movimento
+
+- A sprite sheet atualizada está no drive, mas nada antigo mudou de posição, então não devem haver problemas implementando-a. Ela também estará neste zip.
+
+- Haverá uma imagem do mapa "completo" neste zip. Ela também serve de "cheat sheet", pois dá umas dicas sobre a implementação, e indica alguns movimentos e etc. Vejam ela.

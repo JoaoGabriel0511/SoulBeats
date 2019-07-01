@@ -35,29 +35,6 @@ void LevelState::LoadAssets() {
     CameraFollower *cameraFollower;
     bg = new GameObject();
 
-    GameObject *bellEnemy1GO;
-    BellEnemy *bellEnemy1;
-    GameObject *bellEnemy2GO;
-    BellEnemy *bellEnemy2;
-    GameObject *bellEnemy3GO;
-    BellEnemy *bellEnemy3;
-    GameObject *bellEnemy4GO;
-    BellEnemy *bellEnemy4;
-
-    GameObject *harpEnemy1GO;
-    HarpEnemy *harpEnemy1;
-    GameObject *harpEnemy2GO;
-    HarpEnemy *harpEnemy2;
-    GameObject *harpEnemy3GO;
-    HarpEnemy *harpEnemy3;
-
-    GameObject *accordionEnemy1GO;
-    AccordionEnemy *accordionEnemy1;
-    GameObject *accordionEnemy2GO;
-    AccordionEnemy *accordionEnemy2;
-    GameObject *bellEnemyGO;
-    BellEnemy *bellEnemy;
-
     GameObject *collectable1GO;
     Collectable *collectable1;
     GameObject *collectable2GO;
@@ -126,17 +103,9 @@ void LevelState::LoadAssets() {
     //Floresta 1 Adicionada
 
     //// Beat Game Object
-    GameObject *heartBackground = new GameObject();
-    new Sprite(*heartBackground, BEATING_HEART_BG, 1, 1);
-    heartBackground->box.x = 901;
-    heartBackground->box.y = 31;
-    heartBackground->box.z = 5;
-    objectArray.emplace_back(heartBackground);
     beat = new GameObject();
-    beat->box.x = 900;
-    beat->box.y = 30;
     beat->box.z = 6;
-    Beat *beat_component = new Beat(*beat, heartBackground);
+    Beat *beat_component = new Beat(*beat);
     global_beat = beat_component;
     objectArray.emplace_back(beat);
 
@@ -174,102 +143,6 @@ void LevelState::LoadAssets() {
     //Personagem Adicionado
     
     //Adicionando Inimigos
-    /*//Adicionando Inimigo ( BellEnemy )
-
-    bellEnemy1GO = new GameObject();
-    bellEnemy1GO->box.x = 1700;
-    bellEnemy1GO->box.y = 2630;
-    bellEnemy1GO->box.z = 4;
-    bellEnemy1 = new BellEnemy(*bellEnemy1GO, 10, 10, characterGO);
-    objectArray.emplace_back(bellEnemy1GO);
-
-    //Inimigo Adicionado
-
-    //Adicionando Inimigo ( BellEnemy )
-
-    bellEnemy2GO = new GameObject();
-    bellEnemy2GO->box.x = 4908;
-    bellEnemy2GO->box.y = 2640;
-    bellEnemy2GO->box.z = 4;
-    bellEnemy2 = new BellEnemy(*bellEnemy2GO, 10, 10, characterGO);
-    objectArray.emplace_back(bellEnemy2GO);
-
-    //Inimigo Adicionado
-
-    //Adicionando Inimigo ( BellEnemy )
-
-    bellEnemy3GO = new GameObject();
-    bellEnemy3GO->box.x = 5187;
-    bellEnemy3GO->box.y = 2900;
-    bellEnemy3GO->box.z = 4;
-    bellEnemy3 = new BellEnemy(*bellEnemy3GO, 10, 10, characterGO);
-    objectArray.emplace_back(bellEnemy3GO);
-
-    //Inimigo Adicionado
-
-    //Adicionando Inimigo ( BellEnemy )
-
-    bellEnemy4GO = new GameObject();
-    bellEnemy4GO->box.x = 8636;
-    bellEnemy4GO->box.y = 3025;
-    bellEnemy4GO->box.z = 4;
-    bellEnemy4 = new BellEnemy(*bellEnemy4GO, 10, 10, characterGO);
-    objectArray.emplace_back(bellEnemy4GO);
-
-    //Inimigo Adicionado
-
-    //Adicionando Inimigo ( HarpEnemy )
-
-    harpEnemy1GO = new GameObject();
-    harpEnemy1 = new HarpEnemy(*harpEnemy1GO, 10, 10, characterGO);
-    harpEnemy1GO->box.x = 2750;
-    harpEnemy1GO->box.y = 2610;
-    harpEnemy1GO->box.z = 4;
-    objectArray.emplace_back(harpEnemy1GO);
-
-    //Inimigo Adicionado
-
-    //Adicionando Inimigo ( HarpEnemy )
-
-    harpEnemy2GO = new GameObject();
-    harpEnemy2 = new HarpEnemy(*harpEnemy2GO, 10, 10, characterGO);
-    harpEnemy2GO->box.x = 4285;
-    harpEnemy2GO->box.y = 2486;
-    harpEnemy2GO->box.z = 4;
-    objectArray.emplace_back(harpEnemy2GO);
-
-    //Inimigo Adicionado
-
-    //Adicionando Inimigo ( HarpEnemy )
-
-    harpEnemy3GO = new GameObject();
-    harpEnemy3 = new HarpEnemy(*harpEnemy3GO, 10, 10, characterGO);
-    harpEnemy3GO->box.x = 7000;
-    harpEnemy3GO->box.y = 2770;
-    harpEnemy3GO->box.z = 4;
-    objectArray.emplace_back(harpEnemy3GO);
-
-    //Inimigo Adicionado
-
-    //Adicionando Inimigo ( AccordionEnemy )
-
-    accordionEnemy1GO = new GameObject();
-    accordionEnemy1 = new AccordionEnemy(*accordionEnemy1GO, 10, 10, characterGO);
-    accordionEnemy1GO->box.x = 4321;
-    accordionEnemy1GO->box.y = 3085;
-    accordionEnemy1GO->box.z = 4;
-    objectArray.emplace_back(accordionEnemy1GO);
-
-    //Inimigo Adicionado
-
-    //Adicionando Inimigo ( AccordionEnemy )
-
-    accordionEnemy2GO = new GameObject();
-    accordionEnemy2 = new AccordionEnemy(*accordionEnemy2GO, 10, 10, characterGO);
-    accordionEnemy2GO->box.x = 7287;
-    accordionEnemy2GO->box.y = 2570;
-    accordionEnemy2GO->box.z = 4;
-    objectArray.emplace_back(accordionEnemy2GO);*/
 
     for(int i = 0; i < LevelData::GetInstance().enemyData.size(); i++) {
         if(LevelData::GetInstance().enemyData[i]->isDead == false) {
@@ -294,6 +167,7 @@ void LevelState::LoadAssets() {
     }
 
     //Inimigos Adicionandos
+
     //Adicionando Coletável ( Collectable )
 
     collectable1GO = new GameObject();

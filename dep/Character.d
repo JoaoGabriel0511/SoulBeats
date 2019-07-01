@@ -7,8 +7,8 @@ bin/Character.o: src/Character.cpp src/../include/Character.h \
  src/../include/GameData.h src/../include/State.h src/../include/Music.h \
  src/../include/Sound.h src/../include/Collision.h \
  src/../include/Collider.h src/../include/CameraFollower.h \
- src/../include/Timer.h src/../include/Attack.h include/Game.h \
- src/../include/LevelState.h src/../include/Beat.h \
+ src/../include/Timer.h src/../include/Attack.h src/../include/LifeBar.h \
+ include/Game.h src/../include/LevelState.h src/../include/Beat.h \
  src/../include/Character.h src/../include/BellEnemy.h \
  src/../include/LevelData.h src/../include/CheckPointData.h \
  src/../include/EnemyData.h src/../include/HarpEnemy.h \
@@ -59,6 +59,8 @@ src/../include/CameraFollower.h:
 src/../include/Timer.h:
 
 src/../include/Attack.h:
+
+src/../include/LifeBar.h:
 
 include/Game.h:
 

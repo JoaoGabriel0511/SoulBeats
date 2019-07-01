@@ -17,8 +17,9 @@ class Beat : public Component {
     Timer falseTimer;
     bool onBeat;
     GameObject *heartBackground;
+    Sprite *backgroundSprite;
     public:
-        Beat(GameObject& associated, GameObject* heartBackground);
+        Beat(GameObject& associated);
         void Update(float dt);
         void Start();
         void Render();

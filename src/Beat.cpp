@@ -1,19 +1,24 @@
 #include "../include/Beat.h"
 
-Beat::Beat(GameObject& associated, GameObject* heartBackground) : Component(associated){
-    this->heartBackground = heartBackground;
+Beat::Beat(GameObject& associated) : Component(associated){
 }
 
 void Beat::Start(){
+    heartBackground = new GameObject();
+    backgroundSprite = new Sprite(*heartBackground, BEATING_HEART_BG, 1, 1);
+    backgroundSprite->SetScale({2,2});
+    heartBackground->box.z = 5;
+    Game::GetInstance().GetCurrentStatePointer()->AddObject(heartBackground);
     beatSprite = new Sprite(associated, BEATING_HEART_SPRITE, FRAME_COUNT, BEAT_TRUE_LIMIT/FRAME_COUNT);
+    beatSprite->SetScale({2,2});
     onBeat = true;
 }
 
 void Beat::Update(float dt){
-    associated.box.x = 900 - Camera::pos.x;
-    associated.box.y = 30 - Camera::pos.y;
-    heartBackground->box.x = 877 - Camera::pos.x;
-    heartBackground->box.y = 28 - Camera::pos.y;
+    associated.box.x = 902 - Camera::pos.x;
+    associated.box.y = 3 - Camera::pos.y;
+    heartBackground->box.x = 854 - Camera::pos.x;
+    heartBackground->box.y = 1 - Camera::pos.y;
     if(onBeat){
         if(trueTimer.Get() >= BEAT_TRUE_LIMIT){
             onBeat = false;
