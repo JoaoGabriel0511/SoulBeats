@@ -7,15 +7,15 @@ void LevelState::StartData() {
     if(LevelData::GetInstance().isNewLevel) {
         LevelData::GetInstance().checkPointData.emplace_back(new CheckPointData(false, {3580,2440}));
         LevelData::GetInstance().checkPointData.emplace_back(new CheckPointData(false, {7484,2630}));
-        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {1700,2630}, EnemyData::BELL));
-        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {4908,2640}, EnemyData::BELL));
-        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {5187,2900}, EnemyData::BELL));
-        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {8636,3025}, EnemyData::BELL));
-        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {2750,2610}, EnemyData::HARP));
-        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {4285,2486}, EnemyData::HARP));
-        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {7000,2770}, EnemyData::HARP));
-        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {4321,3085}, EnemyData::ACCORDION));
-        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {7287,2570}, EnemyData::ACCORDION));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {1700,2630}, EnemyData::BELL, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {4908,2640}, EnemyData::BELL, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {5187,2900}, EnemyData::BELL, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {8636,3025}, EnemyData::BELL, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {2750,2610}, EnemyData::HARP, false, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {4285,2486}, EnemyData::HARP, true, false));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {7000,2770}, EnemyData::HARP, false, false));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {4321,3085}, EnemyData::ACCORDION, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {7287,2570}, EnemyData::ACCORDION, true, true));
         LevelData::GetInstance().isNewLevel = false;
     }
     LevelData::GetInstance().Start();
@@ -24,8 +24,6 @@ void LevelState::StartData() {
 void LevelState::Start() {
     State::Start();
     levelCompleted = false;
-    switchedBegininMusic = false;
-    switchedDevelopmentMusic = false;
     beforeFinishLevelTimer.Restart();
 }
 
@@ -49,10 +47,23 @@ void LevelState::LoadAssets() {
     Music *levelMusic;
     cameraFollower = new CameraFollower(*bg);
     levelSprite = new Sprite(*bg, "assets/img/background/Fundo.png");
-    levelMusic = new Music(*bg, BEGINING_MUSIC);
-    levelMusic->Play(-1);
+    if(LevelData::GetInstance().musicState == LevelData::BEGINING) {
+        levelMusic = new Music(*bg, BEGINING_MUSIC);
+	    levelMusic->Play(1);
+    } else {
+        if(LevelData::GetInstance().musicState == LevelData::DEVELOPMENT) {
+            levelMusic = new Music(*bg, DEVELOPMENT_MUSIC);
+	        levelMusic->Play(1);
+        } else {
+            if(LevelData::GetInstance().musicState == LevelData::MAIN) {
+                levelMusic == new Music(*bg, MAIN_MUSIC);
+                levelMusic->Stop(0);
+            }
+        }
+    }
     beginingMusicTimer.Restart();
     developmentMusicTimer.Restart();
+    mainMusicTimer.Update(100);
     musicStopTimer.Restart();
     bg->box.h = Game::GetInstance().GetHeight();
     bg->box.w = Game::GetInstance().GetWidth();
@@ -155,7 +166,7 @@ void LevelState::LoadAssets() {
                 new BellEnemy(*enemyGO, 10, 10, characterGO, i);
             } else {
                 if(LevelData::GetInstance().enemyData[i]->type == EnemyData::HARP) {
-                    new HarpEnemy(*enemyGO, 10, 10, characterGO, i);
+                    new HarpEnemy(*enemyGO, 10, 10, characterGO, i, LevelData::GetInstance().enemyData[i]->harpMoveX, LevelData::GetInstance().enemyData[i]->harpMoveY);
                 } else {
                     if(LevelData::GetInstance().enemyData[i]->type == EnemyData::ACCORDION){
                         new AccordionEnemy(*enemyGO, 10, 10, characterGO, i);
@@ -186,15 +197,6 @@ void LevelState::LoadAssets() {
     collectable1GO->box.z = 4;
     objectArray.emplace_back(collectable1GO);
 
-    /*accordionEnemyGO = new GameObject();
-    accordionEnemy = new AccordionEnemy(*accordionEnemyGO, 10, 10, characterGO);
-    accordionEnemyGO->box.x = 2500;
-    accordionEnemyGO->box.y = 2990;
-    accordionEnemyGO->box.z = 4;
-    objectArray.emplace_back(accordionEnemyGO);*/
-
-    //Inimigo Adicionado
-
     //Adicionando TileMap Terreno ForeGround
 
     TileSet *tileSet;
@@ -209,7 +211,7 @@ void LevelState::LoadAssets() {
 
     //TileMap Terreno ForeGround Adicionado
 
-    //Adicionando TileMap Decoracao ForeGround
+    //Adicionando TileMap Decoracao ForeGround~
 
     TileMap *tileMapDecoFore;
     GameObject *tileDecoForeGO = new GameObject();
@@ -275,42 +277,38 @@ void LevelState::Resume()
 
 void LevelState::UpdateMusic(float dt)
 {
-    beginingMusicTimer.Update(dt);
-    if (beginingMusicTimer.Get() >= BEGINING_MUSIC_TIME)
-    {
-        if (!switchedBegininMusic)
-        {
-            switchedBegininMusic = true;
-            ((Music *)bg->GetComponent("Music").get())->Open(DEVELOPMENT_MUSIC);
-            ((Music *)bg->GetComponent("Music").get())->Play(-1);
-        }
-        developmentMusicTimer.Update(dt);
-        if (developmentMusicTimer.Get() >= DEVELOPMENT_MUSIC_TIME)
-        {
-            if (!switchedDevelopmentMusic)
-            {
-                switchedDevelopmentMusic = true;
-                ((Music *)bg->GetComponent("Music").get())->Open(MAIN_MUSIC);
-                ((Music *)bg->GetComponent("Music").get())->Play(-1);
-            }
-            mainMusicTimer.Update(dt);
-            if (mainMusicTimer.Get() >= MAIN_MUSIC_TIME)
-            {
-                ((Music *)bg->GetComponent("Music").get())->Stop(0);
-                musicStopTimer.Update(dt);
-                if (musicStopTimer.Get() >= STOP_MUSIC_TIME)
-                {
-                    ((Music *)bg->GetComponent("Music").get())->Open(BEGINING_MUSIC);
-                    ((Music *)bg->GetComponent("Music").get())->Play(-1);
-                    mainMusicTimer.Restart();
-                    developmentMusicTimer.Restart();
-                    beginingMusicTimer.Restart();
-                    musicStopTimer.Restart();
-                    switchedBegininMusic = false;
-                    switchedDevelopmentMusic = false;
+    switch(LevelData::GetInstance().musicState){
+        case LevelData::BEGINING:
+            beginingMusicTimer.Update(dt);
+            if(beginingMusicTimer.Get() >= BEGINING_MUSIC_TIME){
+                if(LevelData::GetInstance().switchedBegininMusic) {
+                    ((Music *) bg->GetComponent("Music").get())->Open(DEVELOPMENT_MUSIC);
+                    LevelData::GetInstance().musicState = LevelData::DEVELOPMENT;
                 }
+                beginingMusicTimer.Restart();
+                ((Music *) bg->GetComponent("Music").get())->Play(1);
             }
-        }
+            break;
+        case LevelData::DEVELOPMENT:
+            developmentMusicTimer.Update(dt);
+            if(developmentMusicTimer.Get() >= DEVELOPMENT_MUSIC_TIME){
+                if(LevelData::GetInstance().switchedDevelopmentMusic) {
+                    ((Music *) bg->GetComponent("Music").get())->Open(MAIN_MUSIC);
+                    LevelData::GetInstance().musicState = LevelData::MAIN;
+                }
+                developmentMusicTimer.Restart();
+                ((Music *) bg->GetComponent("Music").get())->Play(1);
+            }
+            break;
+        case LevelData::MAIN:
+            mainMusicTimer.Update(dt);
+            if(mainMusicTimer.Get() >= MAIN_MUSIC_TIME) {
+	            mainMusicTimer.Restart();
+                ((Music *) bg->GetComponent("Music").get())->Play(1);
+            }
+            break;
+        default:
+            break;
     }
 }
 

@@ -37,8 +37,6 @@ class LevelState : public State {
     Timer beforeFinishLevelTimer;
     void StartData();
     void UpdateMusic(float dt);
-    bool switchedBegininMusic;
-    bool switchedDevelopmentMusic;
     void LevelCycle(float dt);
     void UpdateCameraFocus(float dt);
     void VictoryCycle(float dt);

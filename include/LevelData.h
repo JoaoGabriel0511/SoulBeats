@@ -9,6 +9,14 @@ using namespace std;
 class LevelData {
     public:
         bool isNewLevel;
+        bool switchedBegininMusic;
+        bool switchedDevelopmentMusic;
+        enum MusicState {
+            MAIN,
+            DEVELOPMENT,
+            BEGINING
+        };
+        MusicState musicState;
         vector<CheckPointData*> checkPointData;
         vector<EnemyData*> enemyData;
         void clear();

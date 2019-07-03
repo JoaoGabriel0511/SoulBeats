@@ -2,6 +2,9 @@
 
 LevelData::LevelData() {
     isNewLevel = true;
+    switchedDevelopmentMusic = false;
+    switchedBegininMusic = false;
+    musicState = BEGINING;
 }
 
 LevelData::~LevelData() {}

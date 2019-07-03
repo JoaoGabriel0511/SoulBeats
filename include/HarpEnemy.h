@@ -58,9 +58,10 @@ class HarpEnemy : public Component
     Sprite *lifeBarSprite;
     int index;
     void SwitchHarpEnemyState(HarpEnemyState state, string sprite, int frameCount, float frameTime, Timer *timer);
-
+	bool moveX;
+	bool moveY;
   public:
-    HarpEnemy(GameObject &associated, int movingDistance, int movingSpeed, GameObject *character, int index);
+    HarpEnemy(GameObject &associated, int movingDistance, int movingSpeed, GameObject *character, int index, bool moveX, bool moveY);
     ~HarpEnemy();
     void Update(float dt);
     void Render();

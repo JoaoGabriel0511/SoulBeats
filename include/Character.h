@@ -35,12 +35,12 @@
 #define PEAK_DURATION 0.4
 #define WALKING_SPEED 400
 #define WALKING_SOUND "assets/audio/SFX/Passo1.wav"
-#define ON_BEAT_ATTACKING_SPEED 1000
-#define ATTACKING_SPEED 800
+#define ON_BEAT_ATTACKING_SPEED 800
+#define ATTACKING_SPEED 600
 #define JUMPING_SOUND "assets/audio/SFX/PuloForte1.wav"
 #define JUMPING_SOUND_ON_BEAT "assets/audio/SFX/PuloFraco1.wav"
-#define JUMPING_SPEED -1100
-#define JUMPING_SPEED_ON_BEAT -1350
+#define JUMPING_SPEED -1130
+#define JUMPING_SPEED_ON_BEAT -1380
 #define GRAVITY_RISING 25
 #define GRAVITY_PEAK 8
 #define GRAVITY_FALLING 25

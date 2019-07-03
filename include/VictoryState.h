@@ -1,6 +1,6 @@
 #ifndef VICTORY_STATE
 #define VICTORY_STATE
-#define VICTORY_BG_SPRITE "assets/img/background/Results.png"
+#define VICTORY_BG_SPRITE "assets/img/background/results/ResultseExemplo.png"
 #define VICTORY_BG_MUSIC "assets/audio/TelaDeResultados.wav"
 #include "State.h"
 #include "LevelData.h"

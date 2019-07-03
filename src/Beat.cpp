@@ -12,6 +12,7 @@ void Beat::Start(){
     beatSprite = new Sprite(associated, BEATING_HEART_SPRITE, FRAME_COUNT, BEAT_TRUE_LIMIT/FRAME_COUNT);
     beatSprite->SetScale({2,2});
     onBeat = true;
+    onBeatAnimation = true;
 }
 
 void Beat::Update(float dt){
@@ -19,16 +20,23 @@ void Beat::Update(float dt){
     associated.box.y = 3 - Camera::pos.y;
     heartBackground->box.x = 854 - Camera::pos.x;
     heartBackground->box.y = 1 - Camera::pos.y;
-    if(onBeat){
+    if(onBeatAnimation){
+    	if(trueTimer.Get() >= BEAT_TRUE_LIMIT - BEAT_OFFSET){
+    		onBeat = false;
+    	}
         if(trueTimer.Get() >= BEAT_TRUE_LIMIT){
-            onBeat = false;
+            onBeatAnimation = false;
             beatSprite->SwitchSprite(IDLE_HEART_SPRITE, STILL_FRAME_COUNT, 1);
             trueTimer.Restart();
         }
         trueTimer.Update(dt);
+        falseTimer.Update(dt);
     } else {
+    	if(falseTimer.Get() >= BEAT_FALSE_LIMIT - BEAT_OFFSET) {
+    		onBeat = true;
+    	}
         if(falseTimer.Get() >= BEAT_FALSE_LIMIT){
-            onBeat = true;
+            onBeatAnimation = true;
             beatSprite->SwitchSprite(BEATING_HEART_SPRITE, FRAME_COUNT, BEAT_TRUE_LIMIT/FRAME_COUNT);
             falseTimer.Restart();
         }

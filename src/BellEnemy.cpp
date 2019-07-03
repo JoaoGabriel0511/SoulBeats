@@ -82,7 +82,7 @@ void BellEnemy::NotifyCollision(GameObject& other) {
             sound->Open(ENEMY_HIT_SOUND);
             sound->Play(1);
             if(((Character*) character->GetComponent("Character").get())->AttackOnBeat()) {
-                hp-=2;
+                hp=0;
             } else {
                 hp--;
             }
@@ -90,9 +90,7 @@ void BellEnemy::NotifyCollision(GameObject& other) {
                 lifeBarSprite->SwitchSprite(HALF_LIFE_BAR, 1, 0);
             }
             if(hp <= 0) {
-                cout<<__FILE__<<"::"<<__LINE__<<endl;
                 LevelData::GetInstance().enemyData[index]->wasKilled = true;
-                cout<<__FILE__<<"::"<<__LINE__<<endl;
                 associated.RequestedDelete();
             }
         } else {

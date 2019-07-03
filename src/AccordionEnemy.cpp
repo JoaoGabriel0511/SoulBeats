@@ -75,9 +75,6 @@ void AccordionEnemy::Update(float dt)
             float fallDuration = ENEMY_JUMP_HEIGHT / ENEMY_VELOCITY_FALLING;
             SwitchAccordionEnemyState(FALL, ENEMY_FALL_SPRITE, ENEMY_FALL_FRAME_COUNT, ((float) fallDuration/ ENEMY_FALL_FRAME_COUNT), &fallTimer);
             velocityY = ENEMY_VELOCITY_FALLING;
-            if(Camera::IsOnCamera(associated.box)) {
-                sound->Play(1);
-            }
         }
         break;
     case FALL:
@@ -112,7 +109,7 @@ void AccordionEnemy::NotifyCollision(GameObject &other)
         sound->Open(ENEMY_HIT_SOUND);
         sound->Play(1);
         if(((Character*) character->GetComponent("Character").get())->AttackOnBeat()) {
-            hp-=2;
+            hp=0;
         } else {
             hp--;
         }
