@@ -74,8 +74,8 @@ shared_ptr<Mix_Chunk> Resources::GetSound(string file) {
 void Resources::ClearSounds() {
     for(auto sound = soundTable.begin(); sound != soundTable.end(); sound++) {
         if(sound->second.get() != NULL) {
-            if(sound->second.unique() ) {
-                Mix_FreeChunk(sound->second.get());
+            if(sound->second.unique()) {
+                //Mix_FreeChunk(sound->second.get());
             }
         }
 
@@ -108,4 +108,5 @@ void Resources::ClearFonts() {
         }
     }
     fontTable.clear();
+	cout<<__FILE__<<"::"<<__LINE__<<endl;
 }

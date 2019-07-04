@@ -44,7 +44,7 @@ void TileMap::Load(string file){
                 //cout<< stoi(line.substr(i,i+3))<< " ";
                 tileMatrix.push_back(stoi(line.substr(i,i+3))-1);
             }
-            cout<<endl;
+            //cout<<endl;
         }
         row++;
     }

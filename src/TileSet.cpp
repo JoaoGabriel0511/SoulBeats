@@ -9,12 +9,12 @@ TileSet::TileSet(int tileWidth, int tileHeight, string file) {
     if(tileSet->Open(file)) {
         rows = tileSet->GetHeight() / this->tileHeight;
         columns = tileSet->GetWidth() / this->tileWidth;
-        cout<<"rows: "<<rows<<endl;
-        cout<<"columns: "<<columns<<endl;
-        cout<<"tileset height: "<<tileSet->GetHeight()<<endl;
-        cout<<"tileset width: "<<tileSet->GetWidth()<<endl;
+        //cout<<"rows: "<<rows<<endl;
+        //cout<<"columns: "<<columns<<endl;
+        //cout<<"tileset height: "<<tileSet->GetHeight()<<endl;
+        //cout<<"tileset width: "<<tileSet->GetWidth()<<endl;
     } else {
-        cout<<"Falha ao carregar o tileSet: "<< file <<endl;
+        //cout<<"Falha ao carregar o tileSet: "<< file <<endl;
     }
 }
 

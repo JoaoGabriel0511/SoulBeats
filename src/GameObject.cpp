@@ -19,9 +19,9 @@ GameObject::~GameObject() {
     for (int i = components_size - 1; i >= 0 ; i--) {
         components.erase(components.begin() + i);
     }
-    cout << "Terminou com sucesso de deletar components" << endl;
+    //cout << "Terminou com sucesso de deletar components" << endl;
     components.clear();
-    cout << "clear nos components" << endl;
+    //cout << "clear nos components" << endl;
 }
 
 void GameObject::Update(float dt) {

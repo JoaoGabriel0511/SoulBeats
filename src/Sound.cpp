@@ -14,8 +14,9 @@ Sound::Sound(GameObject& associated, string file) : Sound(associated) {
 void Sound::Play(int times = 1) {
     int i = 0;
     chanel = Mix_PlayChannel(-1, chunk.get(), times-1);
+    //cout<<"chanel"<<chanel<<endl;
     if (chanel == NULL){
-        cout << "Nenhum canal disponivel para o som" << endl;
+        //cout << "Nenhum canal disponivel para o som" << endl;
     }
 }
 
@@ -34,7 +35,8 @@ void Sound::Open(string file) {
     }
 }
 
-Sound::~Sound() {}
+Sound::~Sound() {
+}
 
 void Sound::Update(float dt){
 

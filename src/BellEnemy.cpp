@@ -103,6 +103,7 @@ void BellEnemy::NotifyCollision(GameObject& other) {
 }
 
 BellEnemy::~BellEnemy() {
+	sound->Stop();
     lifeBar->RequestedDelete();
     character = NULL;
 }

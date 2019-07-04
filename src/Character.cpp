@@ -507,19 +507,19 @@ void Character::SolidSlope1Collision(Rect tileBox)
 }
 
 void Character::BangUpdate(float dt) {
-    idleTimer.Update(dt);
-    if (idleTimer.Get() >= IDLE_DURATION && isOnGround && !finishIdle)
-    {
-        if (isLeftSide)
-        {
-            charSprite->SwitchSprite(LITSEN_TO_MUSIC_LEFT_SPRITE, LITSEN_TO_MUSIC_FRAME_COUNT, LISTEN_TO_MUSIC_FRAME_TIME);
-        }
-        else
-        {
-            charSprite->SwitchSprite(LITSEN_TO_MUSIC_RIGHT_SPRITE, LITSEN_TO_MUSIC_FRAME_COUNT, LISTEN_TO_MUSIC_FRAME_TIME);
-        }
-        finishIdle = true;
-    }
+	if(!finishIdle) {
+		idleTimer.Update(dt);
+		if (idleTimer.Get() >= IDLE_DURATION && isOnGround) {
+			if (isLeftSide) {
+				charSprite->SwitchSprite(LITSEN_TO_MUSIC_LEFT_SPRITE, LITSEN_TO_MUSIC_FRAME_COUNT,
+				                         LISTEN_TO_MUSIC_FRAME_TIME);
+			} else {
+				charSprite->SwitchSprite(LITSEN_TO_MUSIC_RIGHT_SPRITE, LITSEN_TO_MUSIC_FRAME_COUNT,
+				                         LISTEN_TO_MUSIC_FRAME_TIME);
+			}
+			finishIdle = true;
+		}
+	}
 }
 
 void Character::IsInvincibleUpdate(float dt) {
@@ -607,6 +607,7 @@ void Character::AttackUpdate(float dt) {
         isAttacking = false;
         attackOnBeat = false;
         peakDone = true;
+        finishIdle = false;
         if(isOnGround) {
             isStill = true;
             if(isLeftSide){
@@ -645,6 +646,7 @@ void Character::MoveSideWays(float dt) {
         }
         canCancelKnockBack = false;
         recoveringFromHitKnockback = false;
+        finishIdle = true;
         //charSprite->flip = false;
     } else {
         if (InputManager::GetInstance().IsKeyDown(A_KEY)) {
@@ -664,6 +666,7 @@ void Character::MoveSideWays(float dt) {
             canCancelKnockBack = false;
             recoveringFromHitKnockback = false;
             isLeftSide = true;
+            finishIdle = true;
             //charSprite->flip = true;
         }
     }
@@ -702,6 +705,7 @@ void Character::Jump(float dt) {
                 }
             }
             beforeRiseTimer.Restart();
+	        finishIdle = true;
         }
         canCancelKnockBack = false;
         recoveringFromHitKnockback = false;
@@ -716,6 +720,7 @@ void Character::DoAttack(float dt) {
             gravity = 0;
             velocity.y = 0;
             isAttacking = true;
+            finishIdle = true;
             canAttack = false;
             isRising = false;
             peakDone = true;
