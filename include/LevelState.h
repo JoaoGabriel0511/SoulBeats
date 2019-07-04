@@ -22,6 +22,7 @@
 #include "Goal.h"
 #include "CheckPoint.h"
 #include "LevelData.h"
+#include "Spotlights.h"
 #include "VictoryState.h"
 class LevelState : public State {
     GameObject *bg;

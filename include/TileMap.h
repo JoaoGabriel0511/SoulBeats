@@ -28,6 +28,7 @@ class TileMap : public Component {
         int GetHeight();
         int GetDepth();
         float GetScale();
+        //void SwitchTileSet(string type);
         TileSet* GetTileSet();
         bool Is(string file);
         void Update(float dt);

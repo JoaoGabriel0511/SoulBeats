@@ -91,6 +91,14 @@ void LevelState::LoadAssets() {
 
     //Floresta 2 Adicionada
 
+    //Adicionando Holofotes
+
+    GameObject *spotlights = new GameObject();
+    new Spotlights(*spotlights);
+    objectArray.emplace_back(spotlights);
+
+    //Holofotes adicionados
+
     //Adicionando Floresta 1.5
 
     TileSet *tileSetFlorest1_5;
@@ -101,6 +109,7 @@ void LevelState::LoadAssets() {
     objectArray.emplace_back(florest1_5);
 
     //Floresta 1.5 Adicionada
+
 
     //Adicionando Floresta 1
 

@@ -15,7 +15,7 @@ bin/Main.o: src/Main.cpp src/../include/Game.h src/../include/GameData.h \
  src/../include/Collectable.h src/../include/TileMap.h \
  src/../include/TileSet.h src/../include/TileMapCollider.h \
  src/../include/Goal.h src/../include/CheckPoint.h \
- src/../include/VictoryState.h
+ src/../include/Spotlights.h src/../include/VictoryState.h
 
 src/../include/Game.h:
 
@@ -92,5 +92,7 @@ src/../include/TileMapCollider.h:
 src/../include/Goal.h:
 
 src/../include/CheckPoint.h:
+
+src/../include/Spotlights.h:
 
 src/../include/VictoryState.h:

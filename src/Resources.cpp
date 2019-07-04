@@ -52,7 +52,7 @@ void Resources::ClearMusics() {
             Mix_FreeMusic(music->second.get());
         }
     }
-    musicTable.clear();
+    //musicTable.clear();
 }
 
 shared_ptr<Mix_Chunk> Resources::GetSound(string file) {
@@ -108,5 +108,4 @@ void Resources::ClearFonts() {
         }
     }
     fontTable.clear();
-	cout<<__FILE__<<"::"<<__LINE__<<endl;
 }

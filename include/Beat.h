@@ -27,6 +27,7 @@ class Beat : public Component {
         void Render();
         bool Is(string type);
         bool GetOnBeat();
+        bool GetOnBeatAnimation();
 };
 
 #endif
