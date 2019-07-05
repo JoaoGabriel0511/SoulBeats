@@ -126,7 +126,9 @@ void HarpEnemy::NotifyCollision(GameObject &other)
             LevelData::GetInstance().enemyData[index]->wasKilled = true;
             associated.RequestedDelete();
         }
-        ((Character*) character->GetComponent("Character").get())->HitKnockBack();
+        if(hp > 0) {
+            ((Character*) character->GetComponent("Character").get())->HitKnockBack();
+        }
         sound->Open(HARP_SOUND);
     }
 }

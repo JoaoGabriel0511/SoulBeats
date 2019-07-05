@@ -116,6 +116,7 @@ class Character : public Component {
   bool playingWalkingSound;
   bool recoveringFromHitKnockback;
   bool isDead;
+  bool isLaunching;
 
   Timer beforeRiseTimer;
   Timer walkingSoundTimer;
@@ -156,14 +157,13 @@ class Character : public Component {
   int hp;
   GameObject *lifeBarGO;
   LifeBar* lifeBar;
-
-  
   public:
     Character(GameObject &associated);
     void Update(float dt);
     void Start();
     bool AttackOnBeat();
     void HitKnockBack();
+    void LaunchCharacter(Vect2 velocity, bool isLeftSide);
     bool Is(string type);
     void NotifyCollision(GameObject &other);
     void NotifYCollisionWithMap(Rect Tilebox);

@@ -33,15 +33,13 @@ void LevelState::LoadAssets() {
     CameraFollower *cameraFollower;
     bg = new GameObject();
 
+    GameObject *launcherGO;
+    Launcher *launcher;
+
     GameObject *collectable1GO;
     Collectable *collectable1;
     GameObject *collectable2GO;
     Collectable *collectable2;
-
-    GameObject *checkPoint1GO;
-    CheckPoint *checkPoint1;
-    GameObject *checkPoint2GO;
-    CheckPoint *checkPoint2;
 
     Sprite *levelSprite;
     Music *levelMusic;
@@ -158,10 +156,21 @@ void LevelState::LoadAssets() {
     Camera::followX = true;
     Camera::followY = true;
     Camera::Follow(characterGO);
+
+    //Personagem Adicionada
+
+    //Adicionando Launcher
+
+    launcherGO = new GameObject();
+    launcherGO->box.x = 1450;
+    launcherGO->box.y = 2600;
+    launcherGO->box.z = 4;
+    launcher = new Launcher(*launcherGO, Launcher::DOWN, characterGO);
+    objectArray.emplace_back(launcherGO);
     objectArray.emplace_back(characterGO);
 
-    //Personagem Adicionado
-    
+    //Launcher Adicionado
+
     //Adicionando Inimigos
 
     for(int i = 0; i < LevelData::GetInstance().enemyData.size(); i++) {
@@ -365,7 +374,6 @@ void LevelState::UpdateCameraFocus(float dt) {
 void LevelState::LevelCycle(float dt) {
     TileMapCollider *tileMapForeCollider = ((TileMapCollider*) tileTerrForeGO->GetComponent("TileMapCollider").get());
     TileMapCollider *tileMapBackCollider = ((TileMapCollider*) tileTerrBackGO->GetComponent("TileMapCollider").get());
-    State::Update(dt);
     UpdateCameraFocus(dt);
     for (int i = tileMapForeCollider->boxes.size() - 1; i >= 0; i--)
     {
@@ -405,6 +413,7 @@ void LevelState::LevelCycle(float dt) {
             }
         }
     }
+    State::Update(dt);
     UpdateMusic(dt);
 }
 

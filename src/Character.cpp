@@ -38,6 +38,7 @@ void Character::Start()
     finishIdle = false;
     hasChanged = false;
     jumpedOnBeat = false;
+    isLaunching = false;
     recoveringFromHitKnockback = false;
     wasLeftSide = isLeftSide;
     wasOnGround = isOnGround;
@@ -101,6 +102,8 @@ void Character::Update(float dt)
         velocity.y += gravity;
     }
     associated.box += velocity * dt;
+    //cout<<"associated.box.x"<<associated.box.x<<endl;
+    //cout<<"associated.box.y"<<associated.box.y<<endl;
     Camera::Update(dt);
     isFalling = true;
     peakDone = false;
@@ -603,7 +606,9 @@ void Character::AttackUpdate(float dt) {
         velocity.x = 0;
         gravity = GRAVITY_FALLING;
         associated.box.x = associated.box.x + 2;
-        attackGO->RequestedDelete();
+        if(attackGO != NULL) {
+            attackGO->RequestedDelete();
+        }
         isAttacking = false;
         attackOnBeat = false;
         peakDone = true;
@@ -872,4 +877,13 @@ void Character::ApplyPhysics(float dt) {
 
 bool Character::AttackOnBeat() {
     return attackOnBeat;
+}
+
+void Character::LaunchCharacter(Vect2 velocity, bool isLeftSide) {
+    Collider *collider = ((Collider *)associated.GetComponent("Collider").get());
+    velocity.x = 0;
+    collider->Update(0);
+    isAttacking = false;
+    attackGO->RequestedDelete();
+    isLaunching = true;
 }
