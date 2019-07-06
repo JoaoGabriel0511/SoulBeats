@@ -10,26 +10,49 @@ void Launcher::Start() {
         case UP:
             launcherSprite = new Sprite(associated, LAUNCHER_UP);
             pointPos = {associated.box.x - 3 * associated.box.w, associated.box.y - (character->box.h)};
+            launchVelocity = {0, -1 * LAUNCHER_VELOCITY_Y};
             break;
         case UP_RIGHT:
             launcherSprite = new Sprite(associated, LAUNCHER_UP_RIGHT);
             pointPos = {associated.box.x + associated.box.w, associated.box.y - (character->box.h)};
+            launchVelocity = {LAUNCHER_VELOCITY_X, -1 * LAUNCHER_VELOCITY_Y};
+            isCharacterLeft = false;
+            characterLaunchSprite = RISING_RIGHT_SPRITE;
+            characterLaunchSpriteFameCount = RISING_FRAME_COUNT;
+            characterLaunchSpriteFrameTime = RISING_FRAME_TIME;
             break;
         case UP_LEFT:
             launcherSprite = new Sprite(associated, LAUNCHER_UP_LEFT);
             pointPos = {associated.box.x - character->box.w, associated.box.y - (character->box.h)};
+            launchVelocity = {-1 * LAUNCHER_VELOCITY_X, -1 * LAUNCHER_VELOCITY_Y};
+            isCharacterLeft = true;
+            characterLaunchSprite = RISING_LEFT_SPRITE;
+            characterLaunchSpriteFameCount = RISING_FRAME_COUNT;
+            characterLaunchSpriteFrameTime = RISING_FRAME_TIME;
             break;
         case RIGHT:
             launcherSprite = new Sprite(associated, LAUNCHER_RIGHT);
             pointPos = {associated.box.x + associated.box.w, associated.box.y + associated.box.h/2 - (character->box.h/2)};
+            launchVelocity = {LAUNCHER_VELOCITY_X, 0};
+            isCharacterLeft = false;
+            characterLaunchSprite = PEAK_RIGHT_SPRITE;
+            characterLaunchSpriteFameCount = PEAK_FRAME_COUNT;
+            characterLaunchSpriteFrameTime = PEAK_FRAME_TIME;
             break;
         case LEFT:
             launcherSprite = new Sprite(associated, LAUNCHER_LEFT);
             pointPos = {associated.box.x - 2*character->box.w, associated.box.y + associated.box.h/2 - (character->box.h/2)};
+            launchVelocity = {-1 * LAUNCHER_VELOCITY_X, 0};
+            isCharacterLeft = true;
+            characterLaunchSprite = PEAK_LEFT_SPRITE;
+            characterLaunchSpriteFameCount = PEAK_FRAME_COUNT;
+            characterLaunchSpriteFrameTime = PEAK_FRAME_TIME;
             break;
         case DOWN:
             launcherSprite = new Sprite(associated, LAUNCHER_DOWN);
             pointPos = {associated.box.x - 3 * associated.box.w, associated.box.y + associated.box.h};
+            launchVelocity = {0, LAUNCHER_VELOCITY_Y};
+            break;
             break;
         default:
             break;
@@ -39,12 +62,43 @@ void Launcher::Start() {
 }
 
 void Launcher::NotifyCollision(GameObject& other) {
+    float launchDuration;
     if(other.GetComponent("Attack") != NULL) {
+        switch (type) {
+        case UP:
+            isCharacterLeft = ((Character*) character->GetComponent("Character").get())->IsCharacterLeftSide();
+            if(isCharacterLeft) {
+                characterLaunchSprite = RISING_LEFT_SPRITE;
+            } else {
+                characterLaunchSprite = RISING_RIGHT_SPRITE;
+            }
+            characterLaunchSpriteFameCount = RISING_FRAME_COUNT;
+            characterLaunchSpriteFrameTime = RISING_FRAME_TIME;
+            break;
+        case DOWN:
+            isCharacterLeft = ((Character*) character->GetComponent("Character").get())->IsCharacterLeftSide();
+            if(isCharacterLeft) {
+                characterLaunchSprite = FALLING_LEFT_SPRITE;
+            } else {
+                characterLaunchSprite = FALLING_RIGHT_SPRITE;
+            }
+            characterLaunchSpriteFameCount = FALLING_FRAME_COUNT;
+            characterLaunchSpriteFrameTime = FALLING_FRAME_TIME;
+            break;
+        default:
+            break;
+        }
         cout<<"PointPos.y "<<pointPos.y<<endl;
         character->box.x = pointPos.x;
         character->box.y = pointPos.y - (character->box.h);
+        if(((Character*) character->GetComponent("Character").get())->AttackOnBeat()) {
+            launchDuration = 0.5;
+        } else {
+            launchDuration = 0.25;
+        }
         //character->Update(0);
-        ((Character*) character->GetComponent("Character").get())->LaunchCharacter({0,0},true);
+        ((Character*) character->GetComponent("Character").get())->LaunchCharacter(launchVelocity, isCharacterLeft,
+                                        characterLaunchSprite, characterLaunchSpriteFameCount, characterLaunchSpriteFrameTime, launchDuration);
     }
 }
 

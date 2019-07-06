@@ -2,9 +2,9 @@
 #define LEVEL_STATE_H
 #define BEGINING_MUSIC "assets/audio/GamePlay(Loop1).wav"
 #define DEVELOPMENT_MUSIC "assets/audio/GamePlay(Loop2).wav"
-#define BEGINING_MUSIC_TIME 32
-#define DEVELOPMENT_MUSIC_TIME 21
-#define MAIN_MUSIC_TIME 21
+#define BEGINING_MUSIC_TIME 32.2
+#define DEVELOPMENT_MUSIC_TIME 22.3
+#define MAIN_MUSIC_TIME 22.3
 #define STOP_MUSIC_TIME 0.2
 #define BEFORE_FINISH_LEVEL_TIME 3
 #define MAIN_MUSIC "assets/audio/GamePlay(Loop3).wav"

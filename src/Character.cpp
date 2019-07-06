@@ -39,6 +39,7 @@ void Character::Start()
     hasChanged = false;
     jumpedOnBeat = false;
     isLaunching = false;
+    launchDuration = 0;
     recoveringFromHitKnockback = false;
     wasLeftSide = isLeftSide;
     wasOnGround = isOnGround;
@@ -75,25 +76,29 @@ void Character::Update(float dt)
     if (gotHit)
     {
         GotHit(dt);
-    }
-    else {
-        if(recoveringFromHitKnockback){
-            RecoverFromHitKnockback(dt);
-        } if(!recoveringFromHitKnockback || canCancelKnockBack) {
-            if(canCancelKnockBack && !isOnGround) {
-                isFalling = true;
-                peakDone = false;
-                isRising = false;
-                hasChanged = false;
-            }
-            if (isAttacking) {
-                AttackUpdate(dt);
-            } else {
-                MoveSideWays(dt);
-                Jump(dt);
-                DoAttack(dt);
-                StopMovingSideWays(dt);
-                ApplyPhysics(dt);
+    } else {
+        if(isLaunching) {
+            LaunchUpdate(dt);
+        }
+        else {
+            if(recoveringFromHitKnockback){
+                RecoverFromHitKnockback(dt);
+            } if(!recoveringFromHitKnockback || canCancelKnockBack) {
+                if(canCancelKnockBack && !isOnGround) {
+                    isFalling = true;
+                    peakDone = false;
+                    isRising = false;
+                    hasChanged = false;
+                }
+                if (isAttacking) {
+                    AttackUpdate(dt);
+                } else {
+                    MoveSideWays(dt);
+                    Jump(dt);
+                    DoAttack(dt);
+                    StopMovingSideWays(dt);
+                    ApplyPhysics(dt);
+                }
             }
         }
     }
@@ -256,6 +261,13 @@ void Character::SolidGroundCollision(Rect tileBox)
             {
                 velocity.y = 0;
                 associated.box.y = tileBox.y + tileBox.h - 45;
+                if(isLaunching) {
+                    isLaunching = false;
+                    peakDone = true;
+                    isFalling = true;
+                    isRising = false;
+                    gravity = GRAVITY_FALLING;
+                }
             }
         }
         if ((velocity.x >= 0) && (collider->box.x < tileBox.x))
@@ -264,6 +276,13 @@ void Character::SolidGroundCollision(Rect tileBox)
             {
                 velocity.x = 0;
                 associated.box.x = tileBox.x - associated.box.w - 35;
+                if(isLaunching){
+                    isLaunching = false;
+                    peakDone = true;
+                    isFalling = true;
+                    isRising = false;
+                    gravity = GRAVITY_FALLING;
+                }
             }
         }
         if ((velocity.x <= 0) && (collider->box.x > tileBox.x) && (collider->box.y + 40 < tileBox.y + tileBox.h))
@@ -272,6 +291,13 @@ void Character::SolidGroundCollision(Rect tileBox)
             {
                 velocity.x = 0;
                 associated.box.x = tileBox.x + tileBox.w - 75;
+                if(isLaunching){
+                    isLaunching = false;
+                    peakDone = true;
+                    isFalling = true;
+                    isRising = false;
+                    gravity = GRAVITY_FALLING;
+                }
             }
         }
     }
@@ -308,6 +334,13 @@ void Character::LandOnground()
         idleTimer.Restart();
         finishIdle = false;
     }
+    if(isLaunching) {
+        isLaunching = false;
+        peakDone = true;
+        isFalling = true;
+        isRising = false;
+        gravity = GRAVITY_FALLING;
+    }
     isOnGround = true;
     canAttack = true;
     isFalling = false;
@@ -342,6 +375,13 @@ void Character::SolidSlope2Collision(Rect tileBox) {
             if((collider->box.y >= posY) && (collider->box.x + collider->box.w > tileBox.x + 24) && (collider->box.x < tileBox.x + tileBox.w - 24)) {
                 velocity.y = 0;
                 associated.box.y = posY + tileBox.h - 45;
+                if(isLaunching) {
+                    isLaunching = false;
+                    peakDone = true;
+                    isFalling = true;
+                    isRising = false;
+                    gravity = GRAVITY_FALLING;
+                }
             }
         }
         if((velocity.x >= 0) && (collider->box.x < tileBox.x)) {
@@ -360,7 +400,7 @@ void Character::SolidSlope2Collision(Rect tileBox) {
                 associated.box.x = tileBox.x + tileBox.w - 75;
             }
         }
-    }   
+    }
 }
 
 void Character::LightSlope2Collision(Rect tileBox) {
@@ -481,6 +521,13 @@ void Character::SolidSlope1Collision(Rect tileBox)
             {
                 velocity.y = 0;
                 associated.box.y = posY + tileBox.h - 45;
+            }
+            if(isLaunching) {
+                isLaunching = false;
+                peakDone = true;
+                isFalling = true;
+                isRising = false;
+                gravity = GRAVITY_FALLING;
             }
         }
         if ((velocity.x >= 0) && (collider->box.x < tileBox.x))
@@ -879,11 +926,36 @@ bool Character::AttackOnBeat() {
     return attackOnBeat;
 }
 
-void Character::LaunchCharacter(Vect2 velocity, bool isLeftSide) {
+void Character::LaunchCharacter(Vect2 launchVelocity, bool isLeftSide,
+ string launcherSprite, int launcherSpriteFrameCount, float launcherSpriteFrameTime, float launchDuration) {
     Collider *collider = ((Collider *)associated.GetComponent("Collider").get());
-    velocity.x = 0;
+    this->isLeftSide = isLeftSide;
+    cout<<"LeftSide "<<isLeftSide<<endl;
+    charSprite->SwitchSprite(launcherSprite, launcherSpriteFrameCount, launcherSpriteFrameTime);
     collider->Update(0);
     isAttacking = false;
+    isOnGround = false;
+    gravity = 0;
+    velocity = launchVelocity;
+    this->launchDuration = launchDuration;
     attackGO->RequestedDelete();
     isLaunching = true;
+    LaunchTimer.Restart();
+}
+
+bool Character::IsCharacterLeftSide() {
+    return isLeftSide;
+}
+
+void Character::LaunchUpdate(float dt) {
+    LaunchTimer.Update(dt);
+    cout<<"launchDuration"<<launchDuration<<endl;
+    if(LaunchTimer.Get() >= launchDuration){
+        isLaunching = false;
+        peakDone = true;
+        isFalling = true;
+        isRising = false;
+        velocity.x = 0;
+        gravity = GRAVITY_FALLING;
+    }
 }

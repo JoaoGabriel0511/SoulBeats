@@ -73,6 +73,7 @@
 #define LITSEN_TO_MUSIC_LEFT_SPRITE "assets/img/char/SoulBeatsCharHeadbangSwordlessLeft.png"
 #define LITSEN_TO_MUSIC_FRAME_COUNT 8
 #define LISTEN_TO_MUSIC_FRAME_TIME 0.08333
+//#define LAUNCH_TIMER_DURATION 0.5
 #define IDLE_DURATION 10
 #define HIT_RECOVER_TIME 0.2
 #define MAX_CHARACTER_HEIGHT 3700.00
@@ -95,6 +96,7 @@ class Character : public Component {
   Vect2 oldVelocity;
   Rect oldPosition;
   Sprite *charSprite;
+  float launchDuration;
   bool isOnGround;
   bool wasOnGround;
   bool isStill;
@@ -130,6 +132,7 @@ class Character : public Component {
   Timer endingInvincibilityTimer;
   Timer hitRecoverTimer;
   Timer deathTimer;
+  Timer LaunchTimer;
 
   Sound *sound;
   float gravity;
@@ -141,6 +144,7 @@ class Character : public Component {
   void BangUpdate(float dt);
   void IsInvincibleUpdate(float dt);
   void GotHit(float dt);
+  void LaunchUpdate(float dt);
   void RecoverFromHitKnockback(float dt);
   void AttackUpdate(float dt);
   void MoveSideWays(float dt);
@@ -162,8 +166,10 @@ class Character : public Component {
     void Update(float dt);
     void Start();
     bool AttackOnBeat();
+    bool IsCharacterLeftSide();
     void HitKnockBack();
-    void LaunchCharacter(Vect2 velocity, bool isLeftSide);
+    void LaunchCharacter(Vect2 velocity, bool isLeftSide,
+     string launcherSprite, int launcherSpriteFrameCount, float launcherSpriteFrameTime, float launchDuration);
     bool Is(string type);
     void NotifyCollision(GameObject &other);
     void NotifYCollisionWithMap(Rect Tilebox);
