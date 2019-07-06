@@ -16,5 +16,6 @@ class TileSet {
         int GetHeight();
         int GetColums();
         int GetRows();
+        //void SwitchTileSet(string file);
 };
 #endif

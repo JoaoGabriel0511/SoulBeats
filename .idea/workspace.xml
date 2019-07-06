@@ -12,28 +12,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f2bc4007-ee96-4b1f-8c7e-5a7a50ea8ad5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/BellEnemy.o" beforeDir="false" afterPath="$PROJECT_DIR$/bin/BellEnemy.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/Character.o" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Character.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/Game.o" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Game.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/GameObject.o" beforeDir="false" afterPath="$PROJECT_DIR$/bin/GameObject.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/Rect.o" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Rect.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/Resources.o" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Resources.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/Sound.o" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Sound.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/TileMap.o" beforeDir="false" afterPath="$PROJECT_DIR$/bin/TileMap.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/TileSet.o" beforeDir="false" afterPath="$PROJECT_DIR$/bin/TileSet.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/Vect2.o" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Vect2.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game.out" beforeDir="false" afterPath="$PROJECT_DIR$/game.out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/BellEnemy.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/BellEnemy.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Character.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Character.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Game.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameObject.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObject.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Resources.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Resources.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Sound.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Sound.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TileMap.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/TileMap.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TileSet.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/TileSet.cpp" afterDir="false" />
-    </list>
+    <list default="true" id="f2bc4007-ee96-4b1f-8c7e-5a7a50ea8ad5" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,65 +43,69 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/TileMap.cpp">
+        <entry file="file://$PROJECT_DIR$/include/BellEnemy.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="782">
-              <caret line="46" column="14" selection-start-line="46" selection-start-column="14" selection-end-line="46" selection-end-column="14" />
+            <state relative-caret-position="697">
+              <caret line="41" column="40" selection-start-line="41" selection-start-column="40" selection-end-line="41" selection-end-column="40" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/TileSet.cpp">
+        <entry file="file://$PROJECT_DIR$/src/Main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="15" column="12" selection-start-line="15" selection-start-column="12" selection-end-line="15" selection-end-column="12" />
+            <state relative-caret-position="51">
+              <caret line="3" selection-start-line="3" selection-end-line="3" selection-end-column="20" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Component.cpp">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/include/Character.h">
+        <entry file="file://$PROJECT_DIR$/include/Spotlights.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="143" column="15" selection-start-line="143" selection-start-column="15" selection-end-line="143" selection-end-column="15" />
+            <state relative-caret-position="153">
+              <caret line="9" column="40" selection-start-line="9" selection-start-column="40" selection-end-line="9" selection-end-column="40" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Game.cpp">
+        <entry file="file://$PROJECT_DIR$/src/Spotlights.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2142">
-              <caret line="126" column="9" selection-start-line="126" selection-start-column="9" selection-end-line="126" selection-end-column="9" />
+            <state relative-caret-position="461">
+              <caret line="37" column="62" lean-forward="true" selection-start-line="37" selection-start-column="62" selection-end-line="37" selection-end-column="62" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/Character.cpp">
+        <entry file="file://$PROJECT_DIR$/src/Launcher.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="11" column="38" selection-start-line="11" selection-start-column="38" selection-end-line="11" selection-end-column="38" />
+            <state relative-caret-position="393">
+              <caret line="44" column="12" selection-start-line="44" selection-start-column="12" selection-end-line="44" selection-end-column="12" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/State.cpp">
+        <entry file="file://$PROJECT_DIR$/include/GameObject.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="10" column="6" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="6" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/makefile">
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/include/State.h">
+        <entry file="file://$PROJECT_DIR$/include/Component.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="459">
-              <caret line="27" column="21" selection-start-line="27" selection-start-column="21" selection-end-line="27" selection-end-column="21" />
+            <state relative-caret-position="306">
+              <caret line="18" column="21" selection-start-line="18" selection-start-column="21" selection-end-line="18" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -204,6 +187,10 @@
         <option value="$PROJECT_DIR$/src/Game.cpp" />
         <option value="$PROJECT_DIR$/src/Sound.cpp" />
         <option value="$PROJECT_DIR$/src/Character.cpp" />
+        <option value="$PROJECT_DIR$/src/Main.cpp" />
+        <option value="$PROJECT_DIR$/src/Spotlights.cpp" />
+        <option value="$PROJECT_DIR$/include/Spotlights.h" />
+        <option value="$PROJECT_DIR$/src/Launcher.cpp" />
       </list>
     </option>
   </component>
@@ -265,8 +252,8 @@
   <component name="RunAnythingCache">
     <option name="myCommands">
       <command value="make clean" />
-      <command value="make" />
       <command value="./game.out" />
+      <command value="make" />
     </option>
   </component>
   <component name="RunDashboard">
@@ -309,12 +296,14 @@
       <workItem from="1562103003341" duration="122000" />
       <workItem from="1562103162806" duration="15660000" />
       <workItem from="1562167977012" duration="5147000" />
-      <workItem from="1562173151277" duration="3812000" />
+      <workItem from="1562173151277" duration="4742000" />
+      <workItem from="1562259618227" duration="1327000" />
+      <workItem from="1562266718864" duration="87000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="43499000" />
+    <option name="totallyTimeSpent" value="45843000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -327,21 +316,20 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="64" y="-11" width="1537" height="912" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.15580927" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32958803" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49966422" visible="true" weight="0.19101124" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49966422" weight="0.309613" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32958803" />
-      <window_info anchor="bottom" id="Version Control" order="7" weight="0.03851091" />
+      <window_info anchor="bottom" id="Version Control" order="7" weight="0.26466915" />
       <window_info anchor="bottom" id="Database Changes" order="8" />
-      <window_info anchor="bottom" id="Terminal" order="9" weight="0.12609239" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="9" visible="true" weight="0.21598002" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5003358" side_tool="true" weight="0.6267166" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -417,13 +405,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
           <caret line="7" column="5" selection-start-line="7" selection-start-column="5" selection-end-line="7" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/include/Component.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="14" column="31" selection-start-line="14" selection-start-column="31" selection-end-line="14" selection-end-column="31" />
         </state>
       </provider>
     </entry>
@@ -573,13 +554,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/BellEnemy.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="522">
-          <caret line="105" column="16" selection-start-line="105" selection-start-column="16" selection-end-line="105" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/GameObject.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
@@ -604,6 +578,13 @@
     <entry file="file://$PROJECT_DIR$/src/Component.cpp">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/include/Character.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2431">
+          <caret line="143" column="15" selection-start-line="143" selection-start-column="15" selection-end-line="143" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Game.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2142">
@@ -621,6 +602,44 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/Character.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1496">
+          <caret line="88" column="21" selection-start-line="88" selection-start-column="21" selection-end-line="88" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/BellEnemy.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1785">
+          <caret line="105" column="16" selection-start-line="105" selection-start-column="16" selection-end-line="105" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/BellEnemy.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="697">
+          <caret line="41" column="40" selection-start-line="41" selection-start-column="40" selection-end-line="41" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" selection-start-line="3" selection-end-line="3" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/Spotlights.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="40" selection-start-line="9" selection-start-column="40" selection-end-line="9" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/makefile">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Resources.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1309">
@@ -635,17 +654,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/include/Character.h">
+    <entry file="file://$PROJECT_DIR$/src/Spotlights.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="143" column="15" selection-start-line="143" selection-start-column="15" selection-end-line="143" selection-end-column="15" />
+        <state relative-caret-position="461">
+          <caret line="37" column="62" lean-forward="true" selection-start-line="37" selection-start-column="62" selection-end-line="37" selection-end-column="62" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Character.cpp">
+    <entry file="file://$PROJECT_DIR$/include/Component.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="38" selection-start-line="11" selection-start-column="38" selection-end-line="11" selection-end-column="38" />
+        <state relative-caret-position="306">
+          <caret line="18" column="21" selection-start-line="18" selection-start-column="21" selection-end-line="18" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/GameObject.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="6" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Launcher.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="393">
+          <caret line="44" column="12" selection-start-line="44" selection-start-column="12" selection-end-line="44" selection-end-column="12" />
         </state>
       </provider>
     </entry>

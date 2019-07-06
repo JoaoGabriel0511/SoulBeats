@@ -9,6 +9,7 @@
 #define BEFORE_FINISH_LEVEL_TIME 3
 #define MAIN_MUSIC "assets/audio/GamePlay(Loop3).wav"
 #include "State.h"
+#include "Launcher.h"
 #include "Beat.h"
 #include "Character.h"
 #include "BellEnemy.h"
@@ -22,6 +23,7 @@
 #include "Goal.h"
 #include "CheckPoint.h"
 #include "LevelData.h"
+#include "Spotlights.h"
 #include "VictoryState.h"
 class LevelState : public State {
     GameObject *bg;

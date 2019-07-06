@@ -97,7 +97,9 @@ void BellEnemy::NotifyCollision(GameObject& other) {
             sound->Open(ENEMY_DEFEND_SOUND);
             sound->Play(1);
         }
-        ((Character*) character->GetComponent("Character").get())->HitKnockBack();
+        if(hp > 0) {
+            ((Character*) character->GetComponent("Character").get())->HitKnockBack();
+        }
         sound->Open(BELL_SOUND);
     }
 }

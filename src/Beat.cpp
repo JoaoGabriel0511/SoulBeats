@@ -55,3 +55,7 @@ bool Beat::GetOnBeat(){
     // if(onBeat == true) cout << "returning true\n;"; else cout << "returning false\n;";
     return onBeat;
 }
+
+bool Beat::GetOnBeatAnimation() {
+    return onBeatAnimation;
+}
