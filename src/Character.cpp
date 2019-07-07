@@ -114,6 +114,7 @@ void Character::Update(float dt)
     isFalling = true;
     peakDone = false;
     wasOnGround = isOnGround;
+    isOnTopOfJumpingPad = false;
     isOnGround = false;
 }
 
@@ -127,11 +128,11 @@ bool Character::Is(string type)
     return result;
 }
 
-void Character::JumpingPadCollision(GameObject &other){
+/*void Character::JumpingPadCollision(GameObject &other){
         if (!isDead) {
         Collider *collider = ((Collider *)associated.GetComponent("Collider").get());
         if (velocity.y > 0 || isAttacking || gotHit)
-        {   
+        {
             // cout << collider->box.y - 40+ collider->box.h << " < " << other.box.y <<" ?" << endl;
             // cout << "Second clause: " << (collider->box.x + collider->box.w > other.box.x + 30) << endl;
             // cout << "Third Clause: " << (collider->box.x < other.box.x + other.box.w - 10) << endl;
@@ -172,15 +173,14 @@ void Character::JumpingPadCollision(GameObject &other){
         }
     }
 
-}
+}*/
 
 void Character::NotifyCollision(GameObject &other)
 {
-     if ( other.GetComponent("JumpingPad") ){
-        JumpingPadCollision(other);
+    if ( other.GetComponent("JumpingPad") ){
+        //JumpingPadCollision(other);
         isOnTopOfJumpingPad = true;
-     } else { isOnTopOfJumpingPad = false; }
-
+    }
     if (!isInvincible)
     {
 
@@ -780,7 +780,7 @@ void Character::Jump(float dt) {
     if (InputManager::GetInstance().KeyPress(W_KEY)) {
         if (isOnGround) {
             walkingSoundTimer.Restart();
-            cout << "Is on top of Jumping Pad? " << isOnTopOfJumpingPad << endl;
+            //cout << "Is on top of Jumping Pad? " << isOnTopOfJumpingPad << endl;
             if(global_beat->GetOnBeat() == true){
                 if(isOnTopOfJumpingPad){
                     velocity.y = ULTRA_JUMP_SPEED;
@@ -988,7 +988,6 @@ void Character::LaunchCharacter(Vect2 launchVelocity, bool isLeftSide,
  string launcherSprite, int launcherSpriteFrameCount, float launcherSpriteFrameTime, float launchDuration) {
     Collider *collider = ((Collider *)associated.GetComponent("Collider").get());
     this->isLeftSide = isLeftSide;
-    cout<<"LeftSide "<<isLeftSide<<endl;
     charSprite->SwitchSprite(launcherSprite, launcherSpriteFrameCount, launcherSpriteFrameTime);
     collider->Update(0);
     isAttacking = false;
@@ -1007,7 +1006,6 @@ bool Character::IsCharacterLeftSide() {
 
 void Character::LaunchUpdate(float dt) {
     LaunchTimer.Update(dt);
-    cout<<"launchDuration"<<launchDuration<<endl;
     if(LaunchTimer.Get() >= launchDuration){
         isLaunching = false;
         peakDone = true;

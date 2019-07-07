@@ -164,9 +164,9 @@ void LevelState::LoadAssets() {
     GameObject* padGO;
     JumpingPad* pad;
     padGO = new GameObject();
-    padGO->box.x = 1300;
-    padGO->box.y = 2600;
-    padGO->box.z = 4;
+    padGO->box.x = 6980;
+    padGO->box.y = 3070;
+    padGO->box.z = 5;
     pad = new JumpingPad(*padGO, characterGO);
     objectArray.emplace_back(padGO);
     //Adicionando Launcher

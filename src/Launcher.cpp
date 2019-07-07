@@ -88,7 +88,6 @@ void Launcher::NotifyCollision(GameObject& other) {
         default:
             break;
         }
-        cout<<"PointPos.y "<<pointPos.y<<endl;
         character->box.x = pointPos.x;
         character->box.y = pointPos.y - (character->box.h);
         if(((Character*) character->GetComponent("Character").get())->AttackOnBeat()) {

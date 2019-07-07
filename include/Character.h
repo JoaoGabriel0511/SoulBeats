@@ -41,7 +41,7 @@
 #define JUMPING_SOUND_ON_BEAT "assets/audio/SFX/PuloFraco1.wav"
 #define JUMPING_SPEED -1130
 #define JUMPING_SPEED_ON_BEAT -1380
-#define ULTRA_JUMP_SPEED -2000
+#define ULTRA_JUMP_SPEED -1550
 #define GRAVITY_RISING 25
 #define GRAVITY_PEAK 8
 #define GRAVITY_FALLING 25
@@ -175,7 +175,7 @@ class Character : public Component {
     bool Is(string type);
     void NotifyCollision(GameObject &other);
     void NotifYCollisionWithMap(Rect Tilebox);
-    void JumpingPadCollision(GameObject &other);
+    //void JumpingPadCollision(GameObject &other);
     bool WasNotCollinding(Rect Tilebox, Rect pastPosition);
 };
 
