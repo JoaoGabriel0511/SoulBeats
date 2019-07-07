@@ -11,7 +11,7 @@ Debugger::Debugger() {
     lookUpdateState = false;
     lookInputManager = false;
     lookSprite = false;
-    lookCharCollision = true;
+    lookCharCollision = false;
 }
 
 Debugger::~Debugger(){}
