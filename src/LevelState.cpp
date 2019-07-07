@@ -8,7 +8,7 @@ void LevelState::StartData() {
         LevelData::GetInstance().checkPointData.emplace_back(new CheckPointData(false, {3580,2440}));
         LevelData::GetInstance().checkPointData.emplace_back(new CheckPointData(false, {7484,2630}));
         LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {1700,2630}, EnemyData::BELL, true, true));
-        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {4908,2640}, EnemyData::BELL, true, true));
+        //LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {4850,2640}, EnemyData::BELL, true, true));
         LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {5187,2900}, EnemyData::BELL, true, true));
         LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {8636,3025}, EnemyData::BELL, true, true));
         LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {2750,2610}, EnemyData::HARP, false, true));
@@ -172,10 +172,10 @@ void LevelState::LoadAssets() {
     //Adicionando Launcher
 
     launcherGO = new GameObject();
-    launcherGO->box.x = 1450;
-    launcherGO->box.y = 2600;
+    launcherGO->box.x = 4979;
+    launcherGO->box.y = 2650;
     launcherGO->box.z = 4;
-    launcher = new Launcher(*launcherGO, Launcher::DOWN, characterGO);
+    launcher = new Launcher(*launcherGO, Launcher::UP_RIGHT, characterGO);
     objectArray.emplace_back(launcherGO);
     objectArray.emplace_back(characterGO);
 
