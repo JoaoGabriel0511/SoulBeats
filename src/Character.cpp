@@ -41,7 +41,7 @@ void Character::Start()
     isLaunching = false;
     launchDuration = 0;
     recoveringFromHitKnockback = false;
-    isOnTopOfJumpingPad = false;    
+    isOnTopOfJumpingPad = false;
     wasLeftSide = isLeftSide;
     wasOnGround = isOnGround;
     gravity = GRAVITY_FALLING;
@@ -823,6 +823,7 @@ void Character::Jump(float dt) {
 }
 
 void Character::DoAttack(float dt) {
+    Attack *attack;
     if (InputManager::GetInstance().KeyPress(SPACE_KEY)) {
         if(canAttack) {
             walkingSoundTimer.Restart();
@@ -847,10 +848,11 @@ void Character::DoAttack(float dt) {
             attackGO = new GameObject();
             attackGO->box.z = 4;
             if(isLeftSide) {
-                Attack *attack = new Attack(*attackGO, {2, 2}, {0, 0}, &associated, 20, 25, 25, 76);
+                attack = new Attack(*attackGO, {2, 2}, {0, 0}, &associated, 20, 25, 25, 76);
             } else {
-                Attack *attack = new Attack(*attackGO, {2, 2}, {0, 0}, &associated, 20, 25, 155, 76);
+                attack = new Attack(*attackGO, {2, 2}, {0, 0}, &associated, 20, 25, 155, 76);
             }
+            attack->isLeftSide = isLeftSide;
             Game::GetInstance().GetCurrentState().AddObject(attackGO);
             attackTimer.Restart();
             if(isOnGround) {

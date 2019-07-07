@@ -46,6 +46,10 @@ void Beat::Update(float dt){
 
 void Beat::Render(){}
 
+float Beat::GetFalseDuration() {
+    return BEAT_FALSE_LIMIT;
+}
+
 
 bool Beat::Is(string type){
     return (type == "Beat") ? true : false;
