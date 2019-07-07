@@ -157,8 +157,18 @@ void LevelState::LoadAssets() {
     Camera::followY = true;
     Camera::Follow(characterGO);
 
+    
     //Personagem Adicionada
 
+    //Adding Jumping Pad
+    GameObject* padGO;
+    JumpingPad* pad;
+    padGO = new GameObject();
+    padGO->box.x = 1300;
+    padGO->box.y = 2600;
+    padGO->box.z = 4;
+    pad = new JumpingPad(*padGO, characterGO);
+    objectArray.emplace_back(padGO);
     //Adicionando Launcher
 
     launcherGO = new GameObject();

@@ -25,6 +25,7 @@
 #include "LevelData.h"
 #include "Spotlights.h"
 #include "VictoryState.h"
+#include "JumpingPad.h"
 class LevelState : public State {
     GameObject *bg;
     GameObject *tileTerrForeGO;

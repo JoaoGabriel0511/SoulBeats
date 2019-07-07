@@ -40,6 +40,7 @@ void Character::Start()
     jumpedOnBeat = false;
     isLaunching = false;
     recoveringFromHitKnockback = false;
+    isOnTopOfJumpingPad = false;    
     wasLeftSide = isLeftSide;
     wasOnGround = isOnGround;
     gravity = GRAVITY_FALLING;
@@ -121,9 +122,59 @@ bool Character::Is(string type)
     return result;
 }
 
+void Character::JumpingPadCollision(GameObject &other){
+        if (!isDead) {
+        Collider *collider = ((Collider *)associated.GetComponent("Collider").get());
+        if (velocity.y > 0 || isAttacking || gotHit)
+        {   
+            // cout << collider->box.y - 40+ collider->box.h << " < " << other.box.y <<" ?" << endl;
+            // cout << "Second clause: " << (collider->box.x + collider->box.w > other.box.x + 30) << endl;
+            // cout << "Third Clause: " << (collider->box.x < other.box.x + other.box.w - 10) << endl;
+
+            if ((collider->box.y + collider->box.h - 40 <= other.box.y) && (collider->box.x + collider->box.w > other.box.x + 30) && (collider->box.x < other.box.x + other.box.w - 10))
+            {
+                LandOnground();
+                associated.box.y = other.box.y - associated.box.h - 20;
+            }
+
+            else{
+                cout << "JUMPING PAD COLLISION ENTERED ELSE\n";
+            }
+        }
+        if (velocity.y <= 0)
+        {
+            if ((collider->box.y >= other.box.y) && (collider->box.x + collider->box.w > other.box.x + 24) && (collider->box.x < other.box.x + other.box.w - 24))
+            {
+                velocity.y = 0;
+                associated.box.y = other.box.y + other.box.h - 20;
+            }
+        }
+        if ((velocity.x >= 0) && (collider->box.x < other.box.x))
+        {
+            if ((collider->box.y + collider->box.h - 50 > other.box.y) && (collider->box.y + 50 < other.box.y + other.box.h))
+            {
+                velocity.x = 0;
+                associated.box.x = other.box.x - associated.box.w - 35;
+            }
+        }
+        if ((velocity.x <= 0) && (collider->box.x > other.box.x) && (collider->box.y + 40 < other.box.y + other.box.h))
+        {
+            if ((collider->box.y + collider->box.h - 40 > other.box.y))
+            {
+                velocity.x = 0;
+                associated.box.x = other.box.x + other.box.w - 75;
+            }
+        }
+    }
+
+}
+
 void Character::NotifyCollision(GameObject &other)
 {
-
+     if ( other.GetComponent("JumpingPad") ){
+        JumpingPadCollision(other);
+        isOnTopOfJumpingPad = true;
+     } else { isOnTopOfJumpingPad = false; }
 
     if (!isInvincible)
     {
@@ -295,6 +346,7 @@ void Character::LightGroundCollision(Rect tileBox)
 
 void Character::LandOnground()
 {
+
     if (!wasOnGround && !isAttacking && !gotHit)
     {
         if (isLeftSide)
@@ -681,8 +733,14 @@ void Character::Jump(float dt) {
     if (InputManager::GetInstance().KeyPress(W_KEY)) {
         if (isOnGround) {
             walkingSoundTimer.Restart();
+            cout << "Is on top of Jumping Pad? " << isOnTopOfJumpingPad << endl;
             if(global_beat->GetOnBeat() == true){
-                velocity.y = JUMPING_SPEED_ON_BEAT;
+                if(isOnTopOfJumpingPad){
+                    velocity.y = ULTRA_JUMP_SPEED;
+                }
+                else{
+                    velocity.y = JUMPING_SPEED_ON_BEAT;
+                }
                 jumpedOnBeat = true;
                 sound->Open(JUMPING_SOUND);
                 sound->Play(1);
