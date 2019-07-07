@@ -17,7 +17,7 @@ bin/LevelState.o: src/LevelState.cpp src/../include/LevelState.h \
  src/../include/TileMap.h src/../include/TileSet.h \
  src/../include/TileMapCollider.h src/../include/Goal.h \
  src/../include/CheckPoint.h src/../include/Spotlights.h \
- src/../include/VictoryState.h
+ src/../include/VictoryState.h src/../include/MovingLayer.h
 
 src/../include/LevelState.h:
 
@@ -98,3 +98,5 @@ src/../include/CheckPoint.h:
 src/../include/Spotlights.h:
 
 src/../include/VictoryState.h:
+
+src/../include/MovingLayer.h:

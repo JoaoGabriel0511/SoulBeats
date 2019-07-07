@@ -345,20 +345,15 @@ void LevelState::VictoryCycle(float dt) {
     goalGO->Update(dt);
     beforeFinishLevelTimer.Update(dt);
     if(beforeFinishLevelTimer.Get() >= BEFORE_FINISH_LEVEL_TIME ) {
-        popRequested = true;
+        //popRequested = true;
         victoryState = new VictoryState();
-        bg->RequestedDelete();
+        //bg->RequestedDelete();
         Game::GetInstance().Push(victoryState);
-        for(int k = 0; k < objectArray.size(); k++) {
-            if(objectArray[k]->IsDead() == true) {
-                objectArray.erase(objectArray.begin() + k);
-            }
-        }
     }
 }
 
 void LevelState::UpdateCameraFocus(float dt) {
-    if(characterGO->box.x >= 500) {
+    if(characterGO->box.x >= 500 && characterGO->box.x <= 9285) {
         Camera::followX = true;
     } else {
         Camera::followX = false;
