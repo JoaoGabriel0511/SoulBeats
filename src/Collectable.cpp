@@ -1,11 +1,12 @@
 #include "../include/Collectable.h"
 
-Collectable::Collectable(GameObject &associated, int movingDistance, int movingSpeed, GameObject *character) : Component(associated)
+Collectable::Collectable(GameObject &associated, int movingDistance, int movingSpeed, GameObject *character, int index) : Component(associated)
 {
     this->character = character;
     Collider *collider;
     sound = new Sound(associated);
     collider = new Collider(associated, {2, 2}, {-140, 0});
+    this->index = index;
     Start();
 }
 
@@ -56,6 +57,7 @@ void Collectable::NotifyCollision(GameObject &other)
 {
     if (other.GetComponent("Character") != NULL)
     {
+        LevelData::GetInstance().collectableData[index]->wasCollected = true;
         sound->Open(COLLECTABLE_HIT_SOUND);
         sound->Play(1);
         associated.RequestedDelete();

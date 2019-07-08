@@ -35,6 +35,7 @@
 #define HIT_SPARK_SPRITE "assets/img/enemies/HitSparks/Hit.png"
 #define HIT_SPARK_DURATION 0.5
 #define HIT_SPARK_FRAME_COUNT 8
+#define ACCORDION_ENEMY_DEATH_SOUND "assets/audio/SFX/Morte.Inimigo(Soul).wav"
 
 class AccordionEnemy : public Component
 {

@@ -1,7 +1,7 @@
 import csv
 
-file = open('MAPA TESTE._Terreno Backgrounder.txt', 'w')
-with open('MAPA TESTE._Terreno Backgrounder.csv') as csv_file:
+file = open('MAPA TESTE._Decoração Backgrounder.txt', 'w')
+with open('Teste_Decoração Backgrounder.csv') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     line_count = 0
     columns_nro = 0
@@ -12,7 +12,7 @@ with open('MAPA TESTE._Terreno Backgrounder.csv') as csv_file:
             rows_nro += 1
     file.write("{0:0=3d}".format(rows_nro) + ',' + "{0:0=3d}".format(columns_nro) + ',1,\n')
     file.write("\n")
-with open('MAPA TESTE._Terreno Backgrounder.csv') as csv_file:
+with open('Teste_Decoração Backgrounder.csv') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     line_count = 0
     columns_nro = 0

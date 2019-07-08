@@ -16,17 +16,19 @@
 #define HARP_ENEMY_LOOKING_DOWN_FRAME_COUNT 16
 #define HARP_ENEMY_LOOKING_DOWN_DURATION 1
 #define HARP_ENEMY_SWITCH_SIDES_TIME 4
-#define HARP_ENEMY_VELOCITY_X 1
-#define HARP_ENEMY_VELOCITY_Y 1
+#define HARP_ENEMY_VELOCITY_X 100
+#define HARP_ENEMY_VELOCITY_Y 100
 #define HARP_ENEMY_DEATH_SPRITE "assets/img/enemies/Boom.png"
 #define HARP_ENEMY_DEATH_DURATION 0.5
 #define HARP_ENEMY_DEATH_FRAME_COUNT 10
 #define HARP_ENEMY_HIT_SOUND "assets/audio/SFX/GolpeForte2.wav"
 #define HARP_SOUND "assets/audio/SFX/Harp1.wav"
+#define HARP_BACK_SOUND "assets/audio/SFX/HarpaVoltando(Soul).wav"
 #define FULL_LIFE_BAR "assets/img/enemies/LifeBar/VidaInimigosFull.png"
 #define TWO_THIRDS_LIFE_BAR "assets/img/enemies/LifeBar/VidaInimigos2terços.png"
 #define ONE_THIRD_LIFE_BAR "assets/img/enemies/LifeBar/VidaInimigos1terço.png"
 #define HIT_SPARK_SPRITE "assets/img/enemies/HitSparks/Hit.png"
+#define HARP_ENEMY_DEATH_SOUND "assets/audio/SFX/Morte.Inimigo(Soul).wav"
 #define HIT_SPARK_DURATION 0.5
 #define HIT_SPARK_FRAME_COUNT 8
 

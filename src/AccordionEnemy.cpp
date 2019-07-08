@@ -137,8 +137,6 @@ void AccordionEnemy::NotifyCollision(GameObject &other)
         }
         hitSpark->box.y = associated.box.y + (associated.box.h/2);
         Game::GetInstance().GetCurrentState().AddObject(hitSpark);
-        sound->Open(ACCORDION_ENEMY_HIT_SOUND);
-        sound->Play(1);
         if(((Character*) character->GetComponent("Character").get())->AttackOnBeat()) {
             hp=0;
         } else {
@@ -154,6 +152,8 @@ void AccordionEnemy::NotifyCollision(GameObject &other)
             lifeBarSprite->SwitchSprite(THREE_FOURTHS_LIFE_BAR, 1, 0);
         }
         if(hp <= 0) {
+            sound->Open(ACCORDION_ENEMY_DEATH_SOUND);
+            sound->Play(1);
             LevelData::GetInstance().enemyData[index]->wasKilled = true;
             explosion = new GameObject();
             explosionSprite = new Sprite(*explosion, ACCORDION_ENEMY_DEATH_SPRITE, ACCORDION_ENEMY_DEATH_FRAME_COUNT, ACCORDION_ENEMY_DEATH_DURATION/ACCORDION_ENEMY_DEATH_FRAME_COUNT, ACCORDION_ENEMY_DEATH_DURATION);
@@ -163,8 +163,9 @@ void AccordionEnemy::NotifyCollision(GameObject &other)
             explosion->box.y = associated.box.y + associated.box.h / 2 - explosion->box.h / 2;
             Game::GetInstance().GetCurrentState().AddObject(explosion);
             associated.RequestedDelete();
-        }
-        if(hp > 0) {
+        } else {
+            sound->Open(ACCORDION_ENEMY_HIT_SOUND);
+            sound->Play(1);
             ((Character*) character->GetComponent("Character").get())->HitKnockBack();
         }
         sound->Open(ARCCORDION_SOUND);

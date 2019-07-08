@@ -6,7 +6,7 @@
 #define DEVELOPMENT_MUSIC_TIME 21.25
 #define MAIN_MUSIC_TIME 21.25
 #define STOP_MUSIC_TIME 0.0
-#define BEFORE_FINISH_LEVEL_TIME 3
+#define BEFORE_FINISH_LEVEL_TIME 5
 #define MAIN_MUSIC "assets/audio/GamePlay(Loop3).wav"
 #include "State.h"
 #include "Launcher.h"
@@ -26,6 +26,7 @@
 #include "Spotlights.h"
 #include "VictoryState.h"
 #include "JumpingPad.h"
+#include "MovingPlatforms.h"
 class LevelState : public State {
     GameObject *bg;
     GameObject *tileTerrForeGO;

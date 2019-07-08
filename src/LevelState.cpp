@@ -5,8 +5,13 @@ LevelState::LevelState() : State(){
 
 void LevelState::StartData() {
     if(LevelData::GetInstance().isNewLevel) {
+        LevelData::GetInstance().movingPlatformsData.emplace_back(new MovingPlatformsData(false, {500, 3000}, 100));
         LevelData::GetInstance().checkPointData.emplace_back(new CheckPointData(false, {3580,2440}));
         LevelData::GetInstance().checkPointData.emplace_back(new CheckPointData(false, {7484,2630}));
+        LevelData::GetInstance().collectableData.emplace_back(new CollectableData(false, {1691,3036}));
+        LevelData::GetInstance().collectableData.emplace_back(new CollectableData(false, {4149,3036}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::UP_RIGHT, {4979,2650}));
+        LevelData::GetInstance().jumpPadData.emplace_back(new JumpPadData({6980,3070}));
         LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {1700,2630}, EnemyData::BELL, true, true));
         LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {4850,2640}, EnemyData::BELL, true, true));
         LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {5187,2900}, EnemyData::BELL, true, true));
@@ -157,26 +162,31 @@ void LevelState::LoadAssets() {
     Camera::followY = true;
     Camera::Follow(characterGO);
 
-    
     //Personagem Adicionada
 
     //Adding Jumping Pad
-    GameObject* padGO;
-    JumpingPad* pad;
-    padGO = new GameObject();
-    padGO->box.x = 6980;
-    padGO->box.y = 3070;
-    padGO->box.z = 5;
-    pad = new JumpingPad(*padGO, characterGO);
-    objectArray.emplace_back(padGO);
+    for(int i = 0; i < LevelData::GetInstance().jumpPadData.size(); i++) {
+        GameObject* padGO = new GameObject();
+        padGO->box.x = LevelData::GetInstance().jumpPadData[i]->GetJumpPadPos().x;
+        padGO->box.y = LevelData::GetInstance().jumpPadData[i]->GetJumpPadPos().y;
+        padGO->box.z = 5;
+        new JumpingPad(*padGO, characterGO);
+        objectArray.emplace_back(padGO);
+    }
+
+    //Jumping Pad Adicionado
+
     //Adicionando Launcher
 
-    launcherGO = new GameObject();
-    launcherGO->box.x = 4979;
-    launcherGO->box.y = 2650;
-    launcherGO->box.z = 4;
-    launcher = new Launcher(*launcherGO, Launcher::UP_RIGHT, characterGO);
-    objectArray.emplace_back(launcherGO);
+    for(int i = 0; i < LevelData::GetInstance().launcherData.size(); i++){
+        GameObject *launcherGO;
+        launcherGO = new GameObject();
+        launcherGO->box.x = LevelData::GetInstance().launcherData[i]->GetLauncherPos().x;
+        launcherGO->box.y = LevelData::GetInstance().launcherData[i]->GetLauncherPos().y;
+        launcherGO->box.z = 4;
+        new Launcher(*launcherGO, LevelData::GetInstance().launcherData[i]->GetLauncherType(), characterGO);
+        objectArray.emplace_back(launcherGO);
+    }
     objectArray.emplace_back(characterGO);
 
     //Launcher Adicionado
@@ -208,22 +218,30 @@ void LevelState::LoadAssets() {
     //Inimigos Adicionandos
 
     //Adicionando Coletável ( Collectable )
+    for(int i = 0; i < LevelData::GetInstance().collectableData.size(); i++){
+        if(LevelData::GetInstance().collectableData[i]->isCollected == false) {
+            GameObject * collectableGO = new GameObject();
+            new Collectable(*collectableGO, 10, 10, characterGO, i);
+            collectableGO->box.x = LevelData::GetInstance().collectableData[i]->GetCollectablePos().x;
+            collectableGO->box.y = LevelData::GetInstance().collectableData[i]->GetCollectablePos().y;
+            collectableGO->box.z = 4;
+            objectArray.emplace_back(collectableGO);
+        }
+    }
+    //Coletável ( Collectable ) Adicionado
 
-    collectable1GO = new GameObject();
-    collectable1 = new Collectable(*collectable1GO, 10, 10, characterGO);
-    collectable1GO->box.x = 1691;
-    collectable1GO->box.y = 3036;
-    collectable1GO->box.z = 4;
-    objectArray.emplace_back(collectable1GO);
+    //Adicionando plataformas que se movem
 
-    //Adicionando Coletável ( Collectable )
+    for(int i = 0; i < LevelData::GetInstance().movingPlatformsData.size(); i++) {
+        GameObject *movingPlataformsGO = new GameObject();
+        new MovingPlatforms(*movingPlataformsGO, LevelData::GetInstance().movingPlatformsData[i]->GetVelocity(), LevelData::GetInstance().movingPlatformsData[i]->GetMoveX());
+        movingPlataformsGO->box.x = LevelData::GetInstance().movingPlatformsData[i]->GetMovingPlatformsPos().x;
+        movingPlataformsGO->box.y = LevelData::GetInstance().movingPlatformsData[i]->GetMovingPlatformsPos().y;
+        movingPlataformsGO->box.z = 4;
+        objectArray.emplace_back(movingPlataformsGO);
+    }
 
-    collectable1GO = new GameObject();
-    collectable1 = new Collectable(*collectable1GO, 10, 10, characterGO);
-    collectable1GO->box.x = 4149;
-    collectable1GO->box.y = 3036;
-    collectable1GO->box.z = 4;
-    objectArray.emplace_back(collectable1GO);
+    //Plataformas que se movem adicionadas
 
     //Adicionando TileMap Terreno ForeGround
 
@@ -279,6 +297,16 @@ void LevelState::LoadAssets() {
     objectArray.emplace_back(tileTerrBackerGO);
 
     //TileMap Decoracao BackGround Adicionada
+
+    //Adicionando TileMap Decoracao BackGrounder
+
+    TileMap *tileMapDecoBacker;
+    GameObject *tileDecoBackerGO = new GameObject();
+    tileDecoBackerGO->box.z = 1;
+    tileMapDecoBacker = new TileMap(*tileDecoBackerGO, "assets/map/MAPA TESTE._Decoração Backgrounder.txt", tileSet, 2, 0, 0, 1, 1);
+    objectArray.emplace_back(tileDecoBackerGO);
+
+    //TileMap Decoracao BackGrounder adicionda
 
     //Adicionando Goal
 
@@ -363,7 +391,7 @@ void LevelState::VictoryCycle(float dt) {
 }
 
 void LevelState::UpdateCameraFocus(float dt) {
-    if(characterGO->box.x >= 500 && characterGO->box.x <= 9285) {
+    if(characterGO->box.x >= 500 /*&& characterGO->box.x <= 9285*/) {
         Camera::followX = true;
     } else {
         Camera::followX = false;

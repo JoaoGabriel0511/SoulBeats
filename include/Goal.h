@@ -4,8 +4,9 @@
 #define GOAL_FRAME_COUNT 20
 #define GOAL_FRAME_TIME 0.083333
 #define GOAL_QUICK_FRAME_TIME 0.005
-#define GOAL_INCRESSE_TIME 0.005
+#define GOAL_INCRESSE_TIME 0.001
 #define GOAL_SPINING_TIME 0.5
+#define GOAL_SOUND "assets/audio/SFX/EncostandoNoFinal(Soul).wav"
 #include "Component.h"
 #include "Sprite.h"
 #include "LevelState.h"
@@ -15,6 +16,8 @@ class Goal : public Component {
     Timer spiningTimer;
     bool charTochedIt;
     int updateSpriteTimes;
+    Sound* sound;
+    bool playedSound;
     public:
         Goal(GameObject &associated);
         // ~Goal();

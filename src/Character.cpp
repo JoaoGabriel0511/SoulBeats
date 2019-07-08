@@ -34,6 +34,7 @@ void Character::Start()
     canCancelKnockBack = false;
     isLeftSide = false;
     isOnSlope = false;
+    isOnMovingPlatform = false;
     canAttack = true;
     finishIdle = false;
     hasChanged = false;
@@ -47,6 +48,7 @@ void Character::Start()
     gravity = GRAVITY_FALLING;
     idleTimer.Restart();
     walkingSoundTimer.Restart();
+    movingPlatformVelocity = {0,0};
 }
 
 void Character::Update(float dt)
@@ -107,7 +109,7 @@ void Character::Update(float dt)
     {
         velocity.y += gravity;
     }
-    associated.box += velocity * dt;
+    associated.box += (velocity + movingPlatformVelocity) * dt;
     //cout<<"associated.box.x"<<associated.box.x<<endl;
     //cout<<"associated.box.y"<<associated.box.y<<endl;
     Camera::Update(dt);
@@ -116,6 +118,8 @@ void Character::Update(float dt)
     wasOnGround = isOnGround;
     isOnTopOfJumpingPad = false;
     isOnGround = false;
+    //isOnMovingPlatform = false;
+    movingPlatformVelocity = {0,0};
 }
 
 bool Character::Is(string type)
@@ -180,53 +184,80 @@ void Character::NotifyCollision(GameObject &other)
     if ( other.GetComponent("JumpingPad") ){
         //JumpingPadCollision(other);
         isOnTopOfJumpingPad = true;
-    }
-    if (!isInvincible)
-    {
-
+    } else {
         if ( other.GetComponent("BellEnemy") != NULL || other.GetComponent("HarpEnemy") != NULL || other.GetComponent("AccordionEnemy") != NULL)
         {
-            if (other.box.x > associated.box.x)
+            if (!isInvincible)
             {
-                velocity.x = -1 * HURT_DEFLECT_SPEED;
+                EnemyCollision(other);
             }
-            else
-            {
-                velocity.x = HURT_DEFLECT_SPEED;
+        } else {
+            if(other.GetComponent("MovingPlatforms") != NULL){
+                MovingPlatformsCollision(other);
             }
-            if (!isOnGround)
-            {
-                velocity.y = HURT_BOUNCING_SPEED;
-            }
-            else
-            {
-                walkingSoundTimer.Restart();
-            }
-            gravity = HURT_GRAVITY;
-            gotHit = true;
-            lifeBar->LoseHP();
-            isInvincible = true;
-            if (isAttacking)
-            {
-                isAttacking = false;
-                attackOnBeat = false;
-                //associated.box.x = associated.box.x + 2;
-                attackGO->RequestedDelete();
-            }
-            invincibilityTimer.Restart();
-            endingInvincibilityTimer.Restart();
-            blinkTimer.Restart();
-            if (isLeftSide)
-            {
-                charSprite->SwitchSprite(HURT_SPRITE_LEFT, HURT_FRAME_COUNT, HURT_FRAME_TIME);
-            }
-            else
-            {
-                charSprite->SwitchSprite(HURT_SPRITE_RIGHT, HURT_FRAME_COUNT, HURT_FRAME_TIME);
-            }
-            recoverFromHitTimer.Restart();
         }
     }
+
+}
+
+void Character::MovingPlatformsCollision(GameObject& other) {
+    Collider * collider = ((Collider *)associated.GetComponent("Collider").get());
+    Collider * platformCollider = ((Collider *)other.GetComponent("Collider").get());
+    if (velocity.y > 0 || isAttacking || gotHit)
+    {
+        if ((collider->box.y + collider->box.h - 50 <= platformCollider->box.y) && (collider->box.x + collider->box.w > platformCollider->box.x + 24) && (collider->box.x < platformCollider->box.x + platformCollider->box.w - 24))
+        {
+            LandOnground();
+            associated.box.y = platformCollider->box.y - associated.box.h - 45;
+            if(((MovingPlatforms*) other.GetComponent("MovingPlatforms").get())->GetMovingX()){
+                movingPlatformVelocity = {((MovingPlatforms*) other.GetComponent("MovingPlatforms").get())->GetVelocity(), 0};
+            } else {
+                movingPlatformVelocity = {0, ((MovingPlatforms*) other.GetComponent("MovingPlatforms").get())->GetVelocity()};
+            }
+        }
+    }
+}
+
+void Character::EnemyCollision(GameObject& other) {
+    if (other.box.x > associated.box.x)
+    {
+        velocity.x = -1 * HURT_DEFLECT_SPEED;
+    }
+    else
+    {
+        velocity.x = HURT_DEFLECT_SPEED;
+    }
+    if (!isOnGround)
+    {
+        velocity.y = HURT_BOUNCING_SPEED;
+    }
+    else
+    {
+        walkingSoundTimer.Restart();
+    }
+    gravity = HURT_GRAVITY;
+    gotHit = true;
+    lifeBar->LoseHP();
+    isInvincible = true;
+    if (isAttacking)
+    {
+        isAttacking = false;
+        attackOnBeat = false;
+        //associated.box.x = associated.box.x + 2;
+        attackGO->RequestedDelete();
+    }
+    invincibilityTimer.Restart();
+    endingInvincibilityTimer.Restart();
+    blinkTimer.Restart();
+    if (isLeftSide)
+    {
+        charSprite->SwitchSprite(HURT_SPRITE_LEFT, HURT_FRAME_COUNT, HURT_FRAME_TIME);
+    }
+    else
+    {
+        charSprite->SwitchSprite(HURT_SPRITE_RIGHT, HURT_FRAME_COUNT, HURT_FRAME_TIME);
+    }
+    recoverFromHitTimer.Restart();
 }
 
 void Character::NotifYCollisionWithMap(Rect tileBox)

@@ -17,7 +17,8 @@
 #define BELL_ENEMY_DEATH_DURATION 0.5
 #define BELL_ENEMY_DEATH_FRAME_COUNT 10
 #define BELL_ENEMY_HIT_SOUND "assets/audio/SFX/GolpeForte2.wav"
-#define BELL_ENEMY_DEFEND_SOUND "assets/audio/SFX/GolpeIneficaz1.wav"
+#define BELL_ENEMY_DEATH_SOUND "assets/audio/SFX/Morte.Inimigo(Soul).wav"
+#define BELL_ENEMY_DEFEND_SOUND "assets/audio/SFX/DefesaSino(Soul).wav"
 #define BELL_SOUND "assets/audio/SFX/Sino1.wav"
 #define FULL_LIFE_BAR "assets/img/enemies/LifeBar/VidaInimigosFull.png"
 #define HALF_LIFE_BAR "assets/img/enemies/LifeBar/VidaInimigos1meio.png"

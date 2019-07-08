@@ -6,6 +6,7 @@ Launcher::Launcher(GameObject& associated, LauncherType type, GameObject* charac
 }
 
 void Launcher::Start() {
+    sound = new Sound(associated, LAUNCHER_SOUND);
     switch (type) {
         case UP:
             launcherSprite = new Sprite(associated, LAUNCHER_UP);
@@ -64,6 +65,7 @@ void Launcher::Start() {
 void Launcher::NotifyCollision(GameObject& other) {
     float launchDuration;
     if(other.GetComponent("Attack") != NULL) {
+        sound->Play(1);
         switch (type) {
         case UP:
             isCharacterLeft = ((Character*) character->GetComponent("Character").get())->IsCharacterLeftSide();

@@ -1,7 +1,6 @@
 #include "../include/Goal.h"
 
 Goal::Goal(GameObject &associated) : Component(associated) {
-    Start();
 }
 
 void Goal::Start() {
@@ -12,10 +11,16 @@ void Goal::Start() {
     charTochedIt = false;
     spiningTimer.Restart();
     updateSpriteTimes = 0;
+    sound = new Sound(associated, GOAL_SOUND);
+    playedSound = false;
 }
 
 void Goal::Update(float dt) {
     if(charTochedIt) {
+        if(!playedSound) {
+            sound->Play(1);
+            playedSound = true;
+        }
         spiningTimer.Update(dt);
         if(spiningTimer.Get() >= GOAL_SPINING_TIME) {
             goalSprite->SwitchSprite(GOAL_SPRITE, GOAL_FRAME_COUNT, GOAL_QUICK_FRAME_TIME + GOAL_INCRESSE_TIME * updateSpriteTimes);

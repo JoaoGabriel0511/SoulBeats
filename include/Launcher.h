@@ -20,6 +20,7 @@
 #define FALLING_FRAME_TIME 0.08333
 #define LAUNCHER_VELOCITY_X 500
 #define LAUNCHER_VELOCITY_Y 500
+#define LAUNCHER_SOUND "assets/audio/SFX/PersonagemLançada2.1(Soul).wav"
 #include "Component.h"
 #include "Sprite.h"
 #include "Collider.h"
@@ -47,6 +48,7 @@ class Launcher : public Component {
         GameObject *character;
         Vect2 pointPos;
         Vect2 launchVelocity;
+        Sound* sound;
         float dt;
     public:
         Launcher(GameObject& associated, LauncherType type, GameObject* character);

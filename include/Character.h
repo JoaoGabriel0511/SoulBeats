@@ -95,6 +95,7 @@
 class Character : public Component {
   Vect2 velocity;
   Vect2 oldVelocity;
+  Vect2 movingPlatformVelocity;
   Rect oldPosition;
   Sprite *charSprite;
   float launchDuration;
@@ -121,6 +122,7 @@ class Character : public Component {
   bool isDead;
   bool isLaunching;
   bool isOnTopOfJumpingPad;
+  bool isOnMovingPlatform;
 
   Timer beforeRiseTimer;
   Timer walkingSoundTimer;
@@ -160,6 +162,8 @@ class Character : public Component {
   void LightSlope1Collision(Rect tileBox);
   void LightSlope2Collision(Rect tileBox);
   void LightGroundCollision(Rect tileBox);
+  void EnemyCollision(GameObject &other);
+  void MovingPlatformsCollision(GameObject &other);
   int hp;
   GameObject *lifeBarGO;
   LifeBar* lifeBar;
