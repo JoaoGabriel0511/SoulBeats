@@ -5,7 +5,7 @@ LevelState::LevelState() : State(){
 
 void LevelState::StartData() {
     if(LevelData::GetInstance().isNewLevel) {
-        LevelData::GetInstance().movingPlatformsData.emplace_back(new MovingPlatformsData(false, {500, 3000}, 100));
+        LevelData::GetInstance().movingPlatformsData.emplace_back(new MovingPlatformsData(false, true, {500, 3000}, 100));
         LevelData::GetInstance().checkPointData.emplace_back(new CheckPointData(false, {3580,2440}));
         LevelData::GetInstance().checkPointData.emplace_back(new CheckPointData(false, {7484,2630}));
         LevelData::GetInstance().collectableData.emplace_back(new CollectableData(false, {1691,3036}));
@@ -234,7 +234,7 @@ void LevelState::LoadAssets() {
 
     for(int i = 0; i < LevelData::GetInstance().movingPlatformsData.size(); i++) {
         GameObject *movingPlataformsGO = new GameObject();
-        new MovingPlatforms(*movingPlataformsGO, LevelData::GetInstance().movingPlatformsData[i]->GetVelocity(), LevelData::GetInstance().movingPlatformsData[i]->GetMoveX());
+        new MovingPlatforms(*movingPlataformsGO, LevelData::GetInstance().movingPlatformsData[i]->GetVelocity(), LevelData::GetInstance().movingPlatformsData[i]->GetMoveX(), LevelData::GetInstance().movingPlatformsData[i]->GetMoveY());
         movingPlataformsGO->box.x = LevelData::GetInstance().movingPlatformsData[i]->GetMovingPlatformsPos().x;
         movingPlataformsGO->box.y = LevelData::GetInstance().movingPlatformsData[i]->GetMovingPlatformsPos().y;
         movingPlataformsGO->box.z = 4;

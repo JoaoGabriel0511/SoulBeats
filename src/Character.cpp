@@ -210,9 +210,10 @@ void Character::MovingPlatformsCollision(GameObject& other) {
             LandOnground();
             associated.box.y = platformCollider->box.y - associated.box.h - 45;
             if(((MovingPlatforms*) other.GetComponent("MovingPlatforms").get())->GetMovingX()){
-                movingPlatformVelocity = {((MovingPlatforms*) other.GetComponent("MovingPlatforms").get())->GetVelocity(), 0};
-            } else {
-                movingPlatformVelocity = {0, ((MovingPlatforms*) other.GetComponent("MovingPlatforms").get())->GetVelocity()};
+                movingPlatformVelocity.x = ((MovingPlatforms*) other.GetComponent("MovingPlatforms").get())->GetVelocity();
+            }
+            if(((MovingPlatforms*) other.GetComponent("MovingPlatforms").get())->GetMovingY()) {
+                movingPlatformVelocity.y = ((MovingPlatforms*) other.GetComponent("MovingPlatforms").get())->GetVelocity();
             }
         }
     }
