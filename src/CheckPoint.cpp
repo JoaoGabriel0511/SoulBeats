@@ -58,13 +58,13 @@ void CheckPoint::NotifyCollision(GameObject& other) {
     if(state == INACTIVE && other.GetComponent("Character") != NULL) {
         sound->Play(1);
         LevelData::GetInstance().checkPointData[index]->isActive = true;
-        if(!LevelData::GetInstance().switchedBegininMusic) {
+        /*if(!LevelData::GetInstance().switchedBegininMusic) {
             LevelData::GetInstance().switchedBegininMusic = true;
         } else {
             if(!LevelData::GetInstance().switchedDevelopmentMusic) {
                 LevelData::GetInstance().switchedDevelopmentMusic = true;
             }
-        }
+        }*/
         if(LevelData::GetInstance().pos == NULL) {
             LevelData::GetInstance().pos = new Vect2(associated.box.x, associated.box.y);
         } else {

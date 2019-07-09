@@ -66,7 +66,7 @@ void Character::Update(float dt)
         Camera::UnFollow();
     }
 
-    if(associated.box.y >= MAX_CHARACTER_HEIGHT){
+    if(associated.box.y >= MAX_CHARACTER_HEIGHT && !Camera::debug){
         cout << "Character passed the height limit" << endl;
         deathTimer.Update(dt);
         if(deathTimer.Get() >= DEATH_SCREEN_TIME){
@@ -181,23 +181,24 @@ bool Character::Is(string type)
 
 void Character::NotifyCollision(GameObject &other)
 {
-    if ( other.GetComponent("JumpingPad") ){
-        //JumpingPadCollision(other);
-        isOnTopOfJumpingPad = true;
-    } else {
-        if ( other.GetComponent("BellEnemy") != NULL || other.GetComponent("HarpEnemy") != NULL || other.GetComponent("AccordionEnemy") != NULL)
-        {
-            if (!isInvincible)
-            {
-                EnemyCollision(other);
-            }
+    if(!isDead) {
+        if ( other.GetComponent("JumpingPad") ){
+            //JumpingPadCollision(other);
+            isOnTopOfJumpingPad = true;
         } else {
-            if(other.GetComponent("MovingPlatforms") != NULL){
-                MovingPlatformsCollision(other);
+            if ( other.GetComponent("BellEnemy") != NULL || other.GetComponent("HarpEnemy") != NULL || other.GetComponent("AccordionEnemy") != NULL)
+            {
+                if (!isInvincible)
+                {
+                    EnemyCollision(other);
+                }
+            } else {
+                if(other.GetComponent("MovingPlatforms") != NULL){
+                    MovingPlatformsCollision(other);
+                }
             }
         }
     }
-
 }
 
 void Character::MovingPlatformsCollision(GameObject& other) {
@@ -205,10 +206,10 @@ void Character::MovingPlatformsCollision(GameObject& other) {
     Collider * platformCollider = ((Collider *)other.GetComponent("Collider").get());
     if (velocity.y > 0 || isAttacking || gotHit)
     {
-        if ((collider->box.y + collider->box.h - 50 <= platformCollider->box.y) && (collider->box.x + collider->box.w > platformCollider->box.x + 24) && (collider->box.x < platformCollider->box.x + platformCollider->box.w - 24))
+        if ((collider->box.y + collider->box.h - 25 <= platformCollider->box.y) && (collider->box.x + collider->box.w > platformCollider->box.x + 24) && (collider->box.x < platformCollider->box.x + platformCollider->box.w - 24))
         {
             LandOnground();
-            associated.box.y = platformCollider->box.y - associated.box.h - 45;
+            associated.box.y = platformCollider->box.y - associated.box.h - 90;
             if(((MovingPlatforms*) other.GetComponent("MovingPlatforms").get())->GetMovingX()){
                 movingPlatformVelocity.x = ((MovingPlatforms*) other.GetComponent("MovingPlatforms").get())->GetVelocity();
             }
@@ -277,7 +278,8 @@ void Character::NotifYCollisionWithMap(Rect tileBox)
         cout << "box.h: " << tileBox.h << endl;
     }
     if (tileBox.z == 101 || tileBox.z == 102 || tileBox.z == 103 || tileBox.z == 148 || tileBox.z == 104 ||
-        tileBox.z == 67 || tileBox.z == 68 || tileBox.z == 57 || tileBox.z == 58 || tileBox.z == 66 || tileBox.z == 84)
+        tileBox.z == 67 || tileBox.z == 68 || tileBox.z == 57 || tileBox.z == 58 || tileBox.z == 66 || tileBox.z == 84 ||
+        tileBox.z == 149 || tileBox.z == 150 || tileBox.z == 151 || tileBox.z == 130 || tileBox.z == 129)
     {
         LightGroundCollision(tileBox);
     }
@@ -479,7 +481,7 @@ void Character::SolidSlope2Collision(Rect tileBox) {
             }
         }
         if((velocity.x <= 0) && (collider->box.x > tileBox.x) && (collider->box.y + 40 < posY + tileBox.h)) {
-            if((collider->box.y + collider->box.h - 40 > posY)) {
+            if((collider->box.y + collider->box.h - 60 > posY)) {
                 velocity.x = 0;
                 associated.box.x = tileBox.x + tileBox.w - 75;
             }

@@ -5,6 +5,7 @@ bool Debugger::lookUpdateLevelState;
 bool Debugger::lookUpdateState;
 bool Debugger::lookSprite;
 bool Debugger::lookCharCollision;
+bool Debugger::cameraDebugMode;
 Debugger::Debugger() {
     lookLoopGame = false;
     lookUpdateLevelState = false;
@@ -12,6 +13,7 @@ Debugger::Debugger() {
     lookInputManager = false;
     lookSprite = false;
     lookCharCollision = false;
+    cameraDebugMode = true;
 }
 
 Debugger::~Debugger(){}

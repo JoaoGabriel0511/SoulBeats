@@ -11,5 +11,6 @@ public:
     static bool lookInputManager;
     static bool lookSprite;
     static bool lookCharCollision;
+    static bool cameraDebugMode;
 };
 #endif

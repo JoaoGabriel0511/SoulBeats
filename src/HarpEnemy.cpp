@@ -35,7 +35,7 @@ void HarpEnemy::Start()
     harpEnemySprite->SetScale({2, 2});
     velocity = {-1 * HARP_ENEMY_VELOCITY_X, -1 * HARP_ENEMY_VELOCITY_Y};
     if(moveX && !moveY) {
-        velocity.x = velocity.x * 3;
+        velocity.x = velocity.x * 6;
     } else {
         if(!moveX && moveY) {
             velocity.y = velocity.y * 3;
@@ -123,14 +123,14 @@ void HarpEnemy::Update(float dt)
                             sound->Open(HARP_BACK_SOUND);
                             sound->Play(1);
                         }
-                        velocity.x = -3 * HARP_ENEMY_VELOCITY_X;
+                        velocity.x = -6 * HARP_ENEMY_VELOCITY_X;
                     } else {
                         if(Camera::IsOnCamera(associated.box)){
                             sound->Open(HARP_SOUND);
                             sound->Play(1);
                         }
                         harpEnemySprite->flip = true;
-                        velocity.x = 3 * HARP_ENEMY_VELOCITY_X;
+                        velocity.x = 6 * HARP_ENEMY_VELOCITY_X;
                     }
                     switched = true;
                 }

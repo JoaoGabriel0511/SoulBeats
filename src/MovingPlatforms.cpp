@@ -2,10 +2,14 @@
 #include "Game.h"
 #include "../include/LevelState.h"
 
-MovingPlatforms::MovingPlatforms(GameObject& associated, float velocity, bool moveX, bool moveY) : Component(associated) {
+MovingPlatforms::MovingPlatforms(GameObject& associated, float velocity, bool moveX, bool moveY, bool back) : Component(associated) {
     this->movingX = moveX;
     this->movingY = moveY;
-    this->velocity = velocity;
+    if(back) {
+        this->velocity = -1 * velocity;
+    } else {
+       this->velocity = velocity;
+    }
 }
 
 void MovingPlatforms::Start() {
@@ -38,7 +42,6 @@ void MovingPlatforms::Update(float dt) {
         associated.box.x += velocity * dt;
     }
     if(movingY){
-        cout<<__FILE__<<"::"<<__LINE__<<endl;
         associated.box.y += velocity * dt;
     }
 }

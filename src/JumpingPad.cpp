@@ -6,7 +6,7 @@ JumpingPad::JumpingPad(GameObject& associated, GameObject* character) : Componen
 
 void JumpingPad::Start() {
     padSprite = new Sprite(associated, JUMPING_PAD_SPRITE);
-    padSprite->SetScale({2,2});
+    padSprite->SetScale({3,3});
     padCollider = new Collider(associated, {2,2}, {10, -70});
 }
 

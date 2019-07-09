@@ -75,6 +75,8 @@ void Camera::Update(float dt) {
                 speed.y = 0;
             }
             pos = pos + speed;
+            cout<<"pos x "<<(GameInfo::GetInstance().WIDTH / 2) - pos.x<<endl;
+            cout<<"pos y "<<(GameInfo::GetInstance().HEIGHT / 2) - pos.y<<endl;
         }
     } else {
         if(followX) {
