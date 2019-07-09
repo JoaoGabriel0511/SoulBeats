@@ -195,9 +195,21 @@ void Character::NotifyCollision(GameObject &other)
             } else {
                 if(other.GetComponent("MovingPlatforms") != NULL){
                     MovingPlatformsCollision(other);
+                } else {
+                    if(other.GetComponent("Heart") != NULL) {
+                        HeartCollision(other);
+                    }
                 }
             }
         }
+    }
+}
+
+void Character::HeartCollision(GameObject& other) {
+    lifeBar->GetHP();
+    if(lifeBar->HP() < 5){
+        sound->Open(GET_HEART_SOUND);
+        sound->Play(1);
     }
 }
 

@@ -73,6 +73,10 @@ void LevelState::StartData() {
         LevelData::GetInstance().checkPointData.emplace_back(new CheckPointData(false, {12300,2575}));
         // CheckPoint
 
+        //HEART
+        LevelData::GetInstance().heartData.emplace_back(new HeartData(false, {700,3000}));
+        //HEART
+
         //Collectables
         LevelData::GetInstance().collectableData.emplace_back(new CollectableData(false, {1691,3036}));
         LevelData::GetInstance().collectableData.emplace_back(new CollectableData(false, {4149,3036}));
@@ -250,6 +254,19 @@ void LevelState::LoadAssets() {
     }
 
     //CheckPoints Adicionados
+
+    //Adicionando Coracoes
+    for (int i = 0; i < LevelData::GetInstance().heartData.size(); i++){
+        if(LevelData::GetInstance().heartData[i]->isCollected == false) {
+            GameObject* heartGO = new GameObject();
+            heartGO->box.x = LevelData::GetInstance().heartData[i]->GetHeartPos().x;
+            heartGO->box.y = LevelData::GetInstance().heartData[i]->GetHeartPos().y;
+            heartGO->box.z = 4;
+            new Heart(*heartGO, i);
+            objectArray.emplace_back(heartGO);
+        }
+    }
+    //Coracoes adicionados
 
     //Adicionando Personagem
 

@@ -87,6 +87,7 @@
 #define HIT_DEFLECT_SPEED 250
 #define RECOVER_DURATION 0.5
 #define WALKING_SOUND_TIMER 0.3
+#define GET_HEART_SOUND "assets/audio/SFX/PegandoVida1.wav"
 #include "Component.h"
 #include "Sprite.h"
 #include "Attack.h"
@@ -163,6 +164,7 @@ class Character : public Component {
   void LightSlope2Collision(Rect tileBox);
   void LightGroundCollision(Rect tileBox);
   void EnemyCollision(GameObject &other);
+  void HeartCollision(GameObject &other);
   void MovingPlatformsCollision(GameObject &other);
   int hp;
   GameObject *lifeBarGO;

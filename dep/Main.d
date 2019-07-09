@@ -9,10 +9,11 @@ bin/Main.o: src/Main.cpp src/../include/Game.h src/../include/GameData.h \
  src/../include/CameraFollower.h src/../include/LevelState.h \
  src/../include/Launcher.h src/../include/Character.h \
  src/../include/Attack.h src/../include/LifeBar.h src/../include/Beat.h \
- src/../include/BellEnemy.h src/../include/LevelData.h \
+ src/../include/Heart.h src/../include/LevelData.h \
  src/../include/CheckPointData.h src/../include/EnemyData.h \
  src/../include/LauncherData.h src/../include/JumpPadData.h \
  src/../include/CollectableData.h src/../include/MovingPlatformsData.h \
+ src/../include/HeartData.h src/../include/BellEnemy.h \
  src/../include/HarpEnemy.h src/../include/AccordionEnemy.h \
  src/../include/LevelState.h src/../include/Collectable.h \
  src/../include/TileMap.h src/../include/TileSet.h \
@@ -73,7 +74,7 @@ src/../include/LifeBar.h:
 
 src/../include/Beat.h:
 
-src/../include/BellEnemy.h:
+src/../include/Heart.h:
 
 src/../include/LevelData.h:
 
@@ -88,6 +89,10 @@ src/../include/JumpPadData.h:
 src/../include/CollectableData.h:
 
 src/../include/MovingPlatformsData.h:
+
+src/../include/HeartData.h:
+
+src/../include/BellEnemy.h:
 
 src/../include/HarpEnemy.h:
 

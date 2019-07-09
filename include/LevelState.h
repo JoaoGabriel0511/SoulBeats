@@ -13,6 +13,7 @@
 #include "State.h"
 #include "Launcher.h"
 #include "Beat.h"
+#include "Heart.h"
 #include "Character.h"
 #include "BellEnemy.h"
 #include "HarpEnemy.h"

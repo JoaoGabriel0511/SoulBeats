@@ -77,6 +77,9 @@ void CheckPoint::NotifyCollision(GameObject& other) {
         for(int i = 0; i < LevelData::GetInstance().collectableData.size(); i++) {
             LevelData::GetInstance().collectableData[i]->isCollected = LevelData::GetInstance().collectableData[i]->wasCollected;
         }
+        for(int i = 0; i < LevelData::GetInstance().heartData.size(); i++) {
+            LevelData::GetInstance().heartData[i]->isCollected = LevelData::GetInstance().heartData[i]->wasCollected;
+        }
         state = SPINING_INACTIVE;
         checkPointSprite->SwitchSprite(CHECK_POINT_INACTIVE_SPIN_SPRITE, CHECK_POINT_INACTIVE_SPIN_FRAME_COUNT, CHECK_POINT_INACTIVE_SPIN_DURATION/(8*CHECK_POINT_INACTIVE_SPIN_FRAME_COUNT));
     }
