@@ -449,10 +449,10 @@ void LevelState::LoadAssets() {
     goalGO = new GameObject();
     Goal *goal;
     goal = new Goal(*goalGO);
-    //goalGO->box.x = 16580;
-    //goalGO->box.y = 550;
-    goalGO->box.x = 300;
-    goalGO->box.y = 3000;
+    goalGO->box.x = 16580;
+    goalGO->box.y = 550;
+    //goalGO->box.x = 300;
+    //goalGO->box.y = 3000;
     goalGO->box.z = 4;
     objectArray.emplace_back(goalGO);
 
