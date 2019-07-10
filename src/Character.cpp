@@ -40,15 +40,51 @@ void Character::Start()
     hasChanged = false;
     jumpedOnBeat = false;
     isLaunching = false;
+    idleState = UP;
     launchDuration = 0;
     recoveringFromHitKnockback = false;
     isOnTopOfJumpingPad = false;
+    switchedIdleOnBeat = false;
     wasLeftSide = isLeftSide;
     wasOnGround = isOnGround;
     gravity = GRAVITY_FALLING;
     idleTimer.Restart();
     walkingSoundTimer.Restart();
     movingPlatformVelocity = {0,0};
+}
+
+void Character::IdleUpdate(float dt) {
+    if(isLeftSide) {
+        if(global_beat->GetOnBeat()) {
+            if(!switchedIdleOnBeat){
+                if(idleState == UP){
+                    idleState = DOWN;
+                    charSprite->SwitchSprite(IDLE_SPRITE_DOWN_LEFT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+                } else {
+                    idleState = UP;
+                    charSprite->SwitchSprite(IDLE_SPRITE_UP_LEFT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+                }
+                switchedIdleOnBeat = true;
+            }
+        } else {
+            switchedIdleOnBeat = false;
+        }
+    } else {
+        if(global_beat->GetOnBeat()) {
+            if(!switchedIdleOnBeat) {
+                if(idleState == UP){
+                    idleState = DOWN;
+                    charSprite->SwitchSprite(IDLE_SPRITE_DOWN_RIGHT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+                } else {
+                    idleState = UP;
+                    charSprite->SwitchSprite(IDLE_SPRITE_UP_RIGHT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+                }
+                switchedIdleOnBeat = true;
+            }
+        } else {
+            switchedIdleOnBeat = false;
+        }
+    }
 }
 
 void Character::Update(float dt)
@@ -60,6 +96,9 @@ void Character::Update(float dt)
     wasLeftSide = isLeftSide;
     BangUpdate(dt);
     IsInvincibleUpdate(dt);
+    if(isStill && !finishIdle) {
+        IdleUpdate(dt);
+    }
 
     if(lifeBar->HP() <= 0){
         isDead = true;
@@ -188,7 +227,7 @@ void Character::NotifyCollision(GameObject &other)
         } else {
             if ( other.GetComponent("BellEnemy") != NULL || other.GetComponent("HarpEnemy") != NULL || other.GetComponent("AccordionEnemy") != NULL)
             {
-                if (!isInvincible)
+                if (!isInvincible && !recoveringFromHitKnockback)
                 {
                     EnemyCollision(other);
                 }
@@ -206,11 +245,11 @@ void Character::NotifyCollision(GameObject &other)
 }
 
 void Character::HeartCollision(GameObject& other) {
-    lifeBar->GetHP();
     if(lifeBar->HP() < 5){
         sound->Open(GET_HEART_SOUND);
         sound->Play(1);
     }
+    lifeBar->GetHP();
 }
 
 void Character::MovingPlatformsCollision(GameObject& other) {
@@ -218,7 +257,7 @@ void Character::MovingPlatformsCollision(GameObject& other) {
     Collider * platformCollider = ((Collider *)other.GetComponent("Collider").get());
     if (velocity.y > 0 || isAttacking || gotHit)
     {
-        if ((collider->box.y + collider->box.h - 25 <= platformCollider->box.y) && (collider->box.x + collider->box.w > platformCollider->box.x + 24) && (collider->box.x < platformCollider->box.x + platformCollider->box.w - 24))
+        if ((collider->box.y + collider->box.h - 10 <= platformCollider->box.y) && (collider->box.x + collider->box.w > platformCollider->box.x + 24) && (collider->box.x < platformCollider->box.x + platformCollider->box.w - 24))
         {
             LandOnground();
             associated.box.y = platformCollider->box.y - associated.box.h - 90;
@@ -265,11 +304,23 @@ void Character::EnemyCollision(GameObject& other) {
     blinkTimer.Restart();
     if (isLeftSide)
     {
-        charSprite->SwitchSprite(HURT_SPRITE_LEFT, HURT_FRAME_COUNT, HURT_FRAME_TIME);
+        if(idleState == UP){
+            idleState = DOWN;
+            charSprite->SwitchSprite(IDLE_SPRITE_DOWN_LEFT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+        } else {
+            idleState = UP;
+            charSprite->SwitchSprite(IDLE_SPRITE_UP_LEFT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+        }
     }
     else
     {
-        charSprite->SwitchSprite(HURT_SPRITE_RIGHT, HURT_FRAME_COUNT, HURT_FRAME_TIME);
+        if(idleState == UP){
+            idleState = DOWN;
+            charSprite->SwitchSprite(IDLE_SPRITE_DOWN_RIGHT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+        } else {
+            idleState = UP;
+            charSprite->SwitchSprite(IDLE_SPRITE_UP_RIGHT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+        }
     }
     recoverFromHitTimer.Restart();
 }
@@ -418,11 +469,23 @@ void Character::LandOnground()
     {
         if (isLeftSide)
         {
-            charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
+            if(idleState == UP){
+                idleState = DOWN;
+                charSprite->SwitchSprite(IDLE_SPRITE_DOWN_LEFT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+            } else {
+                idleState = UP;
+                charSprite->SwitchSprite(IDLE_SPRITE_UP_LEFT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+            }
         }
         else
         {
-            charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
+            if(idleState == UP){
+                idleState = DOWN;
+                charSprite->SwitchSprite(IDLE_SPRITE_DOWN_RIGHT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+            } else {
+                idleState = UP;
+                charSprite->SwitchSprite(IDLE_SPRITE_UP_RIGHT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+            }
         }
         idleTimer.Restart();
         finishIdle = false;
@@ -549,6 +612,7 @@ void Character::HitKnockBack()
         }
     }
     isAttacking = false;
+    gravity = GRAVITY_FALLING;
     attackOnBeat = false;
     hitRecoverTimer.Restart();
     recoveringFromHitKnockback = true;

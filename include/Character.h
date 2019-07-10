@@ -1,5 +1,10 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
+#define IDLE_SPRITE_UP_RIGHT "assets/img/char/SoulBeatsCharIdleUp.png"
+#define IDLE_SPRITE_UP_LEFT "assets/img/char/SoulBeatsCharIdleUpLeft.png"
+#define IDLE_SPRITE_DOWN_RIGHT "assets/img/char/SoulBeatsCharIdleDown.png"
+#define IDLE_SPRITE_DOWN_LEFT "assets/img/char/SoulBeatsCharIdleDownLeft.png"
+#define IDLE_SPRITE_ON_BEAT_FRAME_COUNT 4
 #define IDLE_SPRITE_RIGHT "assets/img/char/SoulBeatsCharIdleR.png"
 #define IDLE_SPRITE_LEFT "assets/img/char/SoulBeatsCharIdleL.png"
 #define WALKING_SPRITE_RIGHT "assets/img/char/SoulBeatsCharWalkR.png"
@@ -75,7 +80,7 @@
 #define LITSEN_TO_MUSIC_FRAME_COUNT 8
 #define LISTEN_TO_MUSIC_FRAME_TIME 0.08333
 //#define LAUNCH_TIMER_DURATION 0.5
-#define IDLE_DURATION 10
+#define IDLE_DURATION 15
 #define HIT_RECOVER_TIME 0.2
 #define MAX_CHARACTER_HEIGHT 3700.00
 #define DEATH_SCREEN_TIME 0.5
@@ -124,6 +129,14 @@ class Character : public Component {
   bool isLaunching;
   bool isOnTopOfJumpingPad;
   bool isOnMovingPlatform;
+  bool switchedIdleOnBeat;
+
+  enum IdleState {
+    UP,
+    DOWN
+  };
+
+  IdleState idleState;
 
   Timer beforeRiseTimer;
   Timer walkingSoundTimer;
@@ -138,6 +151,7 @@ class Character : public Component {
   Timer hitRecoverTimer;
   Timer deathTimer;
   Timer LaunchTimer;
+  Timer idleAnimationTimer;
 
   Sound *sound;
   float gravity;
@@ -150,6 +164,7 @@ class Character : public Component {
   void IsInvincibleUpdate(float dt);
   void GotHit(float dt);
   void LaunchUpdate(float dt);
+  void IdleUpdate(float dt);
   void RecoverFromHitKnockback(float dt);
   void AttackUpdate(float dt);
   void MoveSideWays(float dt);
