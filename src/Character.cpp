@@ -1001,9 +1001,21 @@ void Character::StopMovingSideWays(float dt) {
         if(isOnGround) {
             walkingSoundTimer.Restart();
             if(isLeftSide) {
-                charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
+                if(idleState == UP){
+                    idleState = DOWN;
+                    charSprite->SwitchSprite(IDLE_SPRITE_DOWN_LEFT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+                } else {
+                    idleState = UP;
+                    charSprite->SwitchSprite(IDLE_SPRITE_UP_LEFT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+                }
             } else {
-                charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
+                if(idleState == UP){
+                    idleState = DOWN;
+                    charSprite->SwitchSprite(IDLE_SPRITE_DOWN_RIGHT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+                } else {
+                    idleState = UP;
+                    charSprite->SwitchSprite(IDLE_SPRITE_UP_RIGHT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+                }
             }
             idleTimer.Restart();
             finishIdle = false;
