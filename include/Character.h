@@ -40,7 +40,7 @@
 #define JUMPING_SOUND "assets/audio/SFX/PuloForte1.wav"
 #define JUMPING_SOUND_ON_BEAT "assets/audio/SFX/PuloFraco1.wav"
 #define JUMPING_SPEED -1130
-#define JUMPING_SPEED_ON_BEAT -1380
+#define JUMPING_SPEED_ON_BEAT -1300
 #define ULTRA_JUMP_SPEED -1550
 #define GRAVITY_RISING 25
 #define GRAVITY_PEAK 8

@@ -1039,6 +1039,7 @@ void Character::LaunchCharacter(Vect2 launchVelocity, bool isLeftSide,
     charSprite->SwitchSprite(launcherSprite, launcherSpriteFrameCount, launcherSpriteFrameTime);
     collider->Update(0);
     isAttacking = false;
+    canAttack = false;
     isOnGround = false;
     gravity = 0;
     velocity = launchVelocity;
