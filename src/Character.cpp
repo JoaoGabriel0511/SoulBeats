@@ -257,7 +257,7 @@ void Character::MovingPlatformsCollision(GameObject& other) {
     Collider * platformCollider = ((Collider *)other.GetComponent("Collider").get());
     if (velocity.y > 0 || isAttacking || gotHit)
     {
-        if ((collider->box.y + collider->box.h - 25 <= platformCollider->box.y) && (collider->box.x + collider->box.w > platformCollider->box.x + 24) && (collider->box.x < platformCollider->box.x + platformCollider->box.w - 24))
+        if ((collider->box.y + collider->box.h - 10 <= platformCollider->box.y) && (collider->box.x + collider->box.w > platformCollider->box.x + 24) && (collider->box.x < platformCollider->box.x + platformCollider->box.w - 24))
         {
             LandOnground();
             associated.box.y = platformCollider->box.y - associated.box.h - 90;
