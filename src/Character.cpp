@@ -8,7 +8,7 @@ Character::Character(GameObject &associated) : Component(associated)
     Collider *collider;
     collider = new Collider(associated, {2, 2}, {-140, -60});
     lifeBarGO = new GameObject();
-    lifeBarGO->box.z = 6;
+    lifeBarGO->box.z = 7;
     lifeBar = new LifeBar(*lifeBarGO);
     Game::GetInstance().GetCurrentStatePointer()->AddObject(lifeBarGO);
 }
@@ -291,12 +291,7 @@ void Character::NotifYCollisionWithMap(Rect tileBox)
     }
     if (tileBox.z == 101 || tileBox.z == 102 || tileBox.z == 103 || tileBox.z == 148 || tileBox.z == 104 ||
         tileBox.z == 67 || tileBox.z == 68 || tileBox.z == 57 || tileBox.z == 58 || tileBox.z == 66 || tileBox.z == 84 ||
-        tileBox.z == 149 || tileBox.z == 150 || tileBox.z == 151 || tileBox.z == 130 || tileBox.z == 129)
-    {
-        LightGroundCollision(tileBox);
-    }
-    if (tileBox.z == 101 || tileBox.z == 102 || tileBox.z == 103 || tileBox.z == 148 || tileBox.z == 104 ||
-        tileBox.z == 67 || tileBox.z == 68 || tileBox.z == 57 || tileBox.z == 58 || tileBox.z == 66 || tileBox.z == 84)
+        tileBox.z == 149 || tileBox.z == 150 || tileBox.z == 151 || tileBox.z == 130 || tileBox.z == 129 || tileBox.z == 147)
     {
         if (tileBox.z == 67)
         {
@@ -358,13 +353,13 @@ void Character::SolidGroundCollision(Rect tileBox)
             {
                 velocity.y = 0;
                 associated.box.y = tileBox.y + tileBox.h - 45;
-                if(isLaunching) {
+                /*if(isLaunching) {
                     isLaunching = false;
                     peakDone = true;
                     isFalling = true;
                     isRising = false;
                     gravity = GRAVITY_FALLING;
-                }
+                }*/
             }
         }
         if ((velocity.x >= 0) && (collider->box.x < tileBox.x))
@@ -373,13 +368,13 @@ void Character::SolidGroundCollision(Rect tileBox)
             {
                 velocity.x = 0;
                 associated.box.x = tileBox.x - associated.box.w - 35;
-                if(isLaunching){
+                /*if(isLaunching){
                     isLaunching = false;
                     peakDone = true;
                     isFalling = true;
                     isRising = false;
                     gravity = GRAVITY_FALLING;
-                }
+                }*/
             }
         }
         if ((velocity.x <= 0) && (collider->box.x > tileBox.x) && (collider->box.y + 40 < tileBox.y + tileBox.h))
@@ -388,13 +383,13 @@ void Character::SolidGroundCollision(Rect tileBox)
             {
                 velocity.x = 0;
                 associated.box.x = tileBox.x + tileBox.w - 75;
-                if(isLaunching){
+                /*if(isLaunching){
                     isLaunching = false;
                     peakDone = true;
                     isFalling = true;
                     isRising = false;
                     gravity = GRAVITY_FALLING;
-                }
+                }*/
             }
         }
     }
@@ -432,13 +427,13 @@ void Character::LandOnground()
         idleTimer.Restart();
         finishIdle = false;
     }
-    if(isLaunching) {
+    /*if(isLaunching) {
         isLaunching = false;
         peakDone = true;
         isFalling = true;
         isRising = false;
         gravity = GRAVITY_FALLING;
-    }
+    }*/
     isOnGround = true;
     canAttack = true;
     isFalling = false;
@@ -473,13 +468,13 @@ void Character::SolidSlope2Collision(Rect tileBox) {
             if((collider->box.y >= posY) && (collider->box.x + collider->box.w > tileBox.x + 24) && (collider->box.x < tileBox.x + tileBox.w - 24)) {
                 velocity.y = 0;
                 associated.box.y = posY + tileBox.h - 45;
-                if(isLaunching) {
+                /*if(isLaunching) {
                     isLaunching = false;
                     peakDone = true;
                     isFalling = true;
                     isRising = false;
                     gravity = GRAVITY_FALLING;
-                }
+                }*/
             }
         }
         if((velocity.x >= 0) && (collider->box.x < tileBox.x)) {
@@ -620,13 +615,13 @@ void Character::SolidSlope1Collision(Rect tileBox)
                 velocity.y = 0;
                 associated.box.y = posY + tileBox.h - 45;
             }
-            if(isLaunching) {
+            /*if(isLaunching) {
                 isLaunching = false;
                 peakDone = true;
                 isFalling = true;
                 isRising = false;
                 gravity = GRAVITY_FALLING;
-            }
+            }*/
         }
         if ((velocity.x >= 0) && (collider->box.x < tileBox.x))
         {
@@ -1059,6 +1054,7 @@ void Character::LaunchUpdate(float dt) {
         isLaunching = false;
         peakDone = true;
         isFalling = true;
+        canAttack = true;
         isRising = false;
         velocity.x = 0;
         gravity = GRAVITY_FALLING;

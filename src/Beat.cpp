@@ -7,7 +7,7 @@ void Beat::Start(){
     heartBackground = new GameObject();
     backgroundSprite = new Sprite(*heartBackground, BEATING_HEART_BG, 1, 1);
     backgroundSprite->SetScale({2,2});
-    heartBackground->box.z = 5;
+    heartBackground->box.z = 6;
     Game::GetInstance().GetCurrentStatePointer()->AddObject(heartBackground);
     beatSprite = new Sprite(associated, BEATING_HEART_SPRITE, FRAME_COUNT, BEAT_TRUE_LIMIT/FRAME_COUNT);
     beatSprite->SetScale({2,2});

@@ -13,7 +13,7 @@ Debugger::Debugger() {
     lookInputManager = false;
     lookSprite = false;
     lookCharCollision = false;
-    cameraDebugMode = true;
+    cameraDebugMode = false;
 }
 
 Debugger::~Debugger(){}

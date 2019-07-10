@@ -11,6 +11,7 @@ void VictoryState::Start() {
     playedDeathIconSound = false;
     playedAttackIconSound = false;
     playedYourRankIsSound = false;
+    playedResultSound = false;
     LevelData::GetInstance().clear();
     State::Start();
 }
@@ -25,6 +26,7 @@ void VictoryState::LoadAssets() {
     layer6 = new GameObject();
     bgMusic = new GameObject();
     completeLayer = new GameObject();
+    resultLayer = new GameObject();
     yourRankIsLayer = new GameObject();
     heartIconGO = new GameObject();
     deathIconGO = new GameObject();
@@ -59,6 +61,8 @@ void VictoryState::LoadAssets() {
     movingLayer6 = new MovingLayer(*layer6, VICTORY_LAYER6_SPRITE, {LAYER6_BEGINING_POS_X, LAYER_BEGINING_POS_Y}, {LAYER_VELOCITY_X, LAYER_VELOCITY_Y});
     completeLayerSprite = new Sprite(*completeLayer, COMPLETE_SPRITE);
     completeLayerSprite->isBlinking = true;
+    resultSprite = new Sprite(*resultLayer, RESULT_SPRITE);
+    resultSprite->isBlinking = true;
     yourRankIsLayerSprite = new Sprite(*yourRankIsLayer, YOUR_RANK_IS_SPRITE);
     yourRankIsLayerSprite->isBlinking = true;
     music = new Music(*bgMusic, VICTORY_BG_MUSIC);
@@ -90,6 +94,10 @@ void VictoryState::LoadAssets() {
     completeLayer->box.h = GameInfo::GetInstance().HEIGHT;
     completeLayer->box.x = 0 - Camera::pos.x;
     completeLayer->box.y = 0 - Camera::pos.y;
+    resultLayer->box.w = GameInfo::GetInstance().WIDTH;
+    resultLayer->box.h = GameInfo::GetInstance().HEIGHT;
+    resultLayer->box.x = 0 - Camera::pos.x;
+    resultLayer->box.y = 0 - Camera::pos.y;
     yourRankIsLayer->box.w = GameInfo::GetInstance().WIDTH;
     yourRankIsLayer->box.h = GameInfo::GetInstance().HEIGHT;
     yourRankIsLayer->box.x = 0 - Camera::pos.x;
@@ -114,6 +122,7 @@ void VictoryState::LoadAssets() {
     objectArray.emplace_back(layer6);
     objectArray.emplace_back(completeLayer);
     objectArray.emplace_back(yourRankIsLayer);
+    objectArray.emplace_back(resultLayer);
     objectArray.emplace_back(heartIconGO);
     objectArray.emplace_back(deathIconGO);
     objectArray.emplace_back(timeIconGO);
@@ -137,6 +146,7 @@ void VictoryState::Update(float dt) {
         attackIconTimer.Update(dt);
         collectableIconTimer.Update(dt);
         yourRankIsTimer.Update(dt);
+        resultTimer.Update(dt);
         if(heartIconTimer.Get() >= HEART_ICON_TIME){
             heartIconSprite->isBlinking = false;
             if(!playedHeartIconSound){
@@ -177,6 +187,13 @@ void VictoryState::Update(float dt) {
             if(!playedYourRankIsSound) {
                 popSound->Play(1);
                 playedYourRankIsSound = true;
+            }
+        }
+        if(resultTimer.Get() >= RESULT_TIME) {
+            resultSprite->isBlinking = false;
+            if(!playedResultSound) {
+                popSound->Play(1);
+                playedResultSound = true;
             }
         }
     }

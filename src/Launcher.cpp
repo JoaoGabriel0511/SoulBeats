@@ -11,7 +11,7 @@ void Launcher::Start() {
         case UP:
             launcherSprite = new Sprite(associated, LAUNCHER_UP);
             pointPos = {associated.box.x - 3 * associated.box.w, associated.box.y - (character->box.h)};
-            launchVelocity = {0, -1 * LAUNCHER_VELOCITY_Y};
+            launchVelocity = {0, -2 * LAUNCHER_VELOCITY_Y};
             break;
         case UP_RIGHT:
             launcherSprite = new Sprite(associated, LAUNCHER_UP_RIGHT);
@@ -34,7 +34,7 @@ void Launcher::Start() {
         case RIGHT:
             launcherSprite = new Sprite(associated, LAUNCHER_RIGHT);
             pointPos = {associated.box.x + associated.box.w, associated.box.y + associated.box.h/2 - (character->box.h/2)};
-            launchVelocity = {LAUNCHER_VELOCITY_X, 0};
+            launchVelocity = {2*LAUNCHER_VELOCITY_X, 0};
             isCharacterLeft = false;
             characterLaunchSprite = PEAK_RIGHT_SPRITE;
             characterLaunchSpriteFameCount = PEAK_FRAME_COUNT;
@@ -43,7 +43,7 @@ void Launcher::Start() {
         case LEFT:
             launcherSprite = new Sprite(associated, LAUNCHER_LEFT);
             pointPos = {associated.box.x - 2*character->box.w, associated.box.y + associated.box.h/2 - (character->box.h/2)};
-            launchVelocity = {-1 * LAUNCHER_VELOCITY_X, 0};
+            launchVelocity = {-2 * LAUNCHER_VELOCITY_X, 0};
             isCharacterLeft = true;
             characterLaunchSprite = PEAK_LEFT_SPRITE;
             characterLaunchSpriteFameCount = PEAK_FRAME_COUNT;
@@ -52,7 +52,7 @@ void Launcher::Start() {
         case DOWN:
             launcherSprite = new Sprite(associated, LAUNCHER_DOWN);
             pointPos = {associated.box.x - 3 * associated.box.w, associated.box.y + associated.box.h};
-            launchVelocity = {0, LAUNCHER_VELOCITY_Y};
+            launchVelocity = {0, 2*LAUNCHER_VELOCITY_Y};
             break;
             break;
         default:

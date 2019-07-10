@@ -52,6 +52,7 @@ void LevelState::StartData() {
         LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::UP, {13700,2170}));
         LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::UP, {13200,1558}));
         LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::RIGHT, {13680,910}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::UP, {11430,2550}));
         // Launchers
 
         // Jumping
@@ -74,7 +75,13 @@ void LevelState::StartData() {
         // CheckPoint
 
         //HEART
-        LevelData::GetInstance().heartData.emplace_back(new HeartData(false, {700,3000}));
+        LevelData::GetInstance().heartData.emplace_back(new HeartData(false, {3520,2830}));
+        LevelData::GetInstance().heartData.emplace_back(new HeartData(false, {9339,1783}));
+        LevelData::GetInstance().heartData.emplace_back(new HeartData(false, {11210,800}));
+        LevelData::GetInstance().heartData.emplace_back(new HeartData(false, {11430,2200}));
+        LevelData::GetInstance().heartData.emplace_back(new HeartData(false, {11550,1720}));
+        LevelData::GetInstance().heartData.emplace_back(new HeartData(false, {11600,1720}));
+        LevelData::GetInstance().heartData.emplace_back(new HeartData(false, {11650,1720}));
         //HEART
 
         //Collectables
@@ -161,15 +168,15 @@ void LevelState::LoadAssets() {
     levelSprite = new Sprite(*bg, "assets/img/background/Fundo.png");
     if(LevelData::GetInstance().musicState == LevelData::BEGINING) {
         levelMusic = new Music(*bg, BEGINING_MUSIC);
-	    //levelMusic->Play(1);
+	    levelMusic->Play(1);
     } else {
         if(LevelData::GetInstance().musicState == LevelData::DEVELOPMENT) {
             levelMusic = new Music(*bg, DEVELOPMENT_MUSIC);
-	        //levelMusic->Play(1);
+	        levelMusic->Play(1);
         } else {
             if(LevelData::GetInstance().musicState == LevelData::MAIN) {
                 levelMusic == new Music(*bg, MAIN_MUSIC);
-                //levelMusic->Stop(0);
+                levelMusic->Stop(0);
             }
         }
     }
@@ -236,7 +243,7 @@ void LevelState::LoadAssets() {
 
     //// Beat Game Object
     beat = new GameObject();
-    beat->box.z = 6;
+    beat->box.z = 7;
     Beat *beat_component = new Beat(*beat);
     global_beat = beat_component;
     objectArray.emplace_back(beat);
@@ -248,7 +255,7 @@ void LevelState::LoadAssets() {
         checkPointGO = new GameObject();
         checkPointGO->box.x = LevelData::GetInstance().checkPointData[i]->GetCheckPointPos().x;
         checkPointGO->box.y = LevelData::GetInstance().checkPointData[i]->GetCheckPointPos().y;
-        checkPointGO->box.z = 4;
+        checkPointGO->box.z = 5;
         new CheckPoint(*checkPointGO, i);
         objectArray.emplace_back(checkPointGO);
     }
@@ -261,7 +268,7 @@ void LevelState::LoadAssets() {
             GameObject* heartGO = new GameObject();
             heartGO->box.x = LevelData::GetInstance().heartData[i]->GetHeartPos().x;
             heartGO->box.y = LevelData::GetInstance().heartData[i]->GetHeartPos().y;
-            heartGO->box.z = 4;
+            heartGO->box.z = 5;
             new Heart(*heartGO, i);
             objectArray.emplace_back(heartGO);
         }
@@ -278,7 +285,7 @@ void LevelState::LoadAssets() {
         characterGO->box.x = LevelData::GetInstance().pos->x - 100;
         characterGO->box.y = LevelData::GetInstance().pos->y - 95;
     }
-    characterGO->box.z = 4;
+    characterGO->box.z = 5;
     new Character(*characterGO);
     if(Debugger::GetInstance().cameraDebugMode) {
         Camera::debug = true;
@@ -289,15 +296,6 @@ void LevelState::LoadAssets() {
     }
     //Personagem Adicionada
 
-    //Adding Jumping Pad
-    for(int i = 0; i < LevelData::GetInstance().jumpPadData.size(); i++) {
-        GameObject* padGO = new GameObject();
-        padGO->box.x = LevelData::GetInstance().jumpPadData[i]->GetJumpPadPos().x;
-        padGO->box.y = LevelData::GetInstance().jumpPadData[i]->GetJumpPadPos().y;
-        padGO->box.z = 5;
-        new JumpingPad(*padGO, characterGO);
-        objectArray.emplace_back(padGO);
-    }
 
     //Jumping Pad Adicionado
 
@@ -308,13 +306,23 @@ void LevelState::LoadAssets() {
         launcherGO = new GameObject();
         launcherGO->box.x = LevelData::GetInstance().launcherData[i]->GetLauncherPos().x;
         launcherGO->box.y = LevelData::GetInstance().launcherData[i]->GetLauncherPos().y;
-        launcherGO->box.z = 4;
+        launcherGO->box.z = 5;
         new Launcher(*launcherGO, LevelData::GetInstance().launcherData[i]->GetLauncherType(), characterGO);
         objectArray.emplace_back(launcherGO);
     }
     objectArray.emplace_back(characterGO);
 
     //Launcher Adicionado
+
+    //Adding Jumping Pad
+    for(int i = 0; i < LevelData::GetInstance().jumpPadData.size(); i++) {
+        GameObject* padGO = new GameObject();
+        padGO->box.x = LevelData::GetInstance().jumpPadData[i]->GetJumpPadPos().x;
+        padGO->box.y = LevelData::GetInstance().jumpPadData[i]->GetJumpPadPos().y;
+        padGO->box.z = 5;
+        new JumpingPad(*padGO, characterGO);
+        objectArray.emplace_back(padGO);
+    }
 
     //Adicionando Inimigos
 
@@ -349,7 +357,7 @@ void LevelState::LoadAssets() {
             new Collectable(*collectableGO, 10, 10, characterGO, i);
             collectableGO->box.x = LevelData::GetInstance().collectableData[i]->GetCollectablePos().x;
             collectableGO->box.y = LevelData::GetInstance().collectableData[i]->GetCollectablePos().y;
-            collectableGO->box.z = 4;
+            collectableGO->box.z = 5;
             objectArray.emplace_back(collectableGO);
         }
     }
@@ -376,7 +384,7 @@ void LevelState::LoadAssets() {
     TileMap *tileMapTerrFore;
     TileMapCollider *tileMapTerrForeCollider;
     tileTerrForeGO = new GameObject();
-    tileTerrForeGO->box.z = 3;
+    tileTerrForeGO->box.z = 4;
     tileSet = new TileSet(32, 32, "assets/img/tileSet/TilesetTerrain.png");
     tileMapTerrFore = new TileMap(*tileTerrForeGO, "assets/map/MAPA TESTE._Terreno Foreground.txt", tileSet, 2, 0, 0, 1, 1);
     tileMapTerrForeCollider = new TileMapCollider(*tileTerrForeGO, tileMapTerrFore);
@@ -388,7 +396,7 @@ void LevelState::LoadAssets() {
 
     TileMap *tileMapDecoFore;
     GameObject *tileDecoForeGO = new GameObject();
-    tileDecoForeGO->box.z = 4;
+    tileDecoForeGO->box.z = 6;
     tileMapDecoFore = new TileMap(*tileDecoForeGO, "assets/map/MAPA TESTE._Decoração Foreground.txt", tileSet, 2, 0, 0, 1, 1);
     objectArray.emplace_back(tileDecoForeGO);
 
@@ -398,7 +406,7 @@ void LevelState::LoadAssets() {
 
     TileMap *tileMapDecoBack;
     GameObject *tileDecoBackGO = new GameObject();
-    tileDecoBackGO->box.z = 4;
+    tileDecoBackGO->box.z = 2;
     tileMapDecoBack = new TileMap(*tileDecoBackGO, "assets/map/MAPA TESTE._Decoração Background.txt", tileSet, 2, 0, 0, 1, 1);
     objectArray.emplace_back(tileDecoBackGO);
 
@@ -408,7 +416,7 @@ void LevelState::LoadAssets() {
 
     TileMap *tileMapTerrBack;
     tileTerrBackGO = new GameObject();
-    tileTerrBackGO->box.z = 2;
+    tileTerrBackGO->box.z = 3;
     tileMapTerrBack = new TileMap(*tileTerrBackGO, "assets/map/MAPA TESTE._Terreno Background.txt", tileSet, 2, 0, 0, 1, 1);
     TileMapCollider *tileMapTerrBackCollider = new TileMapCollider(*tileTerrBackGO, tileMapTerrBack);
     objectArray.emplace_back(tileTerrBackGO);
@@ -429,7 +437,7 @@ void LevelState::LoadAssets() {
 
     TileMap *tileMapTerrBacker;
     GameObject *tileTerrBackerGO = new GameObject();
-    tileTerrBackerGO->box.z = 1;
+    tileTerrBackerGO->box.z = 0;
     tileMapTerrBacker = new TileMap(*tileTerrBackerGO, "assets/map/MAPA TESTE._Terreno Backgrounder.txt", tileSet, 2, 0, 0, 1, 1);
     objectArray.emplace_back(tileTerrBackerGO);
 
@@ -441,10 +449,10 @@ void LevelState::LoadAssets() {
     goalGO = new GameObject();
     Goal *goal;
     goal = new Goal(*goalGO);
-    goalGO->box.x = 16580;
-    goalGO->box.y = 550;
-    //goalGO->box.x = 300;
-    //goalGO->box.y = 3000;
+    //goalGO->box.x = 16580;
+    //goalGO->box.y = 550;
+    goalGO->box.x = 300;
+    goalGO->box.y = 3000;
     goalGO->box.z = 4;
     objectArray.emplace_back(goalGO);
 
@@ -581,7 +589,7 @@ void LevelState::LevelCycle(float dt) {
         }
     }
     State::Update(dt);
-    //UpdateMusic(dt);
+    UpdateMusic(dt);
 }
 
 GameObject *LevelState::GetBeatObject()
