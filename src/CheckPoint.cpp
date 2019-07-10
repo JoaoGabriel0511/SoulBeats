@@ -24,6 +24,7 @@ void CheckPoint::Start() {
         checkPointSprite = new Sprite(associated, CHECK_POINT_ACTIVE_IDLE_SPRITE);
     }
     checkPointSprite->SetScale({2,2});
+    this->sound = new Sound(associated, CHECK_POINT_SOUND);
     checkPointCollider = new Collider(associated, {2,2}, {-130, 0});
 }
 
@@ -55,14 +56,15 @@ void CheckPoint::Update(float dt) {
 
 void CheckPoint::NotifyCollision(GameObject& other) {
     if(state == INACTIVE && other.GetComponent("Character") != NULL) {
+        sound->Play(1);
         LevelData::GetInstance().checkPointData[index]->isActive = true;
-        if(!LevelData::GetInstance().switchedBegininMusic) {
+        /*if(!LevelData::GetInstance().switchedBegininMusic) {
             LevelData::GetInstance().switchedBegininMusic = true;
         } else {
             if(!LevelData::GetInstance().switchedDevelopmentMusic) {
                 LevelData::GetInstance().switchedDevelopmentMusic = true;
             }
-        }
+        }*/
         if(LevelData::GetInstance().pos == NULL) {
             LevelData::GetInstance().pos = new Vect2(associated.box.x, associated.box.y);
         } else {
@@ -71,6 +73,12 @@ void CheckPoint::NotifyCollision(GameObject& other) {
         }
         for(int i = 0; i < LevelData::GetInstance().enemyData.size(); i++) {
             LevelData::GetInstance().enemyData[i]->isDead = LevelData::GetInstance().enemyData[i]->wasKilled;
+        }
+        for(int i = 0; i < LevelData::GetInstance().collectableData.size(); i++) {
+            LevelData::GetInstance().collectableData[i]->isCollected = LevelData::GetInstance().collectableData[i]->wasCollected;
+        }
+        for(int i = 0; i < LevelData::GetInstance().heartData.size(); i++) {
+            LevelData::GetInstance().heartData[i]->isCollected = LevelData::GetInstance().heartData[i]->wasCollected;
         }
         state = SPINING_INACTIVE;
         checkPointSprite->SwitchSprite(CHECK_POINT_INACTIVE_SPIN_SPRITE, CHECK_POINT_INACTIVE_SPIN_FRAME_COUNT, CHECK_POINT_INACTIVE_SPIN_DURATION/(8*CHECK_POINT_INACTIVE_SPIN_FRAME_COUNT));

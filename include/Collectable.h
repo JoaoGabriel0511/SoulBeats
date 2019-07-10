@@ -3,10 +3,11 @@
 #include "Component.h"
 #include "Sprite.h"
 #include "Character.h"
+#include "LevelData.h"
 #define COLLECTABLE_IDLE_SPRITE "assets/img/interactables/Collectable.png"
 #define COLLECTABLE_IDLE_FRAME_COUNT 8
 #define COLLECTABLE_IDLE_DURATION 0.747
-#define COLLECTABLE_HIT_SOUND "assets/audio/SFX/PegandoItem1.wav"
+#define COLLECTABLE_HIT_SOUND "assets/audio/SFX/PegandoItem2.1(Soul).wav"
 
 class Collectable : public Component
 {
@@ -30,9 +31,9 @@ class Collectable : public Component
     GameObject *character;
     Sound *sound;
     void SwitchCollectableState(CollectableState state, string sprite, int frameCount, float frameTime, Timer *timer);
-
+    int index;
   public:
-    Collectable(GameObject &associated, int movingDistance, int movingSpeed, GameObject *character);
+    Collectable(GameObject &associated, int movingDistance, int movingSpeed, GameObject *character, int index);
     ~Collectable();
     void Update(float dt);
     void Render();

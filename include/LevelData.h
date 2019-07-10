@@ -3,6 +3,11 @@
 #include "Vect2.h"
 #include "CheckPointData.h"
 #include "EnemyData.h"
+#include "LauncherData.h"
+#include "JumpPadData.h"
+#include "CollectableData.h"
+#include "MovingPlatformsData.h"
+#include "HeartData.h"
 #include <vector>
 using namespace std;
 
@@ -19,6 +24,11 @@ class LevelData {
         MusicState musicState;
         vector<CheckPointData*> checkPointData;
         vector<EnemyData*> enemyData;
+        vector<LauncherData*> launcherData;
+        vector<JumpPadData*> jumpPadData;
+        vector<CollectableData*> collectableData;
+        vector<MovingPlatformsData*> movingPlatformsData;
+        vector<HeartData*> heartData;
         void clear();
         Vect2 *pos;
         LevelData();

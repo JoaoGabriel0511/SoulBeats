@@ -2,15 +2,18 @@
 #define LEVEL_STATE_H
 #define BEGINING_MUSIC "assets/audio/GamePlay(Loop1).wav"
 #define DEVELOPMENT_MUSIC "assets/audio/GamePlay(Loop2).wav"
+#define SWITCH_TO_DEVELOP_MUSIC 5000
+#define SWITCH_TO_MAIN_MUSIC 9000
 #define BEGINING_MUSIC_TIME 32.18
 #define DEVELOPMENT_MUSIC_TIME 21.25
 #define MAIN_MUSIC_TIME 21.25
 #define STOP_MUSIC_TIME 0.0
-#define BEFORE_FINISH_LEVEL_TIME 3
+#define BEFORE_FINISH_LEVEL_TIME 5
 #define MAIN_MUSIC "assets/audio/GamePlay(Loop3).wav"
 #include "State.h"
 #include "Launcher.h"
 #include "Beat.h"
+#include "Heart.h"
 #include "Character.h"
 #include "BellEnemy.h"
 #include "HarpEnemy.h"
@@ -26,6 +29,7 @@
 #include "Spotlights.h"
 #include "VictoryState.h"
 #include "JumpingPad.h"
+#include "MovingPlatforms.h"
 class LevelState : public State {
     GameObject *bg;
     GameObject *tileTerrForeGO;

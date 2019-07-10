@@ -104,8 +104,6 @@ void BellEnemy::NotifyCollision(GameObject& other) {
             }
             hitSpark->box.y = associated.box.y + (associated.box.h/2);
             Game::GetInstance().GetCurrentState().AddObject(hitSpark);
-            sound->Open(BELL_ENEMY_HIT_SOUND);
-            sound->Play(1);
             if(((Character*) character->GetComponent("Character").get())->AttackOnBeat()) {
                 hp=0;
             } else {
@@ -115,6 +113,8 @@ void BellEnemy::NotifyCollision(GameObject& other) {
                 lifeBarSprite->SwitchSprite(HALF_LIFE_BAR, 1, 0);
             }
             if(hp <= 0) {
+                sound->Open(BELL_ENEMY_DEATH_SOUND);
+                sound->Play(1);
                 LevelData::GetInstance().enemyData[index]->wasKilled = true;
                 explosion = new GameObject();
                 explosionSprite = new Sprite(*explosion, BELL_ENEMY_DEATH_SPRITE, BELL_ENEMY_DEATH_FRAME_COUNT, BELL_ENEMY_DEATH_DURATION/BELL_ENEMY_DEATH_FRAME_COUNT, BELL_ENEMY_DEATH_DURATION);
@@ -124,6 +124,9 @@ void BellEnemy::NotifyCollision(GameObject& other) {
                 explosion->box.y = associated.box.y + associated.box.h / 2 - explosion->box.h / 2;
                 Game::GetInstance().GetCurrentState().AddObject(explosion);
                 associated.RequestedDelete();
+            } else {
+                sound->Open(BELL_ENEMY_HIT_SOUND);
+                sound->Play(1);
             }
         } else {
             sound->Open(BELL_ENEMY_DEFEND_SOUND);

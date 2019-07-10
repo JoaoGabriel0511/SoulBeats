@@ -35,7 +35,7 @@ void HarpEnemy::Start()
     harpEnemySprite->SetScale({2, 2});
     velocity = {-1 * HARP_ENEMY_VELOCITY_X, -1 * HARP_ENEMY_VELOCITY_Y};
     if(moveX && !moveY) {
-        velocity.x = velocity.x * 3;
+        velocity.x = velocity.x * 6;
     } else {
         if(!moveX && moveY) {
             velocity.y = velocity.y * 3;
@@ -65,6 +65,7 @@ void HarpEnemy::Update(float dt)
                             velocity.y = -3 * HARP_ENEMY_VELOCITY_Y;
                         }
                         if (Camera::IsOnCamera(associated.box)) {
+                            sound->Open(HARP_SOUND);
                             sound->Play(1);
                         }
                         SwitchHarpEnemyState(LOOKING_UP, HARP_ENEMY_LOOKING_UP_SPRITE, HARP_ENEMY_LOOKING_UP_FRAME_COUNT,
@@ -85,6 +86,7 @@ void HarpEnemy::Update(float dt)
                             velocity.y = 3 * HARP_ENEMY_VELOCITY_Y;
                         }
                         if (Camera::IsOnCamera(associated.box)) {
+                            sound->Open(HARP_BACK_SOUND);
                             sound->Play(1);
                         }
                         SwitchHarpEnemyState(LOOKING_DOWN, HARP_ENEMY_LOOKING_DOWN_SPRITE, HARP_ENEMY_LOOKING_DOWN_FRAME_COUNT,
@@ -115,15 +117,20 @@ void HarpEnemy::Update(float dt)
         } else {
             if(global_beat->GetOnBeat()){
                 if(!switched) {
-                    if(Camera::IsOnCamera(associated.box)){
-                        sound->Play(1);
-                    }
                     if (harpEnemySprite->flip) {
                         harpEnemySprite->flip = false;
-                        velocity.x = -3 * HARP_ENEMY_VELOCITY_X;
+                        if(Camera::IsOnCamera(associated.box)){
+                            sound->Open(HARP_BACK_SOUND);
+                            sound->Play(1);
+                        }
+                        velocity.x = -6 * HARP_ENEMY_VELOCITY_X;
                     } else {
+                        if(Camera::IsOnCamera(associated.box)){
+                            sound->Open(HARP_SOUND);
+                            sound->Play(1);
+                        }
                         harpEnemySprite->flip = true;
-                        velocity.x = 3 * HARP_ENEMY_VELOCITY_X;
+                        velocity.x = 6 * HARP_ENEMY_VELOCITY_X;
                     }
                     switched = true;
                 }
@@ -135,10 +142,10 @@ void HarpEnemy::Update(float dt)
     lifeBar->box.x = associated.box.x + 35;
     lifeBar->box.y = associated.box.y - 20;
     if(moveX) {
-	    associated.box.x += velocity.x;
+	    associated.box.x += velocity.x * dt;
     }
     if(moveY) {
-	    associated.box.y += velocity.y;
+	    associated.box.y += velocity.y * dt;
     }
 }
 
@@ -170,8 +177,6 @@ void HarpEnemy::NotifyCollision(GameObject &other)
         }
         hitSpark->box.y = associated.box.y + (associated.box.h/2);
         Game::GetInstance().GetCurrentState().AddObject(hitSpark);
-        sound->Open(HARP_ENEMY_HIT_SOUND);
-        sound->Play(1);
         if(((Character*) character->GetComponent("Character").get())->AttackOnBeat()) {
             hp=0;
         } else {
@@ -184,6 +189,8 @@ void HarpEnemy::NotifyCollision(GameObject &other)
             lifeBarSprite->SwitchSprite(TWO_THIRDS_LIFE_BAR, 1, 0);
         }
         if(hp <= 0) {
+            sound->Open(HARP_ENEMY_DEATH_SOUND);
+            sound->Play(1);
             LevelData::GetInstance().enemyData[index]->wasKilled = true;
             explosion = new GameObject();
             explosionSprite = new Sprite(*explosion, HARP_ENEMY_DEATH_SPRITE, HARP_ENEMY_DEATH_FRAME_COUNT, HARP_ENEMY_DEATH_DURATION/HARP_ENEMY_DEATH_FRAME_COUNT, HARP_ENEMY_DEATH_DURATION);
@@ -193,8 +200,9 @@ void HarpEnemy::NotifyCollision(GameObject &other)
             explosion->box.y = associated.box.y + associated.box.h / 2 - explosion->box.h / 2;
             Game::GetInstance().GetCurrentState().AddObject(explosion);
             associated.RequestedDelete();
-        }
-        if(hp > 0) {
+        } else {
+            sound->Open(HARP_ENEMY_HIT_SOUND);
+            sound->Play(1);
             ((Character*) character->GetComponent("Character").get())->HitKnockBack();
         }
         sound->Open(HARP_SOUND);

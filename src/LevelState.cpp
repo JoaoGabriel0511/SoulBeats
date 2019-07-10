@@ -5,17 +5,131 @@ LevelState::LevelState() : State(){
 
 void LevelState::StartData() {
     if(LevelData::GetInstance().isNewLevel) {
-        LevelData::GetInstance().checkPointData.emplace_back(new CheckPointData(false, {3580,2440}));
-        LevelData::GetInstance().checkPointData.emplace_back(new CheckPointData(false, {7484,2630}));
+        // Plataformas
+        LevelData::GetInstance().movingPlatformsData.emplace_back(new MovingPlatformsData(false, true, {3200, 2600}, 500, true));
+        LevelData::GetInstance().movingPlatformsData.emplace_back(new MovingPlatformsData(true, false, {6530 , 2700}, 500, true));
+        LevelData::GetInstance().movingPlatformsData.emplace_back(new MovingPlatformsData(false, true, {6900, 2850}, 300, true));
+        LevelData::GetInstance().movingPlatformsData.emplace_back(new MovingPlatformsData(false, true, {7500, 2200}, 400, false));
+        LevelData::GetInstance().movingPlatformsData.emplace_back(new MovingPlatformsData(false, true, {7650, 2200}, 300, true));
+        LevelData::GetInstance().movingPlatformsData.emplace_back(new MovingPlatformsData(false, true, {7800, 2200}, 400, false));
+        LevelData::GetInstance().movingPlatformsData.emplace_back(new MovingPlatformsData(false, false, {9500, 1750}, 400, false));
+        LevelData::GetInstance().movingPlatformsData.emplace_back(new MovingPlatformsData(false, false, {9800, 1750}, 400, false));
+        LevelData::GetInstance().movingPlatformsData.emplace_back(new MovingPlatformsData(false, false, {9990, 1500}, 400, false));
+        LevelData::GetInstance().movingPlatformsData.emplace_back(new MovingPlatformsData(false, true, {9800, 1100}, 400, true));
+        LevelData::GetInstance().movingPlatformsData.emplace_back(new MovingPlatformsData(false, true, {12100, 2100}, 300, true));
+        LevelData::GetInstance().movingPlatformsData.emplace_back(new MovingPlatformsData(false, true, {12420, 2100}, 300, true));
+        LevelData::GetInstance().movingPlatformsData.emplace_back(new MovingPlatformsData(false, true, {13550, 2350}, 400, false));
+        LevelData::GetInstance().movingPlatformsData.emplace_back(new MovingPlatformsData(false, true, {13300, 1800}, 500, true));
+        LevelData::GetInstance().movingPlatformsData.emplace_back(new MovingPlatformsData(true, false, {13000, 1800}, 500, false));
+        // Plataformas
+
+        // Launchers
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::UP_RIGHT, {4979,2650}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::LEFT, {5766,2997}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::UP, {7400,2600}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::UP_LEFT, {8540,2370}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::UP, {7194,1710}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::UP_RIGHT, {7600,1200}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::UP_RIGHT, {7600,1120}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::UP_RIGHT, {7600,1040}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::UP_RIGHT, {8100,1200}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::UP_RIGHT, {8100,1120}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::UP_RIGHT, {8100,1040}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::DOWN, {8600,1200}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::DOWN, {8600,1120}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::DOWN, {8600,1040}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::UP, {11210,1020}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::DOWN, {11050,1225}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::DOWN, {10650,1590}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::DOWN, {10860,1875}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::DOWN, {10600,2170}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::RIGHT, {9500,2420}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::UP, {12125,2530}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::UP, {12455,2530}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::RIGHT, {12420,1520}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::LEFT, {12150,1520}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::RIGHT, {11650,1520}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::UP, {13700,2170}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::UP, {13200,1558}));
+        LevelData::GetInstance().launcherData.emplace_back(new LauncherData(Launcher::RIGHT, {13680,910}));
+        // Launchers
+
+        // Jumping
+        LevelData::GetInstance().jumpPadData.emplace_back(new JumpPadData({2140,3100}));
+        LevelData::GetInstance().jumpPadData.emplace_back(new JumpPadData({3277,3092}));
+        LevelData::GetInstance().jumpPadData.emplace_back(new JumpPadData({6270,2840}));
+        LevelData::GetInstance().jumpPadData.emplace_back(new JumpPadData({6900,3030}));
+        LevelData::GetInstance().jumpPadData.emplace_back(new JumpPadData({7650,2320}));
+        LevelData::GetInstance().jumpPadData.emplace_back(new JumpPadData({7300,1436}));
+        LevelData::GetInstance().jumpPadData.emplace_back(new JumpPadData({13826,2390}));
+        LevelData::GetInstance().jumpPadData.emplace_back(new JumpPadData({13812,1875}));
+        LevelData::GetInstance().jumpPadData.emplace_back(new JumpPadData({14000,1180}));
+        // Jumping
+
+        // CheckPoint
+        LevelData::GetInstance().checkPointData.emplace_back(new CheckPointData(false, {2875,2440}));
+        LevelData::GetInstance().checkPointData.emplace_back(new CheckPointData(false, {7520,2380}));
+        LevelData::GetInstance().checkPointData.emplace_back(new CheckPointData(false, {10150,975}));
+        LevelData::GetInstance().checkPointData.emplace_back(new CheckPointData(false, {12300,2575}));
+        // CheckPoint
+
+        //HEART
+        LevelData::GetInstance().heartData.emplace_back(new HeartData(false, {700,3000}));
+        //HEART
+
+        //Collectables
+        LevelData::GetInstance().collectableData.emplace_back(new CollectableData(false, {1691,3036}));
+        LevelData::GetInstance().collectableData.emplace_back(new CollectableData(false, {4149,3036}));
+        LevelData::GetInstance().collectableData.emplace_back(new CollectableData(false, {8620,2357}));
+        LevelData::GetInstance().collectableData.emplace_back(new CollectableData(false, {8600,1280}));
+        LevelData::GetInstance().collectableData.emplace_back(new CollectableData(false, {9700,2440}));
+        LevelData::GetInstance().collectableData.emplace_back(new CollectableData(false, {12290,1869}));
+        //Collectables
+
+        //BELL ENEMY
         LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {1700,2630}, EnemyData::BELL, true, true));
         LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {4850,2640}, EnemyData::BELL, true, true));
-        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {5187,2900}, EnemyData::BELL, true, true));
-        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {8636,3025}, EnemyData::BELL, true, true));
-        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {2750,2610}, EnemyData::HARP, false, true));
-        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {4285,2486}, EnemyData::HARP, true, false));
-        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {7000,2770}, EnemyData::HARP, false, false));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {2100,2510}, EnemyData::BELL, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {7620,1800}, EnemyData::BELL, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {7680,1800}, EnemyData::BELL, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {8670,1670}, EnemyData::BELL, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {10200,1740}, EnemyData::BELL, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {9600,1420}, EnemyData::BELL, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {10800,1230}, EnemyData::BELL, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {10918,2580}, EnemyData::BELL, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {13510,2445}, EnemyData::BELL, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {13000,1550}, EnemyData::BELL, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {14630,970}, EnemyData::BELL, true, true));
+        //BELL ENEMY
+
+        //ACCORDION ENEMY
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {3100,3080}, EnemyData::ACCORDION, true, true));
         LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {4321,3085}, EnemyData::ACCORDION, true, true));
-        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {7287,2570}, EnemyData::ACCORDION, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {7230,2570}, EnemyData::ACCORDION, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {9600,1810}, EnemyData::ACCORDION, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {9800,1810}, EnemyData::ACCORDION, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {10750,1550}, EnemyData::ACCORDION, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {11656,2505}, EnemyData::ACCORDION, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {13645,1875}, EnemyData::ACCORDION, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {12980,1160}, EnemyData::ACCORDION, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {13240,2505}, EnemyData::ACCORDION, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {13820,1160}, EnemyData::ACCORDION, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {15150,850}, EnemyData::ACCORDION, true, true));
+        //ACCORDION ENEMY
+
+        //HARP ENEMY
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {2700,2300}, EnemyData::HARP, false, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {3800,2300}, EnemyData::HARP, true, false));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {6750,2770}, EnemyData::HARP, false, false));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {8020,1500}, EnemyData::HARP, false, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {11200,885}, EnemyData::HARP, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {10310,2360}, EnemyData::HARP, true, false));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {12100,2350}, EnemyData::HARP, true, false));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {12830,2170}, EnemyData::HARP, false, false));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {13446,1600}, EnemyData::HARP, true, false));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {13610,800}, EnemyData::HARP, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {15800,600}, EnemyData::HARP, false, true));
+        //HARP ENEMY
         LevelData::GetInstance().isNewLevel = false;
     }
     LevelData::GetInstance().Start();
@@ -47,15 +161,15 @@ void LevelState::LoadAssets() {
     levelSprite = new Sprite(*bg, "assets/img/background/Fundo.png");
     if(LevelData::GetInstance().musicState == LevelData::BEGINING) {
         levelMusic = new Music(*bg, BEGINING_MUSIC);
-	    levelMusic->Play(1);
+	    //levelMusic->Play(1);
     } else {
         if(LevelData::GetInstance().musicState == LevelData::DEVELOPMENT) {
             levelMusic = new Music(*bg, DEVELOPMENT_MUSIC);
-	        levelMusic->Play(1);
+	        //levelMusic->Play(1);
         } else {
             if(LevelData::GetInstance().musicState == LevelData::MAIN) {
                 levelMusic == new Music(*bg, MAIN_MUSIC);
-                levelMusic->Stop(0);
+                //levelMusic->Stop(0);
             }
         }
     }
@@ -141,6 +255,19 @@ void LevelState::LoadAssets() {
 
     //CheckPoints Adicionados
 
+    //Adicionando Coracoes
+    for (int i = 0; i < LevelData::GetInstance().heartData.size(); i++){
+        if(LevelData::GetInstance().heartData[i]->isCollected == false) {
+            GameObject* heartGO = new GameObject();
+            heartGO->box.x = LevelData::GetInstance().heartData[i]->GetHeartPos().x;
+            heartGO->box.y = LevelData::GetInstance().heartData[i]->GetHeartPos().y;
+            heartGO->box.z = 4;
+            new Heart(*heartGO, i);
+            objectArray.emplace_back(heartGO);
+        }
+    }
+    //Coracoes adicionados
+
     //Adicionando Personagem
 
     characterGO = new GameObject();
@@ -153,30 +280,38 @@ void LevelState::LoadAssets() {
     }
     characterGO->box.z = 4;
     new Character(*characterGO);
-    Camera::followX = true;
-    Camera::followY = true;
-    Camera::Follow(characterGO);
-
-    
+    if(Debugger::GetInstance().cameraDebugMode) {
+        Camera::debug = true;
+    } else {
+        Camera::followX = true;
+        Camera::followY = true;
+        Camera::Follow(characterGO);
+    }
     //Personagem Adicionada
 
     //Adding Jumping Pad
-    GameObject* padGO;
-    JumpingPad* pad;
-    padGO = new GameObject();
-    padGO->box.x = 6980;
-    padGO->box.y = 3070;
-    padGO->box.z = 5;
-    pad = new JumpingPad(*padGO, characterGO);
-    objectArray.emplace_back(padGO);
+    for(int i = 0; i < LevelData::GetInstance().jumpPadData.size(); i++) {
+        GameObject* padGO = new GameObject();
+        padGO->box.x = LevelData::GetInstance().jumpPadData[i]->GetJumpPadPos().x;
+        padGO->box.y = LevelData::GetInstance().jumpPadData[i]->GetJumpPadPos().y;
+        padGO->box.z = 5;
+        new JumpingPad(*padGO, characterGO);
+        objectArray.emplace_back(padGO);
+    }
+
+    //Jumping Pad Adicionado
+
     //Adicionando Launcher
 
-    launcherGO = new GameObject();
-    launcherGO->box.x = 4979;
-    launcherGO->box.y = 2650;
-    launcherGO->box.z = 4;
-    launcher = new Launcher(*launcherGO, Launcher::UP_RIGHT, characterGO);
-    objectArray.emplace_back(launcherGO);
+    for(int i = 0; i < LevelData::GetInstance().launcherData.size(); i++){
+        GameObject *launcherGO;
+        launcherGO = new GameObject();
+        launcherGO->box.x = LevelData::GetInstance().launcherData[i]->GetLauncherPos().x;
+        launcherGO->box.y = LevelData::GetInstance().launcherData[i]->GetLauncherPos().y;
+        launcherGO->box.z = 4;
+        new Launcher(*launcherGO, LevelData::GetInstance().launcherData[i]->GetLauncherType(), characterGO);
+        objectArray.emplace_back(launcherGO);
+    }
     objectArray.emplace_back(characterGO);
 
     //Launcher Adicionado
@@ -189,7 +324,7 @@ void LevelState::LoadAssets() {
             enemyGO = new GameObject();
             enemyGO->box.x = LevelData::GetInstance().enemyData[i]->GetEnemyPos().x;
             enemyGO->box.y = LevelData::GetInstance().enemyData[i]->GetEnemyPos().y;
-            enemyGO->box.z = 4;
+            enemyGO->box.z = 5;
             if(LevelData::GetInstance().enemyData[i]->type == EnemyData::BELL) {
                 new BellEnemy(*enemyGO, 10, 10, characterGO, i);
             } else {
@@ -208,22 +343,32 @@ void LevelState::LoadAssets() {
     //Inimigos Adicionandos
 
     //Adicionando Coletável ( Collectable )
+    for(int i = 0; i < LevelData::GetInstance().collectableData.size(); i++){
+        if(LevelData::GetInstance().collectableData[i]->isCollected == false) {
+            GameObject * collectableGO = new GameObject();
+            new Collectable(*collectableGO, 10, 10, characterGO, i);
+            collectableGO->box.x = LevelData::GetInstance().collectableData[i]->GetCollectablePos().x;
+            collectableGO->box.y = LevelData::GetInstance().collectableData[i]->GetCollectablePos().y;
+            collectableGO->box.z = 4;
+            objectArray.emplace_back(collectableGO);
+        }
+    }
+    //Coletável ( Collectable ) Adicionado
 
-    collectable1GO = new GameObject();
-    collectable1 = new Collectable(*collectable1GO, 10, 10, characterGO);
-    collectable1GO->box.x = 1691;
-    collectable1GO->box.y = 3036;
-    collectable1GO->box.z = 4;
-    objectArray.emplace_back(collectable1GO);
+    //Adicionando plataformas que se movem
 
-    //Adicionando Coletável ( Collectable )
+    for(int i = 0; i < LevelData::GetInstance().movingPlatformsData.size(); i++) {
+        GameObject *movingPlataformsGO = new GameObject();
+        new MovingPlatforms(*movingPlataformsGO, LevelData::GetInstance().movingPlatformsData[i]->GetVelocity(),
+        LevelData::GetInstance().movingPlatformsData[i]->GetMoveX(), LevelData::GetInstance().movingPlatformsData[i]->GetMoveY(),
+        LevelData::GetInstance().movingPlatformsData[i]->GetBack());
+        movingPlataformsGO->box.x = LevelData::GetInstance().movingPlatformsData[i]->GetMovingPlatformsPos().x;
+        movingPlataformsGO->box.y = LevelData::GetInstance().movingPlatformsData[i]->GetMovingPlatformsPos().y;
+        movingPlataformsGO->box.z = 4;
+        objectArray.emplace_back(movingPlataformsGO);
+    }
 
-    collectable1GO = new GameObject();
-    collectable1 = new Collectable(*collectable1GO, 10, 10, characterGO);
-    collectable1GO->box.x = 4149;
-    collectable1GO->box.y = 3036;
-    collectable1GO->box.z = 4;
-    objectArray.emplace_back(collectable1GO);
+    //Plataformas que se movem adicionadas
 
     //Adicionando TileMap Terreno ForeGround
 
@@ -270,6 +415,16 @@ void LevelState::LoadAssets() {
 
     //TileMap Decoracao Terreno Adicionada
 
+    //Adicionando TileMap Decoracao BackGrounder
+
+    TileMap *tileMapDecoBacker;
+    GameObject *tileDecoBackerGO = new GameObject();
+    tileDecoBackerGO->box.z = 1;
+    tileMapDecoBacker = new TileMap(*tileDecoBackerGO, "assets/map/MAPA TESTE._Decoração Backgrounder.txt", tileSet, 2, 0, 0, 1, 1);
+    objectArray.emplace_back(tileDecoBackerGO);
+
+    //TileMap Decoracao BackGrounder adicionda
+
     //Adicionando TileMap Decoracao BackGround
 
     TileMap *tileMapTerrBacker;
@@ -280,15 +435,16 @@ void LevelState::LoadAssets() {
 
     //TileMap Decoracao BackGround Adicionada
 
+
     //Adicionando Goal
 
     goalGO = new GameObject();
     Goal *goal;
     goal = new Goal(*goalGO);
-    goalGO->box.x = 9687;
-    goalGO->box.y = 2900;
-    // goalGO->box.x = 300;
-    // goalGO->box.y = 3000;
+    goalGO->box.x = 16580;
+    goalGO->box.y = 550;
+    //goalGO->box.x = 300;
+    //goalGO->box.y = 3000;
     goalGO->box.z = 4;
     objectArray.emplace_back(goalGO);
 
@@ -305,6 +461,12 @@ void LevelState::Resume()
 
 void LevelState::UpdateMusic(float dt)
 {
+    if(characterGO->box.x >= SWITCH_TO_DEVELOP_MUSIC) {
+        LevelData::GetInstance().switchedBegininMusic = true;
+    }
+    if(characterGO->box.x >= SWITCH_TO_MAIN_MUSIC) {
+        LevelData::GetInstance().switchedDevelopmentMusic = true;
+    }
     switch(LevelData::GetInstance().musicState){
         case LevelData::BEGINING:
             beginingMusicTimer.Update(dt);
@@ -363,7 +525,7 @@ void LevelState::VictoryCycle(float dt) {
 }
 
 void LevelState::UpdateCameraFocus(float dt) {
-    if(characterGO->box.x >= 500 && characterGO->box.x <= 9285) {
+    if(characterGO->box.x >= 500 && characterGO->box.x <= 16287) {
         Camera::followX = true;
     } else {
         Camera::followX = false;
@@ -419,7 +581,7 @@ void LevelState::LevelCycle(float dt) {
         }
     }
     State::Update(dt);
-    UpdateMusic(dt);
+    //UpdateMusic(dt);
 }
 
 GameObject *LevelState::GetBeatObject()

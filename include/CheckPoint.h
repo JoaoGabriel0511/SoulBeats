@@ -6,8 +6,9 @@
 #define CHECK_POINT_ACTIVE_SPIN_SPRITE "assets/img/interactables/Checkpoint/CheckpointGreenRight.png"
 #define CHECK_POINT_ACTIVE_SPIN_FRAME_COUNT 8
 #define CHECK_POINT_INACTIVE_SPIN_FRAME_COUNT 8
-#define CHECK_POINT_ACTIVE_SPIN_DURATION 0.7
-#define CHECK_POINT_INACTIVE_SPIN_DURATION 0.7
+#define CHECK_POINT_ACTIVE_SPIN_DURATION 1.5
+#define CHECK_POINT_INACTIVE_SPIN_DURATION 1.5
+#define CHECK_POINT_SOUND "assets/audio/SFX/CheckPointRapido(Soul).wav"
 #include "Component.h"
 #include "LevelState.h"
 #include "LevelData.h"
@@ -21,6 +22,7 @@ class CheckPoint : public Component
     CheckPointState state;
     Timer spinTimer;
     int index;
+    Sound *sound;
     public:
         CheckPoint(GameObject& associated, int index);
         void Start();
