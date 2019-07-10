@@ -8,7 +8,7 @@ Character::Character(GameObject &associated) : Component(associated)
     Collider *collider;
     collider = new Collider(associated, {2, 2}, {-140, -60});
     lifeBarGO = new GameObject();
-    lifeBarGO->box.z = 6;
+    lifeBarGO->box.z = 7;
     lifeBar = new LifeBar(*lifeBarGO);
     Game::GetInstance().GetCurrentStatePointer()->AddObject(lifeBarGO);
 }
@@ -291,12 +291,7 @@ void Character::NotifYCollisionWithMap(Rect tileBox)
     }
     if (tileBox.z == 101 || tileBox.z == 102 || tileBox.z == 103 || tileBox.z == 148 || tileBox.z == 104 ||
         tileBox.z == 67 || tileBox.z == 68 || tileBox.z == 57 || tileBox.z == 58 || tileBox.z == 66 || tileBox.z == 84 ||
-        tileBox.z == 149 || tileBox.z == 150 || tileBox.z == 151 || tileBox.z == 130 || tileBox.z == 129)
-    {
-        LightGroundCollision(tileBox);
-    }
-    if (tileBox.z == 101 || tileBox.z == 102 || tileBox.z == 103 || tileBox.z == 148 || tileBox.z == 104 ||
-        tileBox.z == 67 || tileBox.z == 68 || tileBox.z == 57 || tileBox.z == 58 || tileBox.z == 66 || tileBox.z == 84)
+        tileBox.z == 149 || tileBox.z == 150 || tileBox.z == 151 || tileBox.z == 130 || tileBox.z == 129 || tileBox.z == 147)
     {
         if (tileBox.z == 67)
         {
