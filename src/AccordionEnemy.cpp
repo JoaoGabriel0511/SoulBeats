@@ -36,6 +36,7 @@ void AccordionEnemy::Start()
     lifeBar->box.z = 5;
     hp = 4;
     switched = false;
+    tookHit = false;
     Game::GetInstance().GetCurrentStatePointer()->AddObject(lifeBar);
 }
 
@@ -105,6 +106,13 @@ void AccordionEnemy::Update(float dt)
     default:
         break;
     }
+    if(tookHit) {
+        blinkingTimer.Update(dt);
+        if(blinkingTimer.Get() >= BLINKING_TIME) {
+            tookHit = false;
+            accordionEnemySprite->isBlinking = false;
+        }
+    }
     associated.box.y += velocityY;
     lifeBar->box.y = associated.box.y - 10;
 }
@@ -159,11 +167,14 @@ void AccordionEnemy::NotifyCollision(GameObject &other)
             explosionSprite = new Sprite(*explosion, ACCORDION_ENEMY_DEATH_SPRITE, ACCORDION_ENEMY_DEATH_FRAME_COUNT, ACCORDION_ENEMY_DEATH_DURATION/ACCORDION_ENEMY_DEATH_FRAME_COUNT, ACCORDION_ENEMY_DEATH_DURATION);
             explosionSprite->SetScale({3,3});
             explosion->box.z = 5;
-            explosion->box.x = associated.box.x + associated.box.w / 2 - explosion->box.w / 2;
-            explosion->box.y = associated.box.y + associated.box.h / 2 - explosion->box.h / 2;
+            explosion->box.x = associated.box.x - explosion->box.w / 2;
+            explosion->box.y = associated.box.y - explosion->box.h / 2;
             Game::GetInstance().GetCurrentState().AddObject(explosion);
             associated.RequestedDelete();
         } else {
+            tookHit = true;
+            accordionEnemySprite->isBlinking = true;
+            blinkingTimer.Restart();
             sound->Open(ACCORDION_ENEMY_HIT_SOUND);
             sound->Play(1);
             ((Character*) character->GetComponent("Character").get())->HitKnockBack();

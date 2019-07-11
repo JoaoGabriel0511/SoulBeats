@@ -11,6 +11,7 @@ HarpEnemy::HarpEnemy(GameObject &associated, int movingDistance, int movingSpeed
     this->index = index;
     this->moveX = moveX;
     this->moveY = moveY;
+    this->tookHit = false;
     //initalPos = associated.box;
     collider = new Collider(associated, {2, 2}, {-70, -80});
 }
@@ -147,6 +148,13 @@ void HarpEnemy::Update(float dt)
     if(moveY) {
 	    associated.box.y += velocity.y * dt;
     }
+    if(tookHit) {
+        blinkingTimer.Update(dt);
+        if(blinkingTimer.Get() >= BLINKING_TIME) {
+            tookHit = false;
+            harpEnemySprite->isBlinking = false;
+        }
+    }
 }
 
 void HarpEnemy::SwitchHarpEnemyState(HarpEnemyState state, string sprite, int frameCount, float frameTime, Timer *timer)
@@ -196,11 +204,14 @@ void HarpEnemy::NotifyCollision(GameObject &other)
             explosionSprite = new Sprite(*explosion, HARP_ENEMY_DEATH_SPRITE, HARP_ENEMY_DEATH_FRAME_COUNT, HARP_ENEMY_DEATH_DURATION/HARP_ENEMY_DEATH_FRAME_COUNT, HARP_ENEMY_DEATH_DURATION);
             explosionSprite->SetScale({3,3});
             explosion->box.z = 5;
-            explosion->box.x = associated.box.x + associated.box.w / 2 - explosion->box.w / 2;
-            explosion->box.y = associated.box.y + associated.box.h / 2 - explosion->box.h / 2;
+            explosion->box.x = associated.box.x - explosion->box.w / 2;
+            explosion->box.y = associated.box.y - explosion->box.h / 2;
             Game::GetInstance().GetCurrentState().AddObject(explosion);
             associated.RequestedDelete();
         } else {
+            tookHit = true;
+            harpEnemySprite->isBlinking = true;
+            blinkingTimer.Restart();
             sound->Open(HARP_ENEMY_HIT_SOUND);
             sound->Play(1);
             ((Character*) character->GetComponent("Character").get())->HitKnockBack();

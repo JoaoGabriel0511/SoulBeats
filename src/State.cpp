@@ -99,6 +99,7 @@ void State::UpdateArray(float dt) {
     }
 	for(int k = 0; k < objectArray.size(); k++) {
 		if(objectArray[k]->IsDead() == true) {
+			//objectArray[k] = NULL;
 			objectArray.erase(objectArray.begin() + k);
 		}
 	}

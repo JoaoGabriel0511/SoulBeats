@@ -13,6 +13,12 @@ Character::Character(GameObject &associated) : Component(associated)
     Game::GetInstance().GetCurrentStatePointer()->AddObject(lifeBarGO);
 }
 
+Character::~Character() {
+    if(jumpingEfectGO) {
+        jumpingEfectGO->RequestedDelete();
+    }
+}
+
 void Character::Start()
 {
     charSprite = new Sprite(associated, IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
@@ -50,6 +56,7 @@ void Character::Start()
     gravity = GRAVITY_FALLING;
     idleTimer.Restart();
     walkingSoundTimer.Restart();
+    jumpingEfectGO = NULL;
     movingPlatformVelocity = {0,0};
 }
 
@@ -151,6 +158,14 @@ void Character::Update(float dt)
     associated.box += (velocity + movingPlatformVelocity) * dt;
     //cout<<"associated.box.x"<<associated.box.x<<endl;
     //cout<<"associated.box.y"<<associated.box.y<<endl;
+    /*if(jumpingEfectGO) {
+        if(isLeftSide) {
+            jumpingEfectGO->box.x = associated.box.x + associated.box.w;
+        } else {
+            jumpingEfectGO->box.x = associated.box.x + (associated.box.w/2) ;
+        }
+        jumpingEfectGO->box.y = associated.box.y + associated.box.h;
+    }*/
     Camera::Update(dt);
     isFalling = true;
     peakDone = false;
@@ -884,6 +899,7 @@ void Character::MoveSideWays(float dt) {
 }
 
 void Character::Jump(float dt) {
+    Sprite* jumpingEfectSprite;
     if (InputManager::GetInstance().KeyPress(W_KEY)) {
         if (isOnGround) {
             walkingSoundTimer.Restart();
@@ -899,6 +915,17 @@ void Character::Jump(float dt) {
                 sound->Open(JUMPING_SOUND);
                 sound->Play(1);
                 global_beat->ActionOnBeat();
+                jumpingEfectGO = new GameObject();
+                jumpingEfectSprite = new Sprite(*jumpingEfectGO,JUMPING_EFECT_SPRITE, JUMPING_EFECT_FRAME_COUNT, JUMPING_EFECT_DURATION/JUMPING_EFECT_FRAME_COUNT, JUMPING_EFECT_DURATION);
+                jumpingEfectSprite->SetScale({2,2});
+                jumpingEfectGO->box.z = 5;
+                if(isLeftSide) {
+                    jumpingEfectGO->box.x = associated.box.x;
+                } else {
+                    jumpingEfectGO->box.x = associated.box.x + (associated.box.w/2) ;
+                }
+                jumpingEfectGO->box.y = associated.box.y + associated.box.h;
+                Game::GetInstance().GetCurrentState().AddObject(jumpingEfectGO);
             } else {
                 jumpedOnBeat = false;
                 velocity.y = JUMPING_SPEED;

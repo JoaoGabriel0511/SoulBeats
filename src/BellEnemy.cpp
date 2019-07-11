@@ -32,6 +32,7 @@ void BellEnemy::Start() {
     lifeBar->box.y = associated.box.y - 50;
     lifeBar->box.z = 5;
     switched = false;
+    tookHit = false;
     Game::GetInstance().GetCurrentStatePointer()->AddObject(lifeBar);
 }
 
@@ -74,6 +75,13 @@ void BellEnemy::Update(float dt) {
             break;
         default:
             break;
+        if(tookHit) {
+            blinkingTimer.Update(dt);
+            if(blinkingTimer.Get() >= BLINKING_TIME) {
+                tookHit = false;
+                bellEnemySprite->isBlinking = false;
+            }
+        }
     }
 }
 
@@ -120,11 +128,14 @@ void BellEnemy::NotifyCollision(GameObject& other) {
                 explosionSprite = new Sprite(*explosion, BELL_ENEMY_DEATH_SPRITE, BELL_ENEMY_DEATH_FRAME_COUNT, BELL_ENEMY_DEATH_DURATION/BELL_ENEMY_DEATH_FRAME_COUNT, BELL_ENEMY_DEATH_DURATION);
                 explosionSprite->SetScale({3,3});
                 explosion->box.z = 5;
-                explosion->box.x = associated.box.x + associated.box.w / 2 - explosion->box.w / 2;
-                explosion->box.y = associated.box.y + associated.box.h / 2 - explosion->box.h / 2;
+                explosion->box.x = associated.box.x - explosion->box.w / 2;
+                explosion->box.y = associated.box.y - explosion->box.h / 2;
                 Game::GetInstance().GetCurrentState().AddObject(explosion);
                 associated.RequestedDelete();
             } else {
+                bellEnemySprite->isBlinking = true;
+                tookHit = true;
+                blinkingTimer.Restart();
                 sound->Open(BELL_ENEMY_HIT_SOUND);
                 sound->Play(1);
             }

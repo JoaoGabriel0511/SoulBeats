@@ -24,7 +24,8 @@
 #define HALF_LIFE_BAR "assets/img/enemies/LifeBar/VidaInimigos1meio.png"
 #define HIT_SPARK_SPRITE "assets/img/enemies/HitSparks/Hit.png"
 #define HIT_SPARK_DURATION 0.5
-#define HIT_SPARK_FRAME_COUNT 8
+#define BLINKING_TIME 0.2
+#define HIT_SPARK_FRAME_COUNT 5
 
 class BellEnemy : public Component {
     float distance;
@@ -40,9 +41,11 @@ class BellEnemy : public Component {
     Timer idleTimer;
     Timer lookRight;
     Timer lookLeft;
+    Timer blinkingTimer;
     GameObject *character;
     Sound *sound;
     int index;
+    bool tookHit;
     int hp;
     bool switched;
     void SwitchBellEnemyState(BellEnemyState state, string sprite, int frameCount, float frameTime, Timer * timer);
