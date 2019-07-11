@@ -171,6 +171,8 @@ void AccordionEnemy::NotifyCollision(GameObject &other)
             explosion->box.y = associated.box.y - explosion->box.h / 2;
             Game::GetInstance().GetCurrentState().AddObject(explosion);
             associated.RequestedDelete();
+            Resources::updateScore(10);
+
         } else {
             tookHit = true;
             accordionEnemySprite->isBlinking = true;

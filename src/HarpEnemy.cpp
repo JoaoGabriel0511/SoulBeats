@@ -208,6 +208,8 @@ void HarpEnemy::NotifyCollision(GameObject &other)
             explosion->box.y = associated.box.y - explosion->box.h / 2;
             Game::GetInstance().GetCurrentState().AddObject(explosion);
             associated.RequestedDelete();
+            Resources::updateScore(15);
+
         } else {
             tookHit = true;
             harpEnemySprite->isBlinking = true;

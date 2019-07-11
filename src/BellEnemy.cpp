@@ -132,6 +132,7 @@ void BellEnemy::NotifyCollision(GameObject& other) {
                 explosion->box.y = associated.box.y - explosion->box.h / 2;
                 Game::GetInstance().GetCurrentState().AddObject(explosion);
                 associated.RequestedDelete();
+                Resources::updateScore(5);
             } else {
                 bellEnemySprite->isBlinking = true;
                 tookHit = true;

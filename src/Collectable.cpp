@@ -58,7 +58,7 @@ void Collectable::NotifyCollision(GameObject &other)
     if (other.GetComponent("Character") != NULL)
     {
         LevelData::GetInstance().collectableData[index]->wasCollected = true;
-        Resources::updateScore();
+        Resources::updateScore(1);
         sound->Open(COLLECTABLE_HIT_SOUND);
         sound->Play(1);
         associated.RequestedDelete();
