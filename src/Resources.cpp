@@ -113,7 +113,11 @@ void Resources::ClearFonts() {
 }
 
 void Resources::updateScore() {
-    cout << "Score antigo: "<<countScore<<endl;
+   cout << "Score antigo: "<<countScore<<endl;
    countScore ++;
    cout << "Score novo: "<<countScore<<endl;
+}
+
+int Resources::getScore() {
+    return countScore;
 }

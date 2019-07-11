@@ -425,10 +425,8 @@ void LevelState::LoadAssets() {
 
     Text *textScore;
     GameObject *textScoreGO = new GameObject();
-    textScoreGO->box.x = 300;
-    textScoreGO->box.y = 3000;
     textScoreGO->box.z = 6;
-    textScore = new Text(*textScoreGO,"assets/font/superFont.ttf", 20, Text::TextStyle::SOLID, "Score: ", SDL_Color {0,0,0}, 0);
+    textScore = new Text(*textScoreGO,"assets/font/superFont.ttf", 40, Text::TextStyle::SOLID, "Score:", SDL_Color {255,255,255}, 0);
     objectArray.emplace_back(textScoreGO);
 
 

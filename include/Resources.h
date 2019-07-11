@@ -22,6 +22,7 @@ class Resources {
         static shared_ptr<TTF_Font> GetFont(string file, int fontSize);
         static void ClearFonts();
         static void updateScore();
+        static int getScore();
 };
 
 #endif

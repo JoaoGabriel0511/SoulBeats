@@ -1,5 +1,7 @@
 #include "../include/Text.h"
 
+int textScoreCount = 0;
+
 Text::Text(GameObject& associated, string fontFile, int fontSize, TextStyle style, string text, SDL_Color color, float blinkTime) : Component(associated) {
     this->fontFile = fontFile;
     this->fontSize = fontSize;
@@ -19,17 +21,12 @@ Text::~Text() {
 }
 
 void Text::Update(float dt) {
-    if(blinkTime > 0) {
-        blinkTimer.Update(dt);
-        if(blinkTimer.Get() >= blinkTime) {
-            if(isBlink) {
-                isBlink = false;
-            } else {
-                isBlink = true;
-            }
-            blinkTimer.Restart();
-        }
-    }
+    textScoreCount = Resources::getScore();
+    associated.box.x = 450 - Camera::pos.x;
+    associated.box.y = 1 - Camera::pos.y;
+
+    SetText(to_string(textScoreCount));
+    RemakeTexture();
 }
 
 void Text::Render() {

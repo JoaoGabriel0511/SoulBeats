@@ -1,128 +1,261 @@
 bin/Character.o: src/Character.cpp src/../include/Character.h \
- src/../include/Component.h src/../include/GameObject.h \
- src/../include/Rect.h src/../include/Vect2.h \
- src/../include/InputManager.h src/../include/Debugger.h \
- src/../include/Camera.h src/../include/GameInfo.h \
- src/../include/Sprite.h src/../include/Resources.h src/../include/Game.h \
- src/../include/GameData.h src/../include/State.h src/../include/Music.h \
- src/../include/Sound.h src/../include/Collision.h \
- src/../include/Collider.h src/../include/CameraFollower.h \
- src/../include/Timer.h src/../include/Attack.h src/../include/LifeBar.h \
- include/Game.h src/../include/LevelState.h src/../include/Launcher.h \
- src/../include/Character.h src/../include/Beat.h src/../include/Heart.h \
- src/../include/LevelData.h src/../include/CheckPointData.h \
- src/../include/EnemyData.h src/../include/LauncherData.h \
- src/../include/JumpPadData.h src/../include/CollectableData.h \
- src/../include/MovingPlatformsData.h src/../include/HeartData.h \
- src/../include/BellEnemy.h src/../include/HarpEnemy.h \
- src/../include/AccordionEnemy.h src/../include/LevelState.h \
- src/../include/Collectable.h src/../include/TileMap.h \
- src/../include/TileSet.h src/../include/TileMapCollider.h \
- src/../include/Goal.h src/../include/CheckPoint.h \
- src/../include/Spotlights.h src/../include/VictoryState.h \
- src/../include/MovingLayer.h src/../include/JumpingPad.h \
- src/../include/MovingPlatforms.h src/../include/Text.h
+  include/Component.h /usr/local/include/SDL2/SDL.h \
+  /usr/local/include/SDL2/SDL_main.h \
+  /usr/local/include/SDL2/SDL_stdinc.h \
+  /usr/local/include/SDL2/SDL_config.h \
+  /usr/local/include/SDL2/SDL_platform.h \
+  /usr/local/include/SDL2/begin_code.h \
+  /usr/local/include/SDL2/close_code.h \
+  /usr/local/include/SDL2/SDL_assert.h \
+  /usr/local/include/SDL2/SDL_atomic.h \
+  /usr/local/include/SDL2/SDL_audio.h \
+  /usr/local/include/SDL2/SDL_error.h \
+  /usr/local/include/SDL2/SDL_endian.h \
+  /usr/local/include/SDL2/SDL_mutex.h \
+  /usr/local/include/SDL2/SDL_thread.h \
+  /usr/local/include/SDL2/SDL_rwops.h \
+  /usr/local/include/SDL2/SDL_clipboard.h \
+  /usr/local/include/SDL2/SDL_cpuinfo.h \
+  /usr/local/include/SDL2/SDL_events.h \
+  /usr/local/include/SDL2/SDL_video.h \
+  /usr/local/include/SDL2/SDL_pixels.h \
+  /usr/local/include/SDL2/SDL_rect.h \
+  /usr/local/include/SDL2/SDL_surface.h \
+  /usr/local/include/SDL2/SDL_blendmode.h \
+  /usr/local/include/SDL2/SDL_keyboard.h \
+  /usr/local/include/SDL2/SDL_keycode.h \
+  /usr/local/include/SDL2/SDL_scancode.h \
+  /usr/local/include/SDL2/SDL_mouse.h \
+  /usr/local/include/SDL2/SDL_joystick.h \
+  /usr/local/include/SDL2/SDL_gamecontroller.h \
+  /usr/local/include/SDL2/SDL_quit.h \
+  /usr/local/include/SDL2/SDL_gesture.h \
+  /usr/local/include/SDL2/SDL_touch.h \
+  /usr/local/include/SDL2/SDL_filesystem.h \
+  /usr/local/include/SDL2/SDL_haptic.h \
+  /usr/local/include/SDL2/SDL_hints.h \
+  /usr/local/include/SDL2/SDL_loadso.h /usr/local/include/SDL2/SDL_log.h \
+  /usr/local/include/SDL2/SDL_messagebox.h \
+  /usr/local/include/SDL2/SDL_power.h \
+  /usr/local/include/SDL2/SDL_render.h \
+  /usr/local/include/SDL2/SDL_sensor.h \
+  /usr/local/include/SDL2/SDL_shape.h \
+  /usr/local/include/SDL2/SDL_system.h \
+  /usr/local/include/SDL2/SDL_timer.h \
+  /usr/local/include/SDL2/SDL_version.h include/GameObject.h \
+  include/Rect.h include/Vect2.h include/InputManager.h \
+  include/Debugger.h include/Camera.h include/GameInfo.h \
+  include/Sprite.h include/Resources.h \
+  /usr/local/include/SDL2/SDL_image.h \
+  /usr/local/include/SDL2/SDL_mixer.h /usr/local/include/SDL2/SDL_ttf.h \
+  include/Game.h include/GameData.h include/State.h include/Music.h \
+  include/Sound.h include/Collision.h include/Collider.h \
+  include/CameraFollower.h include/Timer.h include/Attack.h \
+  include/LifeBar.h src/../include/LevelState.h include/Launcher.h \
+  include/Character.h include/Beat.h include/Heart.h include/LevelData.h \
+  include/CheckPointData.h include/EnemyData.h include/LauncherData.h \
+  include/JumpPadData.h include/CollectableData.h \
+  include/MovingPlatformsData.h include/HeartData.h include/BellEnemy.h \
+  include/HarpEnemy.h include/AccordionEnemy.h include/LevelState.h \
+  include/Collectable.h include/TileMap.h include/TileSet.h \
+  include/TileMapCollider.h include/Goal.h include/CheckPoint.h \
+  include/Spotlights.h include/VictoryState.h include/MovingLayer.h \
+  include/JumpingPad.h include/MovingPlatforms.h include/Text.h
 
 src/../include/Character.h:
 
-src/../include/Component.h:
+include/Component.h:
 
-src/../include/GameObject.h:
+/usr/local/include/SDL2/SDL.h:
 
-src/../include/Rect.h:
+/usr/local/include/SDL2/SDL_main.h:
 
-src/../include/Vect2.h:
+/usr/local/include/SDL2/SDL_stdinc.h:
 
-src/../include/InputManager.h:
+/usr/local/include/SDL2/SDL_config.h:
 
-src/../include/Debugger.h:
+/usr/local/include/SDL2/SDL_platform.h:
 
-src/../include/Camera.h:
+/usr/local/include/SDL2/begin_code.h:
 
-src/../include/GameInfo.h:
+/usr/local/include/SDL2/close_code.h:
 
-src/../include/Sprite.h:
+/usr/local/include/SDL2/SDL_assert.h:
 
-src/../include/Resources.h:
+/usr/local/include/SDL2/SDL_atomic.h:
 
-src/../include/Game.h:
+/usr/local/include/SDL2/SDL_audio.h:
 
-src/../include/GameData.h:
+/usr/local/include/SDL2/SDL_error.h:
 
-src/../include/State.h:
+/usr/local/include/SDL2/SDL_endian.h:
 
-src/../include/Music.h:
+/usr/local/include/SDL2/SDL_mutex.h:
 
-src/../include/Sound.h:
+/usr/local/include/SDL2/SDL_thread.h:
 
-src/../include/Collision.h:
+/usr/local/include/SDL2/SDL_rwops.h:
 
-src/../include/Collider.h:
+/usr/local/include/SDL2/SDL_clipboard.h:
 
-src/../include/CameraFollower.h:
+/usr/local/include/SDL2/SDL_cpuinfo.h:
 
-src/../include/Timer.h:
+/usr/local/include/SDL2/SDL_events.h:
 
-src/../include/Attack.h:
+/usr/local/include/SDL2/SDL_video.h:
 
-src/../include/LifeBar.h:
+/usr/local/include/SDL2/SDL_pixels.h:
+
+/usr/local/include/SDL2/SDL_rect.h:
+
+/usr/local/include/SDL2/SDL_surface.h:
+
+/usr/local/include/SDL2/SDL_blendmode.h:
+
+/usr/local/include/SDL2/SDL_keyboard.h:
+
+/usr/local/include/SDL2/SDL_keycode.h:
+
+/usr/local/include/SDL2/SDL_scancode.h:
+
+/usr/local/include/SDL2/SDL_mouse.h:
+
+/usr/local/include/SDL2/SDL_joystick.h:
+
+/usr/local/include/SDL2/SDL_gamecontroller.h:
+
+/usr/local/include/SDL2/SDL_quit.h:
+
+/usr/local/include/SDL2/SDL_gesture.h:
+
+/usr/local/include/SDL2/SDL_touch.h:
+
+/usr/local/include/SDL2/SDL_filesystem.h:
+
+/usr/local/include/SDL2/SDL_haptic.h:
+
+/usr/local/include/SDL2/SDL_hints.h:
+
+/usr/local/include/SDL2/SDL_loadso.h:
+
+/usr/local/include/SDL2/SDL_log.h:
+
+/usr/local/include/SDL2/SDL_messagebox.h:
+
+/usr/local/include/SDL2/SDL_power.h:
+
+/usr/local/include/SDL2/SDL_render.h:
+
+/usr/local/include/SDL2/SDL_sensor.h:
+
+/usr/local/include/SDL2/SDL_shape.h:
+
+/usr/local/include/SDL2/SDL_system.h:
+
+/usr/local/include/SDL2/SDL_timer.h:
+
+/usr/local/include/SDL2/SDL_version.h:
+
+include/GameObject.h:
+
+include/Rect.h:
+
+include/Vect2.h:
+
+include/InputManager.h:
+
+include/Debugger.h:
+
+include/Camera.h:
+
+include/GameInfo.h:
+
+include/Sprite.h:
+
+include/Resources.h:
+
+/usr/local/include/SDL2/SDL_image.h:
+
+/usr/local/include/SDL2/SDL_mixer.h:
+
+/usr/local/include/SDL2/SDL_ttf.h:
 
 include/Game.h:
 
-src/../include/LevelState.h:
+include/GameData.h:
 
-src/../include/Launcher.h:
+include/State.h:
 
-src/../include/Character.h:
+include/Music.h:
 
-src/../include/Beat.h:
+include/Sound.h:
 
-src/../include/Heart.h:
+include/Collision.h:
 
-src/../include/LevelData.h:
+include/Collider.h:
 
-src/../include/CheckPointData.h:
+include/CameraFollower.h:
 
-src/../include/EnemyData.h:
+include/Timer.h:
 
-src/../include/LauncherData.h:
+include/Attack.h:
 
-src/../include/JumpPadData.h:
-
-src/../include/CollectableData.h:
-
-src/../include/MovingPlatformsData.h:
-
-src/../include/HeartData.h:
-
-src/../include/BellEnemy.h:
-
-src/../include/HarpEnemy.h:
-
-src/../include/AccordionEnemy.h:
+include/LifeBar.h:
 
 src/../include/LevelState.h:
 
-src/../include/Collectable.h:
+include/Launcher.h:
 
-src/../include/TileMap.h:
+include/Character.h:
 
-src/../include/TileSet.h:
+include/Beat.h:
 
-src/../include/TileMapCollider.h:
+include/Heart.h:
 
-src/../include/Goal.h:
+include/LevelData.h:
 
-src/../include/CheckPoint.h:
+include/CheckPointData.h:
 
-src/../include/Spotlights.h:
+include/EnemyData.h:
 
-src/../include/VictoryState.h:
+include/LauncherData.h:
 
-src/../include/MovingLayer.h:
+include/JumpPadData.h:
 
-src/../include/JumpingPad.h:
+include/CollectableData.h:
 
-src/../include/MovingPlatforms.h:
+include/MovingPlatformsData.h:
 
-src/../include/Text.h:
+include/HeartData.h:
+
+include/BellEnemy.h:
+
+include/HarpEnemy.h:
+
+include/AccordionEnemy.h:
+
+include/LevelState.h:
+
+include/Collectable.h:
+
+include/TileMap.h:
+
+include/TileSet.h:
+
+include/TileMapCollider.h:
+
+include/Goal.h:
+
+include/CheckPoint.h:
+
+include/Spotlights.h:
+
+include/VictoryState.h:
+
+include/MovingLayer.h:
+
+include/JumpingPad.h:
+
+include/MovingPlatforms.h:
+
+include/Text.h:
