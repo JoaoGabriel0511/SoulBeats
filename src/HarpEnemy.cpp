@@ -54,105 +54,107 @@ void HarpEnemy::Start()
 
 void HarpEnemy::Update(float dt)
 {
-	if(moveY) {
-		switch (state) {
-			case LOOKING_DOWN:
-				lookDown.Update(dt);
-				if (global_beat->GetOnBeat()) {
-                    if(!switched){
-                        if(moveX) {
-                            velocity.y = -1 * HARP_ENEMY_VELOCITY_Y;
-                        } else {
-                            velocity.y = -3 * HARP_ENEMY_VELOCITY_Y;
-                        }
-                        if (Camera::IsOnCamera(associated.box)) {
-                            sound->Open(HARP_SOUND);
-                            sound->Play(1);
-                        }
-                        SwitchHarpEnemyState(LOOKING_UP, HARP_ENEMY_LOOKING_UP_SPRITE, HARP_ENEMY_LOOKING_UP_FRAME_COUNT,
-                                            HARP_ENEMY_LOOKING_UP_FRAME_TIME, &lookUp);
-                        switched = true;
-                    }
-                } else {
-                    switched = false;
-                }
-				break;
-			case LOOKING_UP:
-				lookUp.Update(dt);
-				if (global_beat->GetOnBeat()) {
-                    if(!switched) {
-                        if(moveX) {
-                            velocity.y =  HARP_ENEMY_VELOCITY_Y;
-                        } else {
-                            velocity.y = 3 * HARP_ENEMY_VELOCITY_Y;
-                        }
-                        if (Camera::IsOnCamera(associated.box)) {
-                            sound->Open(HARP_BACK_SOUND);
-                            sound->Play(1);
-                        }
-                        SwitchHarpEnemyState(LOOKING_DOWN, HARP_ENEMY_LOOKING_DOWN_SPRITE, HARP_ENEMY_LOOKING_DOWN_FRAME_COUNT,
-                                            HARP_ENEMY_LOOKING_UP_FRAME_TIME, &lookDown);
-                        switched = true;
-                    }
-                } else {
-                    switched = false;
-                }
-				break;
-			default:
-				break;
-		}
-	}
-    if(moveX) {
+	if(global_beat->HasBegun()) {
         if(moveY) {
-            switchSides.Update(dt);
-            if (switchSides.Get() >= HARP_ENEMY_SWITCH_SIDES_TIME) {
-                switchSides.Restart();
-                if (harpEnemySprite->flip) {
-                    harpEnemySprite->flip = false;
-                    velocity.x = -1 * HARP_ENEMY_VELOCITY_X;
-                } else {
-                    harpEnemySprite->flip = true;
-                    velocity.x = HARP_ENEMY_VELOCITY_X;
-                }
-            }
-        } else {
-            if(global_beat->GetOnBeat()){
-                if(!switched) {
-                    if (harpEnemySprite->flip) {
-                        harpEnemySprite->flip = false;
-                        if(Camera::IsOnCamera(associated.box)){
-                            sound->Open(HARP_BACK_SOUND);
-                            sound->Play(1);
+            switch (state) {
+                case LOOKING_DOWN:
+                    lookDown.Update(dt);
+                    if (global_beat->GetOnBeat()) {
+                        if(!switched){
+                            if(moveX) {
+                                velocity.y = -1 * HARP_ENEMY_VELOCITY_Y;
+                            } else {
+                                velocity.y = -3 * HARP_ENEMY_VELOCITY_Y;
+                            }
+                            if (Camera::IsOnCamera(associated.box)) {
+                                sound->Open(HARP_SOUND);
+                                sound->Play(1);
+                            }
+                            SwitchHarpEnemyState(LOOKING_UP, HARP_ENEMY_LOOKING_UP_SPRITE, HARP_ENEMY_LOOKING_UP_FRAME_COUNT,
+                                                HARP_ENEMY_LOOKING_UP_FRAME_TIME, &lookUp);
+                            switched = true;
                         }
-                        velocity.x = -6 * HARP_ENEMY_VELOCITY_X;
                     } else {
-                        if(Camera::IsOnCamera(associated.box)){
-                            sound->Open(HARP_SOUND);
-                            sound->Play(1);
-                        }
-                        harpEnemySprite->flip = true;
-                        velocity.x = 6 * HARP_ENEMY_VELOCITY_X;
+                        switched = false;
                     }
-                    switched = true;
-                }
-            } else {
-                switched = false;
+                    break;
+                case LOOKING_UP:
+                    lookUp.Update(dt);
+                    if (global_beat->GetOnBeat()) {
+                        if(!switched) {
+                            if(moveX) {
+                                velocity.y =  HARP_ENEMY_VELOCITY_Y;
+                            } else {
+                                velocity.y = 3 * HARP_ENEMY_VELOCITY_Y;
+                            }
+                            if (Camera::IsOnCamera(associated.box)) {
+                                sound->Open(HARP_BACK_SOUND);
+                                sound->Play(1);
+                            }
+                            SwitchHarpEnemyState(LOOKING_DOWN, HARP_ENEMY_LOOKING_DOWN_SPRITE, HARP_ENEMY_LOOKING_DOWN_FRAME_COUNT,
+                                                HARP_ENEMY_LOOKING_UP_FRAME_TIME, &lookDown);
+                            switched = true;
+                        }
+                    } else {
+                        switched = false;
+                    }
+                    break;
+                default:
+                    break;
             }
         }
-    }
-    lifeBar->box.x = associated.box.x + 35;
-    lifeBar->box.y = associated.box.y - 20;
-    if(moveX) {
-	    associated.box.x += velocity.x * dt;
-    }
-    if(moveY) {
-	    associated.box.y += velocity.y * dt;
-    }
-    if(tookHit) {
-        blinkingTimer.Update(dt);
-        if(blinkingTimer.Get() >= BLINKING_TIME) {
-            tookHit = false;
-            harpEnemySprite->isBlinking = false;
+        if(moveX) {
+            if(moveY) {
+                switchSides.Update(dt);
+                if (switchSides.Get() >= HARP_ENEMY_SWITCH_SIDES_TIME) {
+                    switchSides.Restart();
+                    if (harpEnemySprite->flip) {
+                        harpEnemySprite->flip = false;
+                        velocity.x = -1 * HARP_ENEMY_VELOCITY_X;
+                    } else {
+                        harpEnemySprite->flip = true;
+                        velocity.x = HARP_ENEMY_VELOCITY_X;
+                    }
+                }
+            } else {
+                if(global_beat->GetOnBeat()){
+                    if(!switched) {
+                        if (harpEnemySprite->flip) {
+                            harpEnemySprite->flip = false;
+                            if(Camera::IsOnCamera(associated.box)){
+                                sound->Open(HARP_BACK_SOUND);
+                                sound->Play(1);
+                            }
+                            velocity.x = -6 * HARP_ENEMY_VELOCITY_X;
+                        } else {
+                            if(Camera::IsOnCamera(associated.box)){
+                                sound->Open(HARP_SOUND);
+                                sound->Play(1);
+                            }
+                            harpEnemySprite->flip = true;
+                            velocity.x = 6 * HARP_ENEMY_VELOCITY_X;
+                        }
+                        switched = true;
+                    }
+                } else {
+                    switched = false;
+                }
+            }
+        }
+        lifeBar->box.x = associated.box.x + 35;
+        lifeBar->box.y = associated.box.y - 20;
+        if(moveX) {
+            associated.box.x += velocity.x * dt;
+        }
+        if(moveY) {
+            associated.box.y += velocity.y * dt;
+        }
+        if(tookHit) {
+            blinkingTimer.Update(dt);
+            if(blinkingTimer.Get() >= BLINKING_TIME) {
+                tookHit = false;
+                harpEnemySprite->isBlinking = false;
+            }
         }
     }
 }

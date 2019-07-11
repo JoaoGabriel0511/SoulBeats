@@ -30,18 +30,20 @@ bool MovingPlatforms::Is(string type) {
 }
 
 void MovingPlatforms::Update(float dt) {
-    if(global_beat->GetOnBeat()) {
-        if(!switched) {
-            velocity = -1 * velocity;
-            switched = true;
+    if(global_beat->HasBegun()) {
+        if(global_beat->GetOnBeat()) {
+            if(!switched) {
+                velocity = -1 * velocity;
+                switched = true;
+            }
+        } else {
+            switched = false;
         }
-    } else {
-        switched = false;
-    }
-    if(movingX) {
-        associated.box.x += velocity * dt;
-    }
-    if(movingY){
-        associated.box.y += velocity * dt;
+        if(movingX) {
+            associated.box.x += velocity * dt;
+        }
+        if(movingY){
+            associated.box.y += velocity * dt;
+        }
     }
 }

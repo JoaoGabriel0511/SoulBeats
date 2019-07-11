@@ -28,6 +28,7 @@ class Beat : public Component {
     bool onBeat;
     bool switched;
     bool onBeatAnimation;
+    bool hasBegun;
     GameObject *beatWave;
     GameObject *heartBackground;
     Sprite *backgroundSprite;
@@ -36,9 +37,11 @@ class Beat : public Component {
         void Update(float dt);
         void Start();
         void Render();
+        void BeginBeat();
         void ActionOnBeat();
         bool Is(string type);
         bool GetOnBeat();
+        bool HasBegun();
         float GetFalseDuration();
         bool GetOnBeatAnimation();
 };

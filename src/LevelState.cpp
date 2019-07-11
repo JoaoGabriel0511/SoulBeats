@@ -166,23 +166,27 @@ void LevelState::LoadAssets() {
     Music *levelMusic;
     cameraFollower = new CameraFollower(*bg);
     levelSprite = new Sprite(*bg, "assets/img/background/Fundo.png");
-    if(LevelData::GetInstance().musicState == LevelData::BEGINING) {
-        levelMusic = new Music(*bg, BEGINING_MUSIC);
-	    levelMusic->Play(1);
-    } else {
-        if(LevelData::GetInstance().musicState == LevelData::DEVELOPMENT) {
-            levelMusic = new Music(*bg, DEVELOPMENT_MUSIC);
-	        levelMusic->Play(1);
+    if(LevelData::GetInstance().musicState == LevelData::INTRO) {
+        levelMusic = new Music(*bg, INTRO_MUSIC);
+        levelMusic->Play(1);
+    } else{
+        if(LevelData::GetInstance().musicState == LevelData::BEGINING) {
+            levelMusic = new Music(*bg, BEGINING_MUSIC);
+            levelMusic->Play(1);
         } else {
-            if(LevelData::GetInstance().musicState == LevelData::MAIN) {
-                levelMusic == new Music(*bg, MAIN_MUSIC);
-                levelMusic->Stop(0);
+            if(LevelData::GetInstance().musicState == LevelData::DEVELOPMENT) {
+                levelMusic = new Music(*bg, DEVELOPMENT_MUSIC);
+                levelMusic->Play(1);
+            } else {
+                if(LevelData::GetInstance().musicState == LevelData::MAIN) {
+                    levelMusic = new Music(*bg, MAIN_MUSIC);
+                    levelMusic->Play(1);
+                }
             }
         }
     }
     beginingMusicTimer.Restart();
     developmentMusicTimer.Restart();
-    mainMusicTimer.Update(100);
     musicStopTimer.Restart();
     bg->box.h = Game::GetInstance().GetHeight();
     bg->box.w = Game::GetInstance().GetWidth();
@@ -462,8 +466,8 @@ void LevelState::LoadAssets() {
     goal = new Goal(*goalGO);
     goalGO->box.x = 16580;
     goalGO->box.y = 550;
-    //goalGO->box.x = 300;
-    //goalGO->box.y = 3000;
+    goalGO->box.x = 300;
+    goalGO->box.y = 3000;
     goalGO->box.z = 4;
     objectArray.emplace_back(goalGO);
 
@@ -487,6 +491,15 @@ void LevelState::UpdateMusic(float dt)
         LevelData::GetInstance().switchedDevelopmentMusic = true;
     }
     switch(LevelData::GetInstance().musicState){
+        case LevelData::INTRO:
+            introTimer.Update(dt);
+            if(introTimer.Get() >= INTRO_MUSIC_TIME) {
+                ((Music *) bg->GetComponent("Music").get())->Open(BEGINING_MUSIC);
+                LevelData::GetInstance().musicState = LevelData::BEGINING;
+                ((Music *) bg->GetComponent("Music").get())->Play(1);
+                global_beat->BeginBeat();
+            }
+            break;
         case LevelData::BEGINING:
             beginingMusicTimer.Update(dt);
             if(beginingMusicTimer.Get() >= BEGINING_MUSIC_TIME){

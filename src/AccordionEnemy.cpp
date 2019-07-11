@@ -42,79 +42,81 @@ void AccordionEnemy::Start()
 
 void AccordionEnemy::Update(float dt)
 {
-    switch (state)
-    {
-    case IDLE:
-        inicialPos = associated.box.y;
-        finalPos = associated.box.y - ACCORDION_ENEMY_JUMP_HEIGHT;
-        idleTimer.Update(dt);
-        if (idleTimer.Get() >= (global_beat->GetFalseDuration()/3))
+    if(global_beat->HasBegun()){
+        switch (state)
         {
-            SwitchAccordionEnemyState(CHARGING, ACCORDION_ENEMY_CHARGING_SPRITE, ACCORDION_ENEMY_CHARGING_FRAME_COUNT, ((float) (global_beat->GetFalseDuration()/3)/ACCORDION_ENEMY_CHARGING_FRAME_COUNT), &chargingTimer);
-        }
-        break;
-    case CHARGING:
-        chargingTimer.Update(dt);
-        if(global_beat->GetOnBeat()) {
-            if(!switched) {
-                float jumpDuration = ACCORDION_ENEMY_JUMP_HEIGHT / ACCORDION_ENEMY_VELOCITY_JUMPING;
-                SwitchAccordionEnemyState(JUMP, ACCORDION_ENEMY_JUMP_SPRITE, ACCORDION_ENEMY_JUMP_FRAME_COUNT, ((float) (global_beat->GetFalseDuration()/3)/ ACCORDION_ENEMY_JUMP_FRAME_COUNT), &jumpTimer);
-                velocityY = ACCORDION_ENEMY_VELOCITY_JUMPING;
-                if(Camera::IsOnCamera(associated.box)) {
-                    sound->Play(1);
-                }
-                switched = true;
+        case IDLE:
+            inicialPos = associated.box.y;
+            finalPos = associated.box.y - ACCORDION_ENEMY_JUMP_HEIGHT;
+            idleTimer.Update(dt);
+            if (idleTimer.Get() >= (global_beat->GetFalseDuration()/3))
+            {
+                SwitchAccordionEnemyState(CHARGING, ACCORDION_ENEMY_CHARGING_SPRITE, ACCORDION_ENEMY_CHARGING_FRAME_COUNT, ((float) (global_beat->GetFalseDuration()/3)/ACCORDION_ENEMY_CHARGING_FRAME_COUNT), &chargingTimer);
             }
-        } else {
-            switched = false;
-        }
-        break;
-    case JUMP:
-        if(associated.box.y <= finalPos) {
-            velocityY = 0;
-            associated.box.y = finalPos;
-            state = BOING;
-            accordionEnemySprite->SwitchSprite(ACCORDION_ENEMY_BOING_SPRITE, ACCORDION_ENEMY_BOING_FRAME_COUNT, (global_beat->GetFalseDuration()/3) / ACCORDION_ENEMY_BOING_FRAME_COUNT);
-            boingTimer.Restart();
-        }
-        break;
-    case BOING:
-        boingTimer.Update(dt);
-        if(global_beat->GetOnBeat()) {
-            if(!switched) {
-                float fallDuration = ACCORDION_ENEMY_JUMP_HEIGHT / ACCORDION_ENEMY_VELOCITY_FALLING;
-                SwitchAccordionEnemyState(FALL, ACCORDION_ENEMY_FALL_SPRITE, ACCORDION_ENEMY_FALL_FRAME_COUNT, ((float) (global_beat->GetFalseDuration()/3)/ ACCORDION_ENEMY_FALL_FRAME_COUNT), &fallTimer);
-                velocityY = ACCORDION_ENEMY_VELOCITY_FALLING;
-                if(Camera::IsOnCamera(associated.box)) {
-                    sound->Play(1);
+            break;
+        case CHARGING:
+            chargingTimer.Update(dt);
+            if(global_beat->GetOnBeat()) {
+                if(!switched) {
+                    float jumpDuration = ACCORDION_ENEMY_JUMP_HEIGHT / ACCORDION_ENEMY_VELOCITY_JUMPING;
+                    SwitchAccordionEnemyState(JUMP, ACCORDION_ENEMY_JUMP_SPRITE, ACCORDION_ENEMY_JUMP_FRAME_COUNT, ((float) (global_beat->GetFalseDuration()/3)/ ACCORDION_ENEMY_JUMP_FRAME_COUNT), &jumpTimer);
+                    velocityY = ACCORDION_ENEMY_VELOCITY_JUMPING;
+                    if(Camera::IsOnCamera(associated.box)) {
+                        sound->Play(1);
+                    }
+                    switched = true;
                 }
-                switched = true;
+            } else {
+                switched = false;
             }
-        } else {
-            switched = false;
+            break;
+        case JUMP:
+            if(associated.box.y <= finalPos) {
+                velocityY = 0;
+                associated.box.y = finalPos;
+                state = BOING;
+                accordionEnemySprite->SwitchSprite(ACCORDION_ENEMY_BOING_SPRITE, ACCORDION_ENEMY_BOING_FRAME_COUNT, (global_beat->GetFalseDuration()/3) / ACCORDION_ENEMY_BOING_FRAME_COUNT);
+                boingTimer.Restart();
+            }
+            break;
+        case BOING:
+            boingTimer.Update(dt);
+            if(global_beat->GetOnBeat()) {
+                if(!switched) {
+                    float fallDuration = ACCORDION_ENEMY_JUMP_HEIGHT / ACCORDION_ENEMY_VELOCITY_FALLING;
+                    SwitchAccordionEnemyState(FALL, ACCORDION_ENEMY_FALL_SPRITE, ACCORDION_ENEMY_FALL_FRAME_COUNT, ((float) (global_beat->GetFalseDuration()/3)/ ACCORDION_ENEMY_FALL_FRAME_COUNT), &fallTimer);
+                    velocityY = ACCORDION_ENEMY_VELOCITY_FALLING;
+                    if(Camera::IsOnCamera(associated.box)) {
+                        sound->Play(1);
+                    }
+                    switched = true;
+                }
+            } else {
+                switched = false;
+            }
+            break;
+        case FALL:
+            if(associated.box.y >= inicialPos) {
+                velocityY = 0;
+                associated.box.y = inicialPos;
+                state = IDLE;
+                accordionEnemySprite->SwitchSprite(ACCORDION_ENEMY_IDLE_SPRITE, ACCORDION_ENEMY_IDLE_FRAME_COUNT, (global_beat->GetFalseDuration()/3) / ACCORDION_ENEMY_IDLE_FRAME_COUNT);
+                idleTimer.Restart();
+            }
+            break;
+        default:
+            break;
         }
-        break;
-    case FALL:
-        if(associated.box.y >= inicialPos) {
-            velocityY = 0;
-            associated.box.y = inicialPos;
-            state = IDLE;
-            accordionEnemySprite->SwitchSprite(ACCORDION_ENEMY_IDLE_SPRITE, ACCORDION_ENEMY_IDLE_FRAME_COUNT, (global_beat->GetFalseDuration()/3) / ACCORDION_ENEMY_IDLE_FRAME_COUNT);
-            idleTimer.Restart();
+        if(tookHit) {
+            blinkingTimer.Update(dt);
+            if(blinkingTimer.Get() >= BLINKING_TIME) {
+                tookHit = false;
+                accordionEnemySprite->isBlinking = false;
+            }
         }
-        break;
-    default:
-        break;
+        associated.box.y += velocityY;
+        lifeBar->box.y = associated.box.y - 10;
     }
-    if(tookHit) {
-        blinkingTimer.Update(dt);
-        if(blinkingTimer.Get() >= BLINKING_TIME) {
-            tookHit = false;
-            accordionEnemySprite->isBlinking = false;
-        }
-    }
-    associated.box.y += velocityY;
-    lifeBar->box.y = associated.box.y - 10;
 }
 
 void AccordionEnemy::SwitchAccordionEnemyState(AccordionEnemyState state, string sprite, int frameCount, float frameTime, Timer *timer)
