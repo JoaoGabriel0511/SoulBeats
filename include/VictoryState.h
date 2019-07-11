@@ -15,13 +15,13 @@
 #define ATTACK_ICON_SPRITE "assets/img/background/results/Icon5.png"
 #define HEART_ICON_SPRITE "assets/img/background/results/Icon2.png"
 #define POP_ICON_SOUND "assets/audio/SFX/PegandoItem1.wav"
-#define COLLECTABLE_ICON_TIME 0.5
-#define DEATH_ICON_TIME 2
-#define TIME_ICON_TIME 1.5
-#define ATTACK_ICON_TIME 2.5
-#define HEART_ICON_TIME 1
-#define RESULT_TIME 3
-#define YOUR_RANK_IS_TIME 3.5
+#define COLLECTABLE_ICON_TIME 1
+#define DEATH_ICON_TIME 4
+#define TIME_ICON_TIME 3
+#define ATTACK_ICON_TIME 5
+#define HEART_ICON_TIME 2
+#define RESULT_TIME 6
+#define YOUR_RANK_IS_TIME 7
 #define LAYER1_BEGINING_POS_X -800
 #define LAYER2_BEGINING_POS_X -1000
 #define LAYER3_BEGINING_POS_X -1200
@@ -31,7 +31,8 @@
 #define LAYER_BEGINING_POS_Y 0
 #define LAYER_VELOCITY_Y 0
 #define LAYER_VELOCITY_X 3
-#define VICTORY_BG_MUSIC "assets/audio/TelaDeResultados.wav"
+#define SWITCH_MUSIC_TIME 20
+#define VICTORY_BG_MUSIC "assets/audio/FINAL2.1(Soul.Mus).wav"
 #define VICTORY_BG_MUSIC_2 "assets/audio/TelaDeResultados.wav"
 #include "State.h"
 #include "LevelData.h"
@@ -71,6 +72,7 @@ class VictoryState : public State {
     Timer collectableIconTimer;
     Timer yourRankIsTimer;
     Timer resultTimer;
+    Timer switchMusicTimer;
     Music *music;
     bool playedCompletedSound;
     bool playedResultSound;
@@ -79,6 +81,7 @@ class VictoryState : public State {
     bool playedTimeIconSound;
     bool playedDeathIconSound;
     bool playedAttackIconSound;
+    bool switchedMusic;
     bool playedYourRankIsSound;
     public:
         VictoryState();

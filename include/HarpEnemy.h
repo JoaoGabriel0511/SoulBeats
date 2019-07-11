@@ -28,9 +28,10 @@
 #define TWO_THIRDS_LIFE_BAR "assets/img/enemies/LifeBar/VidaInimigos2terços.png"
 #define ONE_THIRD_LIFE_BAR "assets/img/enemies/LifeBar/VidaInimigos1terço.png"
 #define HIT_SPARK_SPRITE "assets/img/enemies/HitSparks/Hit.png"
-#define HARP_ENEMY_DEATH_SOUND "assets/audio/SFX/Morte.Inimigo(Soul).wav"
+#define HARP_ENEMY_DEATH_SOUND "assets/audio/SFX/InimigoMorrendo3(SOUL).wav"
 #define HIT_SPARK_DURATION 0.5
-#define HIT_SPARK_FRAME_COUNT 8
+#define HIT_SPARK_FRAME_COUNT 5
+#define BLINKING_TIME 0.1
 
 class HarpEnemy : public Component
 {
@@ -58,6 +59,7 @@ class HarpEnemy : public Component
     Timer lookDown;
     Timer lookUp;
     Timer switchSides;
+    Timer blinkingTimer;
     GameObject *character;
     Vect2 velocity;
     Rect initalPos;
@@ -69,6 +71,7 @@ class HarpEnemy : public Component
 	bool moveX;
 	bool moveY;
     bool switched;
+    bool tookHit;
   public:
     HarpEnemy(GameObject &associated, int movingDistance, int movingSpeed, GameObject *character, int index, bool moveX, bool moveY);
     ~HarpEnemy();

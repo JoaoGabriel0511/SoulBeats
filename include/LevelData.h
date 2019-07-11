@@ -17,6 +17,7 @@ class LevelData {
         bool switchedBegininMusic;
         bool switchedDevelopmentMusic;
         enum MusicState {
+            INTRO,
             MAIN,
             DEVELOPMENT,
             BEGINING

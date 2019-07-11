@@ -17,14 +17,15 @@
 #define BELL_ENEMY_DEATH_DURATION 0.5
 #define BELL_ENEMY_DEATH_FRAME_COUNT 10
 #define BELL_ENEMY_HIT_SOUND "assets/audio/SFX/GolpeForte2.wav"
-#define BELL_ENEMY_DEATH_SOUND "assets/audio/SFX/Morte.Inimigo(Soul).wav"
+#define BELL_ENEMY_DEATH_SOUND "assets/audio/SFX/InimigoMorrendo3(SOUL).wav"
 #define BELL_ENEMY_DEFEND_SOUND "assets/audio/SFX/DefesaSino(Soul).wav"
 #define BELL_SOUND "assets/audio/SFX/Sino1.wav"
 #define FULL_LIFE_BAR "assets/img/enemies/LifeBar/VidaInimigosFull.png"
 #define HALF_LIFE_BAR "assets/img/enemies/LifeBar/VidaInimigos1meio.png"
 #define HIT_SPARK_SPRITE "assets/img/enemies/HitSparks/Hit.png"
 #define HIT_SPARK_DURATION 0.5
-#define HIT_SPARK_FRAME_COUNT 8
+#define BLINKING_TIME 0.2
+#define HIT_SPARK_FRAME_COUNT 5
 
 class BellEnemy : public Component {
     float distance;
@@ -40,9 +41,11 @@ class BellEnemy : public Component {
     Timer idleTimer;
     Timer lookRight;
     Timer lookLeft;
+    Timer blinkingTimer;
     GameObject *character;
     Sound *sound;
     int index;
+    bool tookHit;
     int hp;
     bool switched;
     void SwitchBellEnemyState(BellEnemyState state, string sprite, int frameCount, float frameTime, Timer * timer);

@@ -11,6 +11,7 @@ HarpEnemy::HarpEnemy(GameObject &associated, int movingDistance, int movingSpeed
     this->index = index;
     this->moveX = moveX;
     this->moveY = moveY;
+    this->tookHit = false;
     //initalPos = associated.box;
     collider = new Collider(associated, {2, 2}, {-70, -80});
 }
@@ -53,99 +54,108 @@ void HarpEnemy::Start()
 
 void HarpEnemy::Update(float dt)
 {
-	if(moveY) {
-		switch (state) {
-			case LOOKING_DOWN:
-				lookDown.Update(dt);
-				if (global_beat->GetOnBeat()) {
-                    if(!switched){
-                        if(moveX) {
-                            velocity.y = -1 * HARP_ENEMY_VELOCITY_Y;
-                        } else {
-                            velocity.y = -3 * HARP_ENEMY_VELOCITY_Y;
-                        }
-                        if (Camera::IsOnCamera(associated.box)) {
-                            sound->Open(HARP_SOUND);
-                            sound->Play(1);
-                        }
-                        SwitchHarpEnemyState(LOOKING_UP, HARP_ENEMY_LOOKING_UP_SPRITE, HARP_ENEMY_LOOKING_UP_FRAME_COUNT,
-                                            HARP_ENEMY_LOOKING_UP_FRAME_TIME, &lookUp);
-                        switched = true;
-                    }
-                } else {
-                    switched = false;
-                }
-				break;
-			case LOOKING_UP:
-				lookUp.Update(dt);
-				if (global_beat->GetOnBeat()) {
-                    if(!switched) {
-                        if(moveX) {
-                            velocity.y =  HARP_ENEMY_VELOCITY_Y;
-                        } else {
-                            velocity.y = 3 * HARP_ENEMY_VELOCITY_Y;
-                        }
-                        if (Camera::IsOnCamera(associated.box)) {
-                            sound->Open(HARP_BACK_SOUND);
-                            sound->Play(1);
-                        }
-                        SwitchHarpEnemyState(LOOKING_DOWN, HARP_ENEMY_LOOKING_DOWN_SPRITE, HARP_ENEMY_LOOKING_DOWN_FRAME_COUNT,
-                                            HARP_ENEMY_LOOKING_UP_FRAME_TIME, &lookDown);
-                        switched = true;
-                    }
-                } else {
-                    switched = false;
-                }
-				break;
-			default:
-				break;
-		}
-	}
-    if(moveX) {
+	if(global_beat->HasBegun()) {
         if(moveY) {
-            switchSides.Update(dt);
-            if (switchSides.Get() >= HARP_ENEMY_SWITCH_SIDES_TIME) {
-                switchSides.Restart();
-                if (harpEnemySprite->flip) {
-                    harpEnemySprite->flip = false;
-                    velocity.x = -1 * HARP_ENEMY_VELOCITY_X;
-                } else {
-                    harpEnemySprite->flip = true;
-                    velocity.x = HARP_ENEMY_VELOCITY_X;
-                }
-            }
-        } else {
-            if(global_beat->GetOnBeat()){
-                if(!switched) {
-                    if (harpEnemySprite->flip) {
-                        harpEnemySprite->flip = false;
-                        if(Camera::IsOnCamera(associated.box)){
-                            sound->Open(HARP_BACK_SOUND);
-                            sound->Play(1);
+            switch (state) {
+                case LOOKING_DOWN:
+                    lookDown.Update(dt);
+                    if (global_beat->GetOnBeat()) {
+                        if(!switched){
+                            if(moveX) {
+                                velocity.y = -1 * HARP_ENEMY_VELOCITY_Y;
+                            } else {
+                                velocity.y = -3 * HARP_ENEMY_VELOCITY_Y;
+                            }
+                            if (Camera::IsOnCamera(associated.box)) {
+                                sound->Open(HARP_SOUND);
+                                sound->Play(1);
+                            }
+                            SwitchHarpEnemyState(LOOKING_UP, HARP_ENEMY_LOOKING_UP_SPRITE, HARP_ENEMY_LOOKING_UP_FRAME_COUNT,
+                                                HARP_ENEMY_LOOKING_UP_FRAME_TIME, &lookUp);
+                            switched = true;
                         }
-                        velocity.x = -6 * HARP_ENEMY_VELOCITY_X;
                     } else {
-                        if(Camera::IsOnCamera(associated.box)){
-                            sound->Open(HARP_SOUND);
-                            sound->Play(1);
-                        }
-                        harpEnemySprite->flip = true;
-                        velocity.x = 6 * HARP_ENEMY_VELOCITY_X;
+                        switched = false;
                     }
-                    switched = true;
-                }
-            } else {
-                switched = false;
+                    break;
+                case LOOKING_UP:
+                    lookUp.Update(dt);
+                    if (global_beat->GetOnBeat()) {
+                        if(!switched) {
+                            if(moveX) {
+                                velocity.y =  HARP_ENEMY_VELOCITY_Y;
+                            } else {
+                                velocity.y = 3 * HARP_ENEMY_VELOCITY_Y;
+                            }
+                            if (Camera::IsOnCamera(associated.box)) {
+                                sound->Open(HARP_BACK_SOUND);
+                                sound->Play(1);
+                            }
+                            SwitchHarpEnemyState(LOOKING_DOWN, HARP_ENEMY_LOOKING_DOWN_SPRITE, HARP_ENEMY_LOOKING_DOWN_FRAME_COUNT,
+                                                HARP_ENEMY_LOOKING_UP_FRAME_TIME, &lookDown);
+                            switched = true;
+                        }
+                    } else {
+                        switched = false;
+                    }
+                    break;
+                default:
+                    break;
             }
         }
-    }
-    lifeBar->box.x = associated.box.x + 35;
-    lifeBar->box.y = associated.box.y - 20;
-    if(moveX) {
-	    associated.box.x += velocity.x * dt;
-    }
-    if(moveY) {
-	    associated.box.y += velocity.y * dt;
+        if(moveX) {
+            if(moveY) {
+                switchSides.Update(dt);
+                if (switchSides.Get() >= HARP_ENEMY_SWITCH_SIDES_TIME) {
+                    switchSides.Restart();
+                    if (harpEnemySprite->flip) {
+                        harpEnemySprite->flip = false;
+                        velocity.x = -1 * HARP_ENEMY_VELOCITY_X;
+                    } else {
+                        harpEnemySprite->flip = true;
+                        velocity.x = HARP_ENEMY_VELOCITY_X;
+                    }
+                }
+            } else {
+                if(global_beat->GetOnBeat()){
+                    if(!switched) {
+                        if (harpEnemySprite->flip) {
+                            harpEnemySprite->flip = false;
+                            if(Camera::IsOnCamera(associated.box)){
+                                sound->Open(HARP_BACK_SOUND);
+                                sound->Play(1);
+                            }
+                            velocity.x = -6 * HARP_ENEMY_VELOCITY_X;
+                        } else {
+                            if(Camera::IsOnCamera(associated.box)){
+                                sound->Open(HARP_SOUND);
+                                sound->Play(1);
+                            }
+                            harpEnemySprite->flip = true;
+                            velocity.x = 6 * HARP_ENEMY_VELOCITY_X;
+                        }
+                        switched = true;
+                    }
+                } else {
+                    switched = false;
+                }
+            }
+        }
+        lifeBar->box.x = associated.box.x + 35;
+        lifeBar->box.y = associated.box.y - 20;
+        if(moveX) {
+            associated.box.x += velocity.x * dt;
+        }
+        if(moveY) {
+            associated.box.y += velocity.y * dt;
+        }
+        if(tookHit) {
+            blinkingTimer.Update(dt);
+            if(blinkingTimer.Get() >= BLINKING_TIME) {
+                tookHit = false;
+                harpEnemySprite->isBlinking = false;
+            }
+        }
     }
 }
 
@@ -196,11 +206,14 @@ void HarpEnemy::NotifyCollision(GameObject &other)
             explosionSprite = new Sprite(*explosion, HARP_ENEMY_DEATH_SPRITE, HARP_ENEMY_DEATH_FRAME_COUNT, HARP_ENEMY_DEATH_DURATION/HARP_ENEMY_DEATH_FRAME_COUNT, HARP_ENEMY_DEATH_DURATION);
             explosionSprite->SetScale({3,3});
             explosion->box.z = 5;
-            explosion->box.x = associated.box.x + associated.box.w / 2 - explosion->box.w / 2;
-            explosion->box.y = associated.box.y + associated.box.h / 2 - explosion->box.h / 2;
+            explosion->box.x = associated.box.x - explosion->box.w / 2;
+            explosion->box.y = associated.box.y - explosion->box.h / 2;
             Game::GetInstance().GetCurrentState().AddObject(explosion);
             associated.RequestedDelete();
         } else {
+            tookHit = true;
+            harpEnemySprite->isBlinking = true;
+            blinkingTimer.Restart();
             sound->Open(HARP_ENEMY_HIT_SOUND);
             sound->Play(1);
             ((Character*) character->GetComponent("Character").get())->HitKnockBack();

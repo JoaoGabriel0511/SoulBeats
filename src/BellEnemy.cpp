@@ -32,48 +32,59 @@ void BellEnemy::Start() {
     lifeBar->box.y = associated.box.y - 50;
     lifeBar->box.z = 5;
     switched = false;
+    tookHit = false;
     Game::GetInstance().GetCurrentStatePointer()->AddObject(lifeBar);
 }
 
 void BellEnemy::Update(float dt) {
-    switch (state) {
-        case IDLE:
-            idleTimer.Update(dt);
-            if(global_beat->GetOnBeat()) {
-                if(!switched) {
-                    if(character->box.x > associated.box.x) {
-                        SwitchBellEnemyState(LOOKING_LEFT, BELL_ENEMY_LOOKING_LEFT_SPRITE, BELL_ENEMY_LOOKING_LEFT_FRAME_COUNT, (global_beat->GetFalseDuration()/2)/BELL_ENEMY_LOOKING_LEFT_FRAME_COUNT, &lookLeft);
-                    } else{
-                        SwitchBellEnemyState(LOOKING_RIGHT, BELL_ENEMY_LOOKING_RIGHT_SPRITE, BELL_ENEMY_LOOKING_RIGHT_FRAME_COUNT, (global_beat->GetFalseDuration()/2) / BELL_ENEMY_LOOKING_RIGHT_FRAME_COUNT, &lookRight);
+    if(global_beat->HasBegun()) {
+        switch (state) {
+            case IDLE:
+                idleTimer.Update(dt);
+                if(global_beat->GetOnBeat()) {
+                    if(!switched) {
+                        if(character->box.x > associated.box.x) {
+                            SwitchBellEnemyState(LOOKING_LEFT, BELL_ENEMY_LOOKING_LEFT_SPRITE, BELL_ENEMY_LOOKING_LEFT_FRAME_COUNT, (global_beat->GetFalseDuration()/2)/BELL_ENEMY_LOOKING_LEFT_FRAME_COUNT, &lookLeft);
+                        } else{
+                            SwitchBellEnemyState(LOOKING_RIGHT, BELL_ENEMY_LOOKING_RIGHT_SPRITE, BELL_ENEMY_LOOKING_RIGHT_FRAME_COUNT, (global_beat->GetFalseDuration()/2) / BELL_ENEMY_LOOKING_RIGHT_FRAME_COUNT, &lookRight);
+                        }
+                        switched = true;
                     }
-                    switched = true;
+                } else {
+                    switched = false;
                 }
-            } else {
-                switched = false;
-            }
-            break;
-        case LOOKING_RIGHT:
-            lookRight.Update(dt);
-            if(lookRight.Get() >= (global_beat->GetFalseDuration()/2)) {
-                SwitchBellEnemyState(IDLE, BELL_ENEMY_IDLE_SPRITE, BELL_ENEMY_IDLE_FRAME_COUNT, (global_beat->GetFalseDuration()/2)/BELL_ENEMY_IDLE_FRAME_COUNT, &idleTimer);
-                sound->Open(BELL_SOUND);
-                if(Camera::IsOnCamera(associated.box)) {
-                    sound->Play(1);
+                break;
+            case LOOKING_RIGHT:
+                lookRight.Update(dt);
+                if(lookRight.Get() >= (global_beat->GetFalseDuration()/2)) {
+                    SwitchBellEnemyState(IDLE, BELL_ENEMY_IDLE_SPRITE, BELL_ENEMY_IDLE_FRAME_COUNT, (global_beat->GetFalseDuration()/2)/BELL_ENEMY_IDLE_FRAME_COUNT, &idleTimer);
+                    sound->Open(BELL_SOUND);
+                    if(Camera::IsOnCamera(associated.box)) {
+                        sound->Play(1);
+                    }
                 }
-            }
-            break;
-        case LOOKING_LEFT:
-            lookLeft.Update(dt);
-            if(lookLeft.Get() >= (global_beat->GetFalseDuration()/2)) {
-                SwitchBellEnemyState(IDLE, BELL_ENEMY_IDLE_SPRITE, BELL_ENEMY_IDLE_FRAME_COUNT, (global_beat->GetFalseDuration()/2)/BELL_ENEMY_IDLE_FRAME_COUNT, &idleTimer);
-                sound->Open(BELL_SOUND);
-                if(Camera::IsOnCamera(associated.box)) {
-                    sound->Play(1);
+                break;
+            case LOOKING_LEFT:
+                lookLeft.Update(dt);
+                if(lookLeft.Get() >= (global_beat->GetFalseDuration()/2)) {
+                    SwitchBellEnemyState(IDLE, BELL_ENEMY_IDLE_SPRITE, BELL_ENEMY_IDLE_FRAME_COUNT, (global_beat->GetFalseDuration()/2)/BELL_ENEMY_IDLE_FRAME_COUNT, &idleTimer);
+                    sound->Open(BELL_SOUND);
+                    if(Camera::IsOnCamera(associated.box)) {
+                        sound->Play(1);
+                    }
                 }
+                break;
+            default:
+                break;
+        }
+        if(tookHit) {
+            blinkingTimer.Update(dt);
+            if(blinkingTimer.Get() >= BLINKING_TIME) {
+                tookHit = false;
+                cout<<"aqui"<<endl;
+                bellEnemySprite->isBlinking = false;
             }
-            break;
-        default:
-            break;
+        }
     }
 }
 
@@ -120,11 +131,14 @@ void BellEnemy::NotifyCollision(GameObject& other) {
                 explosionSprite = new Sprite(*explosion, BELL_ENEMY_DEATH_SPRITE, BELL_ENEMY_DEATH_FRAME_COUNT, BELL_ENEMY_DEATH_DURATION/BELL_ENEMY_DEATH_FRAME_COUNT, BELL_ENEMY_DEATH_DURATION);
                 explosionSprite->SetScale({3,3});
                 explosion->box.z = 5;
-                explosion->box.x = associated.box.x + associated.box.w / 2 - explosion->box.w / 2;
-                explosion->box.y = associated.box.y + associated.box.h / 2 - explosion->box.h / 2;
+                explosion->box.x = associated.box.x - explosion->box.w / 2;
+                explosion->box.y = associated.box.y - explosion->box.h / 2;
                 Game::GetInstance().GetCurrentState().AddObject(explosion);
                 associated.RequestedDelete();
             } else {
+                bellEnemySprite->isBlinking = true;
+                tookHit = true;
+                blinkingTimer.Restart();
                 sound->Open(BELL_ENEMY_HIT_SOUND);
                 sound->Play(1);
             }

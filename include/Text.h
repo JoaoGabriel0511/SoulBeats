@@ -5,6 +5,7 @@
 #include "Timer.h"
 #include "Resources.h"
 #include "SDL2/SDL_ttf.h"
+using namespace std;
 
 class Text : public Component{
     public:

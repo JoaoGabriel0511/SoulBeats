@@ -4,7 +4,7 @@ LevelData::LevelData() {
     isNewLevel = true;
     switchedDevelopmentMusic = false;
     switchedBegininMusic = false;
-    musicState = BEGINING;
+    musicState = INTRO;
 }
 
 LevelData::~LevelData() {}

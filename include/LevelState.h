@@ -10,6 +10,8 @@
 #define STOP_MUSIC_TIME 0.0
 #define BEFORE_FINISH_LEVEL_TIME 5
 #define MAIN_MUSIC "assets/audio/GamePlay(Loop3).wav"
+#define INTRO_MUSIC "assets/audio/INTRO(Soul.Mus).wav"
+#define INTRO_MUSIC_TIME 21
 #include "State.h"
 #include "Launcher.h"
 #include "Beat.h"
@@ -30,6 +32,8 @@
 #include "VictoryState.h"
 #include "JumpingPad.h"
 #include "MovingPlatforms.h"
+#include "Text.h"
+
 class LevelState : public State {
     GameObject *bg;
     GameObject *tileTerrForeGO;
@@ -42,6 +46,7 @@ class LevelState : public State {
     Timer mainMusicTimer;
     Timer musicStopTimer;
     Timer beforeFinishLevelTimer;
+    Timer introTimer;
     void StartData();
     void UpdateMusic(float dt);
     void LevelCycle(float dt);

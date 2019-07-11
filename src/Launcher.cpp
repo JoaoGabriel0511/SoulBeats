@@ -65,7 +65,6 @@ void Launcher::Start() {
 void Launcher::NotifyCollision(GameObject& other) {
     float launchDuration;
     if(other.GetComponent("Attack") != NULL) {
-        sound->Play(1);
         switch (type) {
         case UP:
             isCharacterLeft = ((Character*) character->GetComponent("Character").get())->IsCharacterLeftSide();
@@ -93,10 +92,13 @@ void Launcher::NotifyCollision(GameObject& other) {
         character->box.x = pointPos.x;
         character->box.y = pointPos.y - (character->box.h);
         if(((Character*) character->GetComponent("Character").get())->AttackOnBeat()) {
+            sound->Open(LAUNCHER_SOUND_ON_BEAT);
             launchDuration = 0.5;
         } else {
+            sound->Open(LAUNCHER_SOUND);
             launchDuration = 0.25;
         }
+        sound->Play(1);
         //character->Update(0);
         ((Character*) character->GetComponent("Character").get())->LaunchCharacter(launchVelocity, isCharacterLeft,
                                         characterLaunchSprite, characterLaunchSpriteFameCount, characterLaunchSpriteFrameTime, launchDuration);

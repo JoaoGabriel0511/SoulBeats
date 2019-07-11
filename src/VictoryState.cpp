@@ -12,6 +12,7 @@ void VictoryState::Start() {
     playedAttackIconSound = false;
     playedYourRankIsSound = false;
     playedResultSound = false;
+    switchedMusic = false;
     LevelData::GetInstance().clear();
     State::Start();
 }
@@ -112,7 +113,7 @@ void VictoryState::LoadAssets() {
     deathIconGO->box.y = 360 - Camera::pos.y;
     attackIconGO->box.x = 60 - Camera::pos.x;
     attackIconGO->box.y = 430 - Camera::pos.y;
-    music->Play(-1);
+    music->Play(1);
     objectArray.emplace_back(bgMusic);
     objectArray.emplace_back(layer1);
     objectArray.emplace_back(layer2);
@@ -195,6 +196,14 @@ void VictoryState::Update(float dt) {
                 popSound->Play(1);
                 playedResultSound = true;
             }
+        }
+    }
+    switchMusicTimer.Update(dt);
+    if(switchMusicTimer.Get() >= SWITCH_MUSIC_TIME) {
+        if(!switchedMusic) {
+            music->Open(VICTORY_BG_MUSIC_2);
+            music->Play(-1);
+            switchedMusic = true;
         }
     }
 }

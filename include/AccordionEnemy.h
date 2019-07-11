@@ -16,7 +16,7 @@
 #define ACCORDION_ENEMY_BOING_DURATION 0.2
 #define ACCORDION_ENEMY_JUMP_FRAME_COUNT 7
 #define ACCORDION_ENEMY_JUMP_DURATION 0.3
-#define ACCORDION_ENEMY_JUMP_HEIGHT 250
+#define ACCORDION_ENEMY_JUMP_HEIGHT 200
 #define ACCORDION_ENEMY_CHARGING_DURATION 0.583333333
 #define ACCORDION_ENEMY_CHARGING_FRAME_COUNT 7
 #define ACCORDION_ENEMY_IDLE_FRAME_COUNT 8
@@ -34,8 +34,9 @@
 #define ONE_FOURTH_LIFE_BAR "assets/img/enemies/LifeBar/VidaInimigos1quarto.png"
 #define HIT_SPARK_SPRITE "assets/img/enemies/HitSparks/Hit.png"
 #define HIT_SPARK_DURATION 0.5
-#define HIT_SPARK_FRAME_COUNT 8
-#define ACCORDION_ENEMY_DEATH_SOUND "assets/audio/SFX/Morte.Inimigo(Soul).wav"
+#define HIT_SPARK_FRAME_COUNT 5
+#define ACCORDION_ENEMY_DEATH_SOUND "assets/audio/SFX/InimigoMorrendo3(SOUL).wav"
+#define BLINKING_TIME 0.1
 
 class AccordionEnemy : public Component
 {
@@ -55,6 +56,7 @@ class AccordionEnemy : public Component
     Timer chargingTimer;
     Timer jumpTimer;
     Timer fallTimer;
+    Timer blinkingTimer;
     float inicialPos;
     float finalPos;
     Sound *sound;
@@ -65,6 +67,7 @@ class AccordionEnemy : public Component
     int hp;
     int index;
     bool switched;
+    bool tookHit;
   public:
     AccordionEnemy(GameObject &associated, int movingDistance, int movingSpeed, GameObject *character, int index);
     ~AccordionEnemy();

@@ -36,5 +36,6 @@ class Game {
         float GetDeltaTime();
         SDL_Renderer * GetRenderer();
         static Game& GetInstance();
+        void gameRanking();
 };
 #endif

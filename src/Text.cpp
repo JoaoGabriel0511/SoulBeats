@@ -70,7 +70,7 @@ void Text::RemakeTexture() {
         SDL_DestroyTexture(texture);
     }
     font = Resources::GetFont(fontFile, fontSize);
-    cout<<"->>>> "<<font<<endl;
+    //cout<<"->>>> "<<font<<endl;
     if(font != NULL) {
         switch (style) {
             case SOLID:
@@ -91,3 +91,4 @@ void Text::RemakeTexture() {
         SDL_FreeSurface(surface);
     }
 }
+

@@ -90,8 +90,12 @@
 #define RECOVER_SPRITE_LEFT "assets/img/char/SoulBeatsCharBounceL.png"
 #define RECOVER_FRAME_COUNT 6
 #define HIT_DEFLECT_SPEED 250
+#define JUMPING_EFECT_SPRITE "assets/img/char/JumpigEfect.png"
+#define JUMPING_EFECT_FRAME_COUNT 8
+#define JUMPING_EFECT_DURATION 0.5
 #define RECOVER_DURATION 0.5
 #define WALKING_SOUND_TIMER 0.3
+#define TAKE_DAMGE_SOUND "assets/audio/SFX/Person.SofrendoDano(SOUL).wav"
 #define GET_HEART_SOUND "assets/audio/SFX/PegandoVida1.wav"
 #include "Component.h"
 #include "Sprite.h"
@@ -104,6 +108,8 @@ class Character : public Component {
   Vect2 movingPlatformVelocity;
   Rect oldPosition;
   Sprite *charSprite;
+  GameObject* jumpingEfectGO;
+  Sprite* jumpingEffectSprite;
   float launchDuration;
   bool isOnGround;
   bool wasOnGround;
@@ -130,6 +136,7 @@ class Character : public Component {
   bool isOnTopOfJumpingPad;
   bool isOnMovingPlatform;
   bool switchedIdleOnBeat;
+  bool jumpingEfect;
 
   enum IdleState {
     UP,
@@ -152,6 +159,7 @@ class Character : public Component {
   Timer deathTimer;
   Timer LaunchTimer;
   Timer idleAnimationTimer;
+  Timer jumpingEffectTimer;
 
   Sound *sound;
   float gravity;
@@ -186,13 +194,14 @@ class Character : public Component {
   LifeBar* lifeBar;
   public:
     Character(GameObject &associated);
+    ~Character();
     void Update(float dt);
     void Start();
     bool AttackOnBeat();
     bool IsCharacterLeftSide();
     void HitKnockBack();
     void LaunchCharacter(Vect2 velocity, bool isLeftSide,
-     string launcherSprite, int launcherSpriteFrameCount, float launcherSpriteFrameTime, float launchDuration);
+    string launcherSprite, int launcherSpriteFrameCount, float launcherSpriteFrameTime, float launchDuration);
     bool Is(string type);
     void NotifyCollision(GameObject &other);
     void NotifYCollisionWithMap(Rect Tilebox);
