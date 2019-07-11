@@ -421,6 +421,17 @@ void LevelState::LoadAssets() {
     TileMapCollider *tileMapTerrBackCollider = new TileMapCollider(*tileTerrBackGO, tileMapTerrBack);
     objectArray.emplace_back(tileTerrBackGO);
 
+    //Adicionando Text 
+
+    Text *textScore;
+    GameObject *textScoreGO = new GameObject();
+    textScoreGO->box.x = 300;
+    textScoreGO->box.y = 3000;
+    textScoreGO->box.z = 6;
+    textScore = new Text(*textScoreGO,"assets/font/superFont.ttf", 20, Text::TextStyle::SOLID, "Score: ", SDL_Color {0,0,0}, 0);
+    objectArray.emplace_back(textScoreGO);
+
+
     //TileMap Decoracao Terreno Adicionada
 
     //Adicionando TileMap Decoracao BackGrounder

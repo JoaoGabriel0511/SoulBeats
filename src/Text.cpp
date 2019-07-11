@@ -91,3 +91,4 @@ void Text::RemakeTexture() {
         SDL_FreeSurface(surface);
     }
 }
+
