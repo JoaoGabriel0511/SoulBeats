@@ -272,6 +272,8 @@ void Character::MovingPlatformsCollision(GameObject& other) {
 }
 
 void Character::EnemyCollision(GameObject& other) {
+    sound->Open(TAKE_DAMGE_SOUND);
+    sound->Play(1);
     if (other.box.x > associated.box.x)
     {
         velocity.x = -1 * HURT_DEFLECT_SPEED;
@@ -304,23 +306,11 @@ void Character::EnemyCollision(GameObject& other) {
     blinkTimer.Restart();
     if (isLeftSide)
     {
-        if(idleState == UP){
-            idleState = DOWN;
-            charSprite->SwitchSprite(IDLE_SPRITE_DOWN_LEFT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
-        } else {
-            idleState = UP;
-            charSprite->SwitchSprite(IDLE_SPRITE_UP_LEFT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
-        }
+        charSprite->SwitchSprite(HURT_SPRITE_LEFT, HURT_FRAME_COUNT, HURT_FRAME_TIME);
     }
     else
     {
-        if(idleState == UP){
-            idleState = DOWN;
-            charSprite->SwitchSprite(IDLE_SPRITE_DOWN_RIGHT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
-        } else {
-            idleState = UP;
-            charSprite->SwitchSprite(IDLE_SPRITE_UP_RIGHT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
-        }
+        charSprite->SwitchSprite(HURT_SPRITE_RIGHT, HURT_FRAME_COUNT, HURT_FRAME_TIME);
     }
     recoverFromHitTimer.Restart();
 }
@@ -794,11 +784,23 @@ void Character::GotHit(float dt) {
             finishIdle = false;
             if (isLeftSide)
             {
-                charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
+                if(idleState == UP){
+                    idleState = DOWN;
+                    charSprite->SwitchSprite(IDLE_SPRITE_DOWN_LEFT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+                } else {
+                    idleState = UP;
+                    charSprite->SwitchSprite(IDLE_SPRITE_UP_LEFT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+                }
             }
             else
             {
-                charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
+                if(idleState == UP){
+                    idleState = DOWN;
+                    charSprite->SwitchSprite(IDLE_SPRITE_DOWN_RIGHT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+                } else {
+                    idleState = UP;
+                    charSprite->SwitchSprite(IDLE_SPRITE_UP_RIGHT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+                }
             }
         }
     }
@@ -896,6 +898,7 @@ void Character::Jump(float dt) {
                 jumpedOnBeat = true;
                 sound->Open(JUMPING_SOUND);
                 sound->Play(1);
+                global_beat->ActionOnBeat();
             } else {
                 jumpedOnBeat = false;
                 velocity.y = JUMPING_SPEED;
@@ -963,12 +966,14 @@ void Character::DoAttack(float dt) {
             if(isOnGround) {
                 if(isLeftSide) {
                     if(global_beat->GetOnBeat() == true) {
+                        global_beat->ActionOnBeat();
                         charSprite->SwitchSprite(ATTACK_LEFT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
                     } else {
                         charSprite->SwitchSprite(ATTACK_LEFT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
                     }
                 } else {
                     if(global_beat->GetOnBeat() == true) {
+                        global_beat->ActionOnBeat();
                         charSprite->SwitchSprite(ATTACK_RIGHT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
                     } else {
                         charSprite->SwitchSprite(ATTACK_RIGHT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
@@ -977,12 +982,14 @@ void Character::DoAttack(float dt) {
             } else {
                 if(isLeftSide) {
                     if(global_beat->GetOnBeat() == true) {
+                        global_beat->ActionOnBeat();
                         charSprite->SwitchSprite(ATTACK_AIR_LEFT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
                     } else {
                         charSprite->SwitchSprite(ATTACK_AIR_LEFT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
                     }
                 } else {
                     if(global_beat->GetOnBeat() == true) {
+                        global_beat->ActionOnBeat();
                         charSprite->SwitchSprite(ATTACK_AIR_RIGHT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
                     } else {
                         charSprite->SwitchSprite(ATTACK_AIR_RIGHT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);

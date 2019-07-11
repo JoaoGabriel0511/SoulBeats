@@ -20,7 +20,8 @@
 #define FALLING_FRAME_TIME 0.08333
 #define LAUNCHER_VELOCITY_X 500
 #define LAUNCHER_VELOCITY_Y 500
-#define LAUNCHER_SOUND "assets/audio/SFX/PersonagemLançada2.1.wav"
+#define LAUNCHER_SOUND "assets/audio/SFX/Lançador1.1(SOUL).wav"
+#define LAUNCHER_SOUND_ON_BEAT "assets/audio/SFX/Lançador1.2(SOUL).wav"
 #include "Component.h"
 #include "Sprite.h"
 #include "Collider.h"

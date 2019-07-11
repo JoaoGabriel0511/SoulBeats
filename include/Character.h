@@ -92,6 +92,7 @@
 #define HIT_DEFLECT_SPEED 250
 #define RECOVER_DURATION 0.5
 #define WALKING_SOUND_TIMER 0.3
+#define TAKE_DAMGE_SOUND "assets/audio/SFX/Person.SofrendoDano(SOUL).wav"
 #define GET_HEART_SOUND "assets/audio/SFX/PegandoVida1.wav"
 #include "Component.h"
 #include "Sprite.h"

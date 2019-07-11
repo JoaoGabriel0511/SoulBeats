@@ -8,7 +8,7 @@
 #define CHECK_POINT_INACTIVE_SPIN_FRAME_COUNT 8
 #define CHECK_POINT_ACTIVE_SPIN_DURATION 1.5
 #define CHECK_POINT_INACTIVE_SPIN_DURATION 1.5
-#define CHECK_POINT_SOUND "assets/audio/SFX/CheckPointRapido(Soul).wav"
+#define CHECK_POINT_SOUND "assets/audio/SFX/Checkpoint3(SOUL).wav"
 #include "Component.h"
 #include "LevelState.h"
 #include "LevelData.h"

@@ -28,7 +28,7 @@
 #define TWO_THIRDS_LIFE_BAR "assets/img/enemies/LifeBar/VidaInimigos2terços.png"
 #define ONE_THIRD_LIFE_BAR "assets/img/enemies/LifeBar/VidaInimigos1terço.png"
 #define HIT_SPARK_SPRITE "assets/img/enemies/HitSparks/Hit.png"
-#define HARP_ENEMY_DEATH_SOUND "assets/audio/SFX/Morte.Inimigo(Soul).wav"
+#define HARP_ENEMY_DEATH_SOUND "assets/audio/SFX/InimigoMorrendo3(SOUL).wav"
 #define HIT_SPARK_DURATION 0.5
 #define HIT_SPARK_FRAME_COUNT 8
 
