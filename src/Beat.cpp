@@ -19,6 +19,7 @@ void Beat::Start(){
     onBeat = true;
     onBeatAnimation = true;
     actionOnBeat = false;
+    switched = false;
 }
 
 void Beat::Update(float dt){
@@ -57,17 +58,22 @@ void Beat::Update(float dt){
                 beatSprite->SwitchSprite(BEATING_HEART_SPRITE, FRAME_COUNT, BEAT_TRUE_LIMIT/FRAME_COUNT);
             }
             waveSprite->isBlinking = false;
-            waveSprite->SwitchSprite(WAVE_SPRITE, WAVE_FRAME_COUNT, BEAT_TRUE_LIMIT/WAVE_FRAME_COUNT);
+            waveSprite->SwitchSprite(WAVE_SPRITE, WAVE_FRAME_COUNT, (BEAT_TRUE_LIMIT/WAVE_FRAME_COUNT) + 0.01);
             falseTimer.Restart();
         }
         falseTimer.Update(dt);
         if(darkTimer.Get() >= DARK_TIME) {
             backgroundSprite->Open(BEATING_HEART_BG);
+            heartBackground->box.x = 854 - Camera::pos.x;
+            heartBackground->box.y = 1 - Camera::pos.y;
             beatSprite->SwitchSprite(IDLE_HEART_SPRITE, STILL_FRAME_COUNT, BEAT_FALSE_LIMIT/STILL_FRAME_COUNT);
             actionOnBeat = false;
+            darkTimer.Restart();
         }
     }
-    darkTimer.Update(dt);
+    if(actionOnBeat){
+        darkTimer.Update(dt);
+    }
 }
 
 void Beat::Render(){}
@@ -89,6 +95,8 @@ bool Beat::GetOnBeat(){
 void Beat::ActionOnBeat() {
     backgroundSprite->Open(BEATING_HEART_BG_DARK);
     beatSprite->SwitchSprite(BEATING_HEART_LIGHT_SPRITE, FRAME_COUNT, 1);
+    heartBackground->box.x = 840 - Camera::pos.x;
+    heartBackground->box.y = 1 - Camera::pos.y;
     actionOnBeat = true;
     darkTimer.Restart();
 }

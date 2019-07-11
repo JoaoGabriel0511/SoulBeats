@@ -51,12 +51,24 @@ void Character::Start()
     recoveringFromHitKnockback = false;
     isOnTopOfJumpingPad = false;
     switchedIdleOnBeat = false;
+    jumpingEfect = false;
     wasLeftSide = isLeftSide;
     wasOnGround = isOnGround;
     gravity = GRAVITY_FALLING;
     idleTimer.Restart();
     walkingSoundTimer.Restart();
-    jumpingEfectGO = NULL;
+    jumpingEfectGO = new GameObject();
+    jumpingEffectSprite = new Sprite(*jumpingEfectGO,JUMPING_EFECT_SPRITE, JUMPING_EFECT_FRAME_COUNT, (JUMPING_EFECT_DURATION/JUMPING_EFECT_FRAME_COUNT) + 0.01);
+    jumpingEffectSprite->SetScale({2,2});
+    jumpingEfectGO->box.z = 5;
+    if(isLeftSide) {
+        jumpingEfectGO->box.x = associated.box.x;
+    } else {
+        jumpingEfectGO->box.x = associated.box.x + (associated.box.w/2) ;
+    }
+    jumpingEfectGO->box.y = associated.box.y + associated.box.h;
+    Game::GetInstance().GetCurrentState().AddObject(jumpingEfectGO);
+    jumpingEffectSprite->isBlinking = true;
     movingPlatformVelocity = {0,0};
 }
 
@@ -158,14 +170,20 @@ void Character::Update(float dt)
     associated.box += (velocity + movingPlatformVelocity) * dt;
     //cout<<"associated.box.x"<<associated.box.x<<endl;
     //cout<<"associated.box.y"<<associated.box.y<<endl;
-    /*if(jumpingEfectGO) {
+    if(jumpingEfect) {
         if(isLeftSide) {
             jumpingEfectGO->box.x = associated.box.x + associated.box.w;
         } else {
             jumpingEfectGO->box.x = associated.box.x + (associated.box.w/2) ;
         }
         jumpingEfectGO->box.y = associated.box.y + associated.box.h;
-    }*/
+        jumpingEffectTimer.Update(dt);
+        if(jumpingEffectTimer.Get() >= JUMPING_EFECT_DURATION){
+            jumpingEfect = false;
+            jumpingEffectSprite->isBlinking = true;
+            jumpingEffectTimer.Restart();
+        }
+    }
     Camera::Update(dt);
     isFalling = true;
     peakDone = false;
@@ -899,7 +917,6 @@ void Character::MoveSideWays(float dt) {
 }
 
 void Character::Jump(float dt) {
-    Sprite* jumpingEfectSprite;
     if (InputManager::GetInstance().KeyPress(W_KEY)) {
         if (isOnGround) {
             walkingSoundTimer.Restart();
@@ -915,17 +932,9 @@ void Character::Jump(float dt) {
                 sound->Open(JUMPING_SOUND);
                 sound->Play(1);
                 global_beat->ActionOnBeat();
-                jumpingEfectGO = new GameObject();
-                jumpingEfectSprite = new Sprite(*jumpingEfectGO,JUMPING_EFECT_SPRITE, JUMPING_EFECT_FRAME_COUNT, JUMPING_EFECT_DURATION/JUMPING_EFECT_FRAME_COUNT, JUMPING_EFECT_DURATION);
-                jumpingEfectSprite->SetScale({2,2});
-                jumpingEfectGO->box.z = 5;
-                if(isLeftSide) {
-                    jumpingEfectGO->box.x = associated.box.x;
-                } else {
-                    jumpingEfectGO->box.x = associated.box.x + (associated.box.w/2) ;
-                }
-                jumpingEfectGO->box.y = associated.box.y + associated.box.h;
-                Game::GetInstance().GetCurrentState().AddObject(jumpingEfectGO);
+                jumpingEfect = true;
+                jumpingEffectSprite->isBlinking = false;
+                jumpingEffectSprite->SwitchSprite(JUMPING_EFECT_SPRITE, JUMPING_EFECT_FRAME_COUNT, (JUMPING_EFECT_DURATION/JUMPING_EFECT_FRAME_COUNT) + 0.01 );
             } else {
                 jumpedOnBeat = false;
                 velocity.y = JUMPING_SPEED;
@@ -975,7 +984,11 @@ void Character::DoAttack(float dt) {
                 attackOnBeat = true;
                 sound->Open(ATTACK_SOUND_ON_BEAT);
                 sound->Play(1);
+                jumpingEffectSprite->isBlinking = false;
+                jumpingEfect = true;
+                jumpingEffectSprite->SwitchSprite(JUMPING_EFECT_SPRITE, JUMPING_EFECT_FRAME_COUNT, (JUMPING_EFECT_DURATION/JUMPING_EFECT_FRAME_COUNT) + 0.01);
             } else {
+                attackOnBeat = false;
                 velocity.x = isLeft * ATTACKING_SPEED;
                 sound->Open(ATTACK_SOUND);
                 sound->Play(1);

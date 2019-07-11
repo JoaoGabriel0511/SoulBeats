@@ -75,12 +75,13 @@ void BellEnemy::Update(float dt) {
             break;
         default:
             break;
-        if(tookHit) {
-            blinkingTimer.Update(dt);
-            if(blinkingTimer.Get() >= BLINKING_TIME) {
-                tookHit = false;
-                bellEnemySprite->isBlinking = false;
-            }
+    }
+    if(tookHit) {
+        blinkingTimer.Update(dt);
+        if(blinkingTimer.Get() >= BLINKING_TIME) {
+            tookHit = false;
+            cout<<"aqui"<<endl;
+            bellEnemySprite->isBlinking = false;
         }
     }
 }

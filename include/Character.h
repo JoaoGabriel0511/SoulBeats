@@ -109,6 +109,7 @@ class Character : public Component {
   Rect oldPosition;
   Sprite *charSprite;
   GameObject* jumpingEfectGO;
+  Sprite* jumpingEffectSprite;
   float launchDuration;
   bool isOnGround;
   bool wasOnGround;
@@ -135,6 +136,7 @@ class Character : public Component {
   bool isOnTopOfJumpingPad;
   bool isOnMovingPlatform;
   bool switchedIdleOnBeat;
+  bool jumpingEfect;
 
   enum IdleState {
     UP,
@@ -157,6 +159,7 @@ class Character : public Component {
   Timer deathTimer;
   Timer LaunchTimer;
   Timer idleAnimationTimer;
+  Timer jumpingEffectTimer;
 
   Sound *sound;
   float gravity;

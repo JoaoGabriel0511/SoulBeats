@@ -1,6 +1,6 @@
 #ifndef BEAT_H
 #define BEAT_H
-#define IDLE_HEART_SPRITE "assets/img/heart/HeartBeatSmooth.png"
+#define IDLE_HEART_SPRITE "assets/img/heart/HeartCalm.png"
 #define BEATING_HEART_SPRITE "assets/img/heart/HeartBeatHard.png"
 #define BEATING_HEART_BG "assets/img/heart/Interface do coração.png"
 #define BEATING_HEART_BG_DARK "assets/img/heart/Interface do coração escura.png"
@@ -11,9 +11,9 @@
 #define BEAT_FALSE_LIMIT 0.6666666
 #define BEAT_TRUE_LIMIT 0.2222222
 #define BEAT_OFFSET 0.011111
-#define STILL_FRAME_COUNT 3
+#define STILL_FRAME_COUNT 1
 #define FRAME_COUNT 1
-#define DARK_TIME 0.2
+#define DARK_TIME 0.3
 #include "Component.h"
 #include "Sprite.h"
 #include "Timer.h"
@@ -26,6 +26,7 @@ class Beat : public Component {
     Timer darkTimer;
     bool actionOnBeat;
     bool onBeat;
+    bool switched;
     bool onBeatAnimation;
     GameObject *beatWave;
     GameObject *heartBackground;
