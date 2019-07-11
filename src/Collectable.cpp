@@ -1,5 +1,6 @@
 #include "../include/Collectable.h"
 
+
 Collectable::Collectable(GameObject &associated, int movingDistance, int movingSpeed, GameObject *character) : Component(associated)
 {
     this->character = character;
@@ -56,6 +57,7 @@ void Collectable::NotifyCollision(GameObject &other)
 {
     if (other.GetComponent("Character") != NULL)
     {
+        Resources::updateScore();
         sound->Open(COLLECTABLE_HIT_SOUND);
         sound->Play(1);
         associated.RequestedDelete();
