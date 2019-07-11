@@ -215,3 +215,7 @@ int Sprite::GetCurrentFrame() {
 void Sprite::SetScale(Vect2 scale) {
     this->scale = scale;
 }
+
+void Sprite::SetCurrentFame(int frame) {
+    this->currentFrame = frame;
+}

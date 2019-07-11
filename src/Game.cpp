@@ -79,6 +79,7 @@ Game::~Game() {
     while(!stateStack.empty()) {
         stateStack.pop();
     }
+
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     Mix_CloseAudio();
@@ -144,6 +145,7 @@ void Game::Run() {
     while(!stateStack.empty()) {
         stateStack.pop();
     }
+
     cout << "Removendo Imagens"<<endl;
     Resources::ClearImages();
     cout << "Removendo Musicas"<<endl;
@@ -151,6 +153,13 @@ void Game::Run() {
     cout << "Removendo Sons"<<endl;
     Resources::ClearSounds();
     cout << "Removendo Fontes"<<endl;
-    Resources::ClearFonts();
+    Resources::ClearFonts(); 
+
     TTF_Quit();
+}
+
+void Game::gameRanking() {
+    string i;
+    cout << "Ranking"<<endl;
+    cout << "Please enter an integer value: ";
 }

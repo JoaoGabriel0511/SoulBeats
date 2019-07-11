@@ -7,19 +7,21 @@
 #define VICTORY_LAYER5_SPRITE "assets/img/background/results/ResultsCamada5.png"
 #define VICTORY_LAYER6_SPRITE "assets/img/background/results/ResultsCamada6.png"
 #define COMPLETE_SPRITE "assets/img/background/results/ResultsClear.png"
-#define YOUR_RANK_IS_SPRITE "assets/img/background/results/ResultsYourRanking.png"
+#define YOUR_RANK_IS_SPRITE "assets/img/background/results/ResultsYourRanking2.png"
+#define RESULT_SPRITE "assets/img/background/results/ResultsResults.png"
 #define COLLECTABLE_ICON_SPRITE "assets/img/background/results/Icon1.png"
 #define DEATH_ICON_SPRITE "assets/img/background/results/Icon4.png"
 #define TIME_ICON_SPRITE "assets/img/background/results/Icon3.png"
 #define ATTACK_ICON_SPRITE "assets/img/background/results/Icon5.png"
 #define HEART_ICON_SPRITE "assets/img/background/results/Icon2.png"
 #define POP_ICON_SOUND "assets/audio/SFX/PegandoItem1.wav"
-#define COLLECTABLE_ICON_TIME 0.5
-#define DEATH_ICON_TIME 2
-#define TIME_ICON_TIME 1.5
-#define ATTACK_ICON_TIME 2.5
-#define HEART_ICON_TIME 1
-#define YOUR_RANK_IS_TIME 3
+#define COLLECTABLE_ICON_TIME 1
+#define DEATH_ICON_TIME 4
+#define TIME_ICON_TIME 3
+#define ATTACK_ICON_TIME 5
+#define HEART_ICON_TIME 2
+#define RESULT_TIME 6
+#define YOUR_RANK_IS_TIME 7
 #define LAYER1_BEGINING_POS_X -800
 #define LAYER2_BEGINING_POS_X -1000
 #define LAYER3_BEGINING_POS_X -1200
@@ -29,7 +31,9 @@
 #define LAYER_BEGINING_POS_Y 0
 #define LAYER_VELOCITY_Y 0
 #define LAYER_VELOCITY_X 3
-#define VICTORY_BG_MUSIC "assets/audio/TelaDeResultados.wav"
+#define SWITCH_MUSIC_TIME 20
+#define VICTORY_BG_MUSIC "assets/audio/FINAL2.1(Soul.Mus).wav"
+#define VICTORY_BG_MUSIC_2 "assets/audio/TelaDeResultados.wav"
 #include "State.h"
 #include "LevelData.h"
 #include "MovingLayer.h"
@@ -44,6 +48,7 @@ class VictoryState : public State {
     GameObject *bgMusic;
     GameObject *completeLayer;
     GameObject *yourRankIsLayer;
+    GameObject *resultLayer;
     GameObject *heartIconGO;
     GameObject *deathIconGO;
     GameObject *timeIconGO;
@@ -58,6 +63,7 @@ class VictoryState : public State {
     Sprite* deathIconSprite;
     Sprite* timeIconSprite;
     Sprite* attackIconSprite;
+    Sprite* resultSprite;
     Sprite* collectableIconSprite;
     Timer heartIconTimer;
     Timer deathIconTimer;
@@ -65,13 +71,17 @@ class VictoryState : public State {
     Timer attackIconTimer;
     Timer collectableIconTimer;
     Timer yourRankIsTimer;
+    Timer resultTimer;
+    Timer switchMusicTimer;
     Music *music;
     bool playedCompletedSound;
+    bool playedResultSound;
     bool playedCollectableIconSound;
     bool playedHeartIconSound;
     bool playedTimeIconSound;
     bool playedDeathIconSound;
     bool playedAttackIconSound;
+    bool switchedMusic;
     bool playedYourRankIsSound;
     public:
         VictoryState();

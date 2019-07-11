@@ -27,6 +27,7 @@ class Sprite : public Component {
         void SetScale(Vect2 scale);
         void SetFrameCount(int frameCount);
         void SetFrameTime(float frameTime);
+        void SetCurrentFame(int frame);
         int GetCurrentFrame();
         bool Open(string file);
         void SetClip(int x, int y, int w, int h);

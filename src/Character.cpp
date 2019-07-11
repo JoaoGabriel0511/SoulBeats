@@ -8,9 +8,15 @@ Character::Character(GameObject &associated) : Component(associated)
     Collider *collider;
     collider = new Collider(associated, {2, 2}, {-140, -60});
     lifeBarGO = new GameObject();
-    lifeBarGO->box.z = 6;
+    lifeBarGO->box.z = 7;
     lifeBar = new LifeBar(*lifeBarGO);
     Game::GetInstance().GetCurrentStatePointer()->AddObject(lifeBarGO);
+}
+
+Character::~Character() {
+    if(jumpingEfectGO) {
+        jumpingEfectGO->RequestedDelete();
+    }
 }
 
 void Character::Start()
@@ -40,15 +46,64 @@ void Character::Start()
     hasChanged = false;
     jumpedOnBeat = false;
     isLaunching = false;
+    idleState = UP;
     launchDuration = 0;
     recoveringFromHitKnockback = false;
     isOnTopOfJumpingPad = false;
+    switchedIdleOnBeat = false;
+    jumpingEfect = false;
     wasLeftSide = isLeftSide;
     wasOnGround = isOnGround;
     gravity = GRAVITY_FALLING;
     idleTimer.Restart();
     walkingSoundTimer.Restart();
+    jumpingEfectGO = new GameObject();
+    jumpingEffectSprite = new Sprite(*jumpingEfectGO,JUMPING_EFECT_SPRITE, JUMPING_EFECT_FRAME_COUNT, (JUMPING_EFECT_DURATION/JUMPING_EFECT_FRAME_COUNT) + 0.01);
+    jumpingEffectSprite->SetScale({2,2});
+    jumpingEfectGO->box.z = 5;
+    if(isLeftSide) {
+        jumpingEfectGO->box.x = associated.box.x;
+    } else {
+        jumpingEfectGO->box.x = associated.box.x + (associated.box.w/2) ;
+    }
+    jumpingEfectGO->box.y = associated.box.y + associated.box.h;
+    Game::GetInstance().GetCurrentState().AddObject(jumpingEfectGO);
+    jumpingEffectSprite->isBlinking = true;
     movingPlatformVelocity = {0,0};
+}
+
+void Character::IdleUpdate(float dt) {
+    if(isLeftSide) {
+        if(global_beat->GetOnBeat()) {
+            if(!switchedIdleOnBeat){
+                if(idleState == UP){
+                    idleState = DOWN;
+                    charSprite->SwitchSprite(IDLE_SPRITE_DOWN_LEFT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+                } else {
+                    idleState = UP;
+                    charSprite->SwitchSprite(IDLE_SPRITE_UP_LEFT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+                }
+                switchedIdleOnBeat = true;
+            }
+        } else {
+            switchedIdleOnBeat = false;
+        }
+    } else {
+        if(global_beat->GetOnBeat()) {
+            if(!switchedIdleOnBeat) {
+                if(idleState == UP){
+                    idleState = DOWN;
+                    charSprite->SwitchSprite(IDLE_SPRITE_DOWN_RIGHT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+                } else {
+                    idleState = UP;
+                    charSprite->SwitchSprite(IDLE_SPRITE_UP_RIGHT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+                }
+                switchedIdleOnBeat = true;
+            }
+        } else {
+            switchedIdleOnBeat = false;
+        }
+    }
 }
 
 void Character::Update(float dt)
@@ -60,6 +115,9 @@ void Character::Update(float dt)
     wasLeftSide = isLeftSide;
     BangUpdate(dt);
     IsInvincibleUpdate(dt);
+    if(isStill && !finishIdle) {
+        IdleUpdate(dt);
+    }
 
     if(lifeBar->HP() <= 0){
         isDead = true;
@@ -112,6 +170,20 @@ void Character::Update(float dt)
     associated.box += (velocity + movingPlatformVelocity) * dt;
     //cout<<"associated.box.x"<<associated.box.x<<endl;
     //cout<<"associated.box.y"<<associated.box.y<<endl;
+    if(jumpingEfect) {
+        if(isLeftSide) {
+            jumpingEfectGO->box.x = associated.box.x + associated.box.w;
+        } else {
+            jumpingEfectGO->box.x = associated.box.x + (associated.box.w/2) ;
+        }
+        jumpingEfectGO->box.y = associated.box.y + associated.box.h;
+        jumpingEffectTimer.Update(dt);
+        if(jumpingEffectTimer.Get() >= JUMPING_EFECT_DURATION){
+            jumpingEfect = false;
+            jumpingEffectSprite->isBlinking = true;
+            jumpingEffectTimer.Restart();
+        }
+    }
     Camera::Update(dt);
     isFalling = true;
     peakDone = false;
@@ -188,7 +260,7 @@ void Character::NotifyCollision(GameObject &other)
         } else {
             if ( other.GetComponent("BellEnemy") != NULL || other.GetComponent("HarpEnemy") != NULL || other.GetComponent("AccordionEnemy") != NULL)
             {
-                if (!isInvincible)
+                if (!isInvincible && !recoveringFromHitKnockback)
                 {
                     EnemyCollision(other);
                 }
@@ -206,11 +278,11 @@ void Character::NotifyCollision(GameObject &other)
 }
 
 void Character::HeartCollision(GameObject& other) {
-    lifeBar->GetHP();
     if(lifeBar->HP() < 5){
         sound->Open(GET_HEART_SOUND);
         sound->Play(1);
     }
+    lifeBar->GetHP();
 }
 
 void Character::MovingPlatformsCollision(GameObject& other) {
@@ -218,7 +290,7 @@ void Character::MovingPlatformsCollision(GameObject& other) {
     Collider * platformCollider = ((Collider *)other.GetComponent("Collider").get());
     if (velocity.y > 0 || isAttacking || gotHit)
     {
-        if ((collider->box.y + collider->box.h - 25 <= platformCollider->box.y) && (collider->box.x + collider->box.w > platformCollider->box.x + 24) && (collider->box.x < platformCollider->box.x + platformCollider->box.w - 24))
+        if ((collider->box.y + collider->box.h - 10 <= platformCollider->box.y) && (collider->box.x + collider->box.w > platformCollider->box.x + 24) && (collider->box.x < platformCollider->box.x + platformCollider->box.w - 24))
         {
             LandOnground();
             associated.box.y = platformCollider->box.y - associated.box.h - 90;
@@ -233,6 +305,8 @@ void Character::MovingPlatformsCollision(GameObject& other) {
 }
 
 void Character::EnemyCollision(GameObject& other) {
+    sound->Open(TAKE_DAMGE_SOUND);
+    sound->Play(1);
     if (other.box.x > associated.box.x)
     {
         velocity.x = -1 * HURT_DEFLECT_SPEED;
@@ -291,12 +365,7 @@ void Character::NotifYCollisionWithMap(Rect tileBox)
     }
     if (tileBox.z == 101 || tileBox.z == 102 || tileBox.z == 103 || tileBox.z == 148 || tileBox.z == 104 ||
         tileBox.z == 67 || tileBox.z == 68 || tileBox.z == 57 || tileBox.z == 58 || tileBox.z == 66 || tileBox.z == 84 ||
-        tileBox.z == 149 || tileBox.z == 150 || tileBox.z == 151 || tileBox.z == 130 || tileBox.z == 129)
-    {
-        LightGroundCollision(tileBox);
-    }
-    if (tileBox.z == 101 || tileBox.z == 102 || tileBox.z == 103 || tileBox.z == 148 || tileBox.z == 104 ||
-        tileBox.z == 67 || tileBox.z == 68 || tileBox.z == 57 || tileBox.z == 58 || tileBox.z == 66 || tileBox.z == 84)
+        tileBox.z == 149 || tileBox.z == 150 || tileBox.z == 151 || tileBox.z == 130 || tileBox.z == 129 || tileBox.z == 147)
     {
         if (tileBox.z == 67)
         {
@@ -358,13 +427,13 @@ void Character::SolidGroundCollision(Rect tileBox)
             {
                 velocity.y = 0;
                 associated.box.y = tileBox.y + tileBox.h - 45;
-                if(isLaunching) {
+                /*if(isLaunching) {
                     isLaunching = false;
                     peakDone = true;
                     isFalling = true;
                     isRising = false;
                     gravity = GRAVITY_FALLING;
-                }
+                }*/
             }
         }
         if ((velocity.x >= 0) && (collider->box.x < tileBox.x))
@@ -373,13 +442,13 @@ void Character::SolidGroundCollision(Rect tileBox)
             {
                 velocity.x = 0;
                 associated.box.x = tileBox.x - associated.box.w - 35;
-                if(isLaunching){
+                /*if(isLaunching){
                     isLaunching = false;
                     peakDone = true;
                     isFalling = true;
                     isRising = false;
                     gravity = GRAVITY_FALLING;
-                }
+                }*/
             }
         }
         if ((velocity.x <= 0) && (collider->box.x > tileBox.x) && (collider->box.y + 40 < tileBox.y + tileBox.h))
@@ -388,13 +457,13 @@ void Character::SolidGroundCollision(Rect tileBox)
             {
                 velocity.x = 0;
                 associated.box.x = tileBox.x + tileBox.w - 75;
-                if(isLaunching){
+                /*if(isLaunching){
                     isLaunching = false;
                     peakDone = true;
                     isFalling = true;
                     isRising = false;
                     gravity = GRAVITY_FALLING;
-                }
+                }*/
             }
         }
     }
@@ -423,22 +492,34 @@ void Character::LandOnground()
     {
         if (isLeftSide)
         {
-            charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
+            if(idleState == UP){
+                idleState = DOWN;
+                charSprite->SwitchSprite(IDLE_SPRITE_DOWN_LEFT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+            } else {
+                idleState = UP;
+                charSprite->SwitchSprite(IDLE_SPRITE_UP_LEFT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+            }
         }
         else
         {
-            charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
+            if(idleState == UP){
+                idleState = DOWN;
+                charSprite->SwitchSprite(IDLE_SPRITE_DOWN_RIGHT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+            } else {
+                idleState = UP;
+                charSprite->SwitchSprite(IDLE_SPRITE_UP_RIGHT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+            }
         }
         idleTimer.Restart();
         finishIdle = false;
     }
-    if(isLaunching) {
+    /*if(isLaunching) {
         isLaunching = false;
         peakDone = true;
         isFalling = true;
         isRising = false;
         gravity = GRAVITY_FALLING;
-    }
+    }*/
     isOnGround = true;
     canAttack = true;
     isFalling = false;
@@ -473,13 +554,13 @@ void Character::SolidSlope2Collision(Rect tileBox) {
             if((collider->box.y >= posY) && (collider->box.x + collider->box.w > tileBox.x + 24) && (collider->box.x < tileBox.x + tileBox.w - 24)) {
                 velocity.y = 0;
                 associated.box.y = posY + tileBox.h - 45;
-                if(isLaunching) {
+                /*if(isLaunching) {
                     isLaunching = false;
                     peakDone = true;
                     isFalling = true;
                     isRising = false;
                     gravity = GRAVITY_FALLING;
-                }
+                }*/
             }
         }
         if((velocity.x >= 0) && (collider->box.x < tileBox.x)) {
@@ -554,6 +635,7 @@ void Character::HitKnockBack()
         }
     }
     isAttacking = false;
+    gravity = GRAVITY_FALLING;
     attackOnBeat = false;
     hitRecoverTimer.Restart();
     recoveringFromHitKnockback = true;
@@ -620,13 +702,13 @@ void Character::SolidSlope1Collision(Rect tileBox)
                 velocity.y = 0;
                 associated.box.y = posY + tileBox.h - 45;
             }
-            if(isLaunching) {
+            /*if(isLaunching) {
                 isLaunching = false;
                 peakDone = true;
                 isFalling = true;
                 isRising = false;
                 gravity = GRAVITY_FALLING;
-            }
+            }*/
         }
         if ((velocity.x >= 0) && (collider->box.x < tileBox.x))
         {
@@ -735,11 +817,23 @@ void Character::GotHit(float dt) {
             finishIdle = false;
             if (isLeftSide)
             {
-                charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
+                if(idleState == UP){
+                    idleState = DOWN;
+                    charSprite->SwitchSprite(IDLE_SPRITE_DOWN_LEFT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+                } else {
+                    idleState = UP;
+                    charSprite->SwitchSprite(IDLE_SPRITE_UP_LEFT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+                }
             }
             else
             {
-                charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
+                if(idleState == UP){
+                    idleState = DOWN;
+                    charSprite->SwitchSprite(IDLE_SPRITE_DOWN_RIGHT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+                } else {
+                    idleState = UP;
+                    charSprite->SwitchSprite(IDLE_SPRITE_UP_RIGHT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+                }
             }
         }
     }
@@ -837,6 +931,10 @@ void Character::Jump(float dt) {
                 jumpedOnBeat = true;
                 sound->Open(JUMPING_SOUND);
                 sound->Play(1);
+                global_beat->ActionOnBeat();
+                jumpingEfect = true;
+                jumpingEffectSprite->isBlinking = false;
+                jumpingEffectSprite->SwitchSprite(JUMPING_EFECT_SPRITE, JUMPING_EFECT_FRAME_COUNT, (JUMPING_EFECT_DURATION/JUMPING_EFECT_FRAME_COUNT) + 0.01 );
             } else {
                 jumpedOnBeat = false;
                 velocity.y = JUMPING_SPEED;
@@ -886,7 +984,11 @@ void Character::DoAttack(float dt) {
                 attackOnBeat = true;
                 sound->Open(ATTACK_SOUND_ON_BEAT);
                 sound->Play(1);
+                jumpingEffectSprite->isBlinking = false;
+                jumpingEfect = true;
+                jumpingEffectSprite->SwitchSprite(JUMPING_EFECT_SPRITE, JUMPING_EFECT_FRAME_COUNT, (JUMPING_EFECT_DURATION/JUMPING_EFECT_FRAME_COUNT) + 0.01);
             } else {
+                attackOnBeat = false;
                 velocity.x = isLeft * ATTACKING_SPEED;
                 sound->Open(ATTACK_SOUND);
                 sound->Play(1);
@@ -904,12 +1006,14 @@ void Character::DoAttack(float dt) {
             if(isOnGround) {
                 if(isLeftSide) {
                     if(global_beat->GetOnBeat() == true) {
+                        global_beat->ActionOnBeat();
                         charSprite->SwitchSprite(ATTACK_LEFT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
                     } else {
                         charSprite->SwitchSprite(ATTACK_LEFT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
                     }
                 } else {
                     if(global_beat->GetOnBeat() == true) {
+                        global_beat->ActionOnBeat();
                         charSprite->SwitchSprite(ATTACK_RIGHT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
                     } else {
                         charSprite->SwitchSprite(ATTACK_RIGHT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
@@ -918,12 +1022,14 @@ void Character::DoAttack(float dt) {
             } else {
                 if(isLeftSide) {
                     if(global_beat->GetOnBeat() == true) {
+                        global_beat->ActionOnBeat();
                         charSprite->SwitchSprite(ATTACK_AIR_LEFT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
                     } else {
                         charSprite->SwitchSprite(ATTACK_AIR_LEFT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
                     }
                 } else {
                     if(global_beat->GetOnBeat() == true) {
+                        global_beat->ActionOnBeat();
                         charSprite->SwitchSprite(ATTACK_AIR_RIGHT_SPRITE_ON_BEAT, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
                     } else {
                         charSprite->SwitchSprite(ATTACK_AIR_RIGHT_SPRITE, ATTACK_FRAME_COUNT, ATTACK_DURATION/ATTACK_FRAME_COUNT + 0.1);
@@ -942,9 +1048,21 @@ void Character::StopMovingSideWays(float dt) {
         if(isOnGround) {
             walkingSoundTimer.Restart();
             if(isLeftSide) {
-                charSprite->SwitchSprite(IDLE_SPRITE_LEFT, IDLE_LEFT_FRAME_COUNT, IDLE_FRAME_TIME);
+                if(idleState == UP){
+                    idleState = DOWN;
+                    charSprite->SwitchSprite(IDLE_SPRITE_DOWN_LEFT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+                } else {
+                    idleState = UP;
+                    charSprite->SwitchSprite(IDLE_SPRITE_UP_LEFT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+                }
             } else {
-                charSprite->SwitchSprite(IDLE_SPRITE_RIGHT, IDLE_RIGHT_FRAME_COUNT, IDLE_FRAME_TIME);
+                if(idleState == UP){
+                    idleState = DOWN;
+                    charSprite->SwitchSprite(IDLE_SPRITE_DOWN_RIGHT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+                } else {
+                    idleState = UP;
+                    charSprite->SwitchSprite(IDLE_SPRITE_UP_RIGHT, IDLE_SPRITE_ON_BEAT_FRAME_COUNT, global_beat->GetFalseDuration()/IDLE_SPRITE_ON_BEAT_FRAME_COUNT);
+                }
             }
             idleTimer.Restart();
             finishIdle = false;
@@ -1039,6 +1157,7 @@ void Character::LaunchCharacter(Vect2 launchVelocity, bool isLeftSide,
     charSprite->SwitchSprite(launcherSprite, launcherSpriteFrameCount, launcherSpriteFrameTime);
     collider->Update(0);
     isAttacking = false;
+    canAttack = false;
     isOnGround = false;
     gravity = 0;
     velocity = launchVelocity;
@@ -1058,6 +1177,7 @@ void Character::LaunchUpdate(float dt) {
         isLaunching = false;
         peakDone = true;
         isFalling = true;
+        canAttack = true;
         isRising = false;
         velocity.x = 0;
         gravity = GRAVITY_FALLING;

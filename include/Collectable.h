@@ -8,6 +8,7 @@
 #define COLLECTABLE_IDLE_FRAME_COUNT 8
 #define COLLECTABLE_IDLE_DURATION 0.747
 #define COLLECTABLE_HIT_SOUND "assets/audio/SFX/PegandoItem2.1(Soul).wav"
+using namespace std;
 
 class Collectable : public Component
 {

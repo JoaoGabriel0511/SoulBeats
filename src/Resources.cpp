@@ -4,6 +4,8 @@ unordered_map<string, shared_ptr<SDL_Texture>> Resources::imageTable;
 unordered_map<string, shared_ptr<Mix_Music>> Resources::musicTable;
 unordered_map<string, shared_ptr<Mix_Chunk>> Resources::soundTable;
 unordered_map<string, shared_ptr<TTF_Font>> Resources::fontTable;
+int countScore = 0;
+
 
 shared_ptr<SDL_Texture> Resources::GetImage(string file) {
     shared_ptr<SDL_Texture> texture;
@@ -108,4 +110,10 @@ void Resources::ClearFonts() {
         }
     }
     fontTable.clear();
+}
+
+void Resources::updateScore() {
+    cout << "Score antigo: "<<countScore<<endl;
+   countScore ++;
+   cout << "Score novo: "<<countScore<<endl;
 }
