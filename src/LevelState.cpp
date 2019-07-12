@@ -565,10 +565,12 @@ void LevelState::VictoryCycle(float dt) {
     VictoryState *victoryState;
     ((Music*) bg->GetComponent("Music").get())->Stop(0);
     Camera::UnFollow();
+    //Camera::pos.x = 16287;
+    //Camera::pos.y = Camera::pos.y;
     goalGO->Update(dt);
     beforeFinishLevelTimer.Update(dt);
     if(beforeFinishLevelTimer.Get() >= BEFORE_FINISH_LEVEL_TIME ) {
-        //popRequested = true;
+        popRequested = true;
         victoryState = new VictoryState();
         //bg->RequestedDelete();
         Game::GetInstance().Push(victoryState);
@@ -593,7 +595,7 @@ void LevelState::LevelCycle(float dt) {
     TileMapCollider *tileMapForeCollider = ((TileMapCollider*) tileTerrForeGO->GetComponent("TileMapCollider").get());
     TileMapCollider *tileMapBackCollider = ((TileMapCollider*) tileTerrBackGO->GetComponent("TileMapCollider").get());
     UpdateCameraFocus(dt);
-    collectablesUI->UpdateText(std::to_string(LevelData::GetInstance().collectablesCollected));
+    collectablesUI->UpdateText(std::to_string(LevelData::GetInstance().collectablesCollected) + "/6");
     pointsUI->UpdateText(std::to_string(LevelData::GetInstance().enemyPoints));
     timeUI->UpdateText(std::to_string(LevelData::GetInstance().time));
     timeTimer.Update(dt);

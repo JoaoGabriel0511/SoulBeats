@@ -86,4 +86,6 @@ void Camera::Update(float dt) {
             pos.y = -1 * (focus->box.y - (GameInfo::GetInstance().HEIGHT / 2)) + 50;
         }
     }
+    cout<<"pos x "<<pos.x<<endl;
+    cout<<"pos y "<< pos.y<<endl;
 }

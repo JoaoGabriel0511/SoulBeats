@@ -25,8 +25,8 @@ void InitialScreenState::LoadAssets() {
     Sprite* backgroungSprite = new Sprite(*backgroundGo, INITIAL_SCREEN_BACKGROUND_SPRITE);
     backgroungSprite->SetScale({2.1,2.1});
 
-    Music * menuMusic = new Music(*backgroundGo, INTIAL_SCREEN_MUSIC);
-    menuMusic->Play(1);
+    menuMusic = new Music(*backgroundGo, INTIAL_SCREEN_MUSIC);
+    menuMusic->Play(-1);
 
     // Floor
     floorGo = new GameObject();
@@ -92,7 +92,7 @@ void InitialScreenState::LoadAssets() {
     objectArray.emplace_back(backgroundGo);
     objectArray.emplace_back(floorGo);
     objectArray.emplace_back(heartGo);
-    objectArray.emplace_back(characterGo); 
+    objectArray.emplace_back(characterGo);
     objectArray.emplace_back(highlightGo);
     objectArray.emplace_back(startOptionGo);
     objectArray.emplace_back(creditsOptionGo);
@@ -123,7 +123,9 @@ void InitialScreenState::Update(float dt) {
 
 void InitialScreenState::Pause() {}
 
-void InitialScreenState::Resume() {}
+void InitialScreenState::Resume() {
+    menuMusic->Play(-1);
+}
 
 void InitialScreenState::StartData() {}
 
@@ -170,7 +172,13 @@ void InitialScreenState::UpdateMenuInput(float dt){
             selectedOption = START;
             creditsSprite->SwitchSprite(OPTION_CREDITS_0, 1, 0);
             startSprite->SwitchSprite(OPTION_START_1, 1, 0);
-        }   
+        }
+        if(InputManager::GetInstance().KeyPress(SDLK_RETURN)){
+            selectingSound->Play(1);
+            LoreState* loreState;
+            loreState = new LoreState("assets/img/background/CreditsSB.png");
+            Game::GetInstance().Push(loreState);
+        }
     }
 
     if(currentOption == QUIT){
@@ -208,8 +216,12 @@ void InitialScreenState::UpdateMenuInput(float dt){
             selectedOption = QUIT;
             loreSprite->SwitchSprite(OPTION_LORE_0, 1, 0);
             exitSprite->SwitchSprite(OPTION_QUIT_1, 1, 0);
-        }   
+        }
+        if (InputManager::GetInstance().KeyPress(SDLK_RETURN)){
+            LoreState* loreState;
+            loreState = new LoreState("assets/img/background/SoulBeatsLore.png");
+            Game::GetInstance().Push(loreState);
+        }
     }
-
 
 }

@@ -15,6 +15,7 @@
 #define ATTACK_ICON_SPRITE "assets/img/background/results/Icon5.png"
 #define HEART_ICON_SPRITE "assets/img/background/results/Icon2.png"
 #define POP_ICON_SOUND "assets/audio/SFX/PegandoItem1.wav"
+#define CONTINUE_TEXT_TIME 5
 #define COLLECTABLE_ICON_TIME 1 * 0.5
 #define DEATH_ICON_TIME 4 * 0.5
 #define TIME_ICON_TIME 3 * 0.5
@@ -110,6 +111,7 @@ class VictoryState : public State {
     Timer yourRankIsTimer;
     Timer resultTimer;
     Timer switchMusicTimer;
+    Timer continueTextTimer;
     Music *music;
     bool playedCompletedSound;
     bool playedResultSound;
@@ -120,6 +122,7 @@ class VictoryState : public State {
     bool playedAttackIconSound;
     bool switchedMusic;
     bool playedYourRankIsSound;
+    bool putedContinueText;
     int collectablesPoints;
     int deathPenalthy;
     int damagePenalthy;

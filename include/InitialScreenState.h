@@ -21,10 +21,11 @@
 #define MENU_CHOOSING_SFX "assets/audio/SFX/menu/Escolhendo2.1(Soul).wav"
 #define MENU_SELECTING_SFX "assets/audio/SFX/menu/Selecionando2.1(Soul).wav"
 
-#define FLOOR_CHANGE_INTERVAL 0.4
+#define FLOOR_CHANGE_INTERVAL 0.545454545
 #define MENU_CHARACTER_FRAME_TIME 0.08
 #include "State.h"
 #include "LevelData.h"
+#include "LoreState.h"
 #include "MovingLayer.h"
 
 class InitialScreenState : public State {
@@ -50,7 +51,7 @@ class InitialScreenState : public State {
     Sound* selectingSound;
 
     Timer floorChangeTimer;
-    
+    Music * menuMusic;
     enum Options {START,CREDITS, QUIT, LORE};
     bool floorOnInitialState;
     Options selectedOption;
