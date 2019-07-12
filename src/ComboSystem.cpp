@@ -143,7 +143,7 @@ void ComboSystem::UpdateKilledEnemy(){
         comboLevelSprite->isBlinking = false;
         playMessage = true;
         comboLevelSprite->SwitchSprite(BRAVO_SPRITE, 8, MESSAGE_FRAME_TIME);
-
     }
+    
     comboBarSprite->isBlinking = false;
 }

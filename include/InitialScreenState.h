@@ -18,6 +18,8 @@
 
 
 #define INTIAL_SCREEN_MUSIC "assets/audio/MENU.wav"
+#define MENU_CHOOSING_SFX "assets/audio/SFX/menu/Escolhendo2.1(Soul).wav"
+#define MENU_SELECTING_SFX "assets/audio/SFX/menu/Selecionando2.1(Soul).wav"
 
 #define FLOOR_CHANGE_INTERVAL 0.4
 #define MENU_CHARACTER_FRAME_TIME 0.08
@@ -44,6 +46,9 @@ class InitialScreenState : public State {
     Sprite* exitSprite;
     Sprite* loreSprite;
     Sprite* creditsSprite;
+    Sound* choosingSound;
+    Sound* selectingSound;
+
     Timer floorChangeTimer;
     
     enum Options {START,CREDITS, QUIT, LORE};

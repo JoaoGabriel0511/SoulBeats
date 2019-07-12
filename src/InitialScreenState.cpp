@@ -12,8 +12,12 @@ void InitialScreenState::Start() {
 }
 
 void InitialScreenState::LoadAssets() {
+
     // Background
     backgroundGo = new GameObject();
+    choosingSound = new Sound(*backgroundGo, MENU_CHOOSING_SFX);
+    selectingSound = new Sound(*backgroundGo, MENU_CHOOSING_SFX);
+
     backgroundGo->box.w = GameInfo::GetInstance().WIDTH;
     backgroundGo->box.h = GameInfo::GetInstance().HEIGHT;
     backgroundGo->box.x = Camera::pos.x;
@@ -22,7 +26,7 @@ void InitialScreenState::LoadAssets() {
     backgroungSprite->SetScale({2.1,2.1});
 
     Music * menuMusic = new Music(*backgroundGo, INTIAL_SCREEN_MUSIC);
-    // menuMusic->Play(1);
+    menuMusic->Play(1);
 
     // Floor
     floorGo = new GameObject();
@@ -130,6 +134,7 @@ void InitialScreenState::UpdateMenuInput(float dt){
         // cout << "[START] selected\n";
         
         if (InputManager::GetInstance().KeyPress(D_KEY) or  InputManager::GetInstance().KeyPress(RIGHT_ARROW_KEY)) {
+            choosingSound->Play(1);
             // cout << "Go right";
             selectedOption = CREDITS;
             startSprite->SwitchSprite(OPTION_START_0, 1, 0);
@@ -137,12 +142,14 @@ void InitialScreenState::UpdateMenuInput(float dt){
         }
 
         if (InputManager::GetInstance().KeyPress(A_KEY) or  InputManager::GetInstance().KeyPress(LEFT_ARROW_KEY)) {
+            choosingSound->Play(1);
             selectedOption = LORE;
             startSprite->SwitchSprite(OPTION_START_0, 1, 0);
             loreSprite->SwitchSprite(OPTION_LORE_1, 1, 0);
         }   
 
         if (InputManager::GetInstance().KeyPress(SDLK_RETURN)){
+            selectingSound->Play(1);
             LevelState* levelState;
             levelState = new LevelState();
             Game::GetInstance().Push(levelState);
@@ -152,12 +159,14 @@ void InitialScreenState::UpdateMenuInput(float dt){
 
     if(currentOption == CREDITS){
         if (InputManager::GetInstance().KeyPress(D_KEY) or  InputManager::GetInstance().KeyPress(RIGHT_ARROW_KEY)) {
+            choosingSound->Play(1);
             selectedOption = QUIT;
             creditsSprite->SwitchSprite(OPTION_CREDITS_0, 1, 0);
             exitSprite->SwitchSprite(OPTION_QUIT_1, 1, 0);
         }
 
         if (InputManager::GetInstance().KeyPress(A_KEY) or  InputManager::GetInstance().KeyPress(LEFT_ARROW_KEY)) {
+            choosingSound->Play(1);
             selectedOption = START;
             creditsSprite->SwitchSprite(OPTION_CREDITS_0, 1, 0);
             startSprite->SwitchSprite(OPTION_START_1, 1, 0);
@@ -166,18 +175,21 @@ void InitialScreenState::UpdateMenuInput(float dt){
 
     if(currentOption == QUIT){
         if (InputManager::GetInstance().KeyPress(D_KEY) or  InputManager::GetInstance().KeyPress(RIGHT_ARROW_KEY)) {
+            choosingSound->Play(1);
             selectedOption = LORE;
             exitSprite->SwitchSprite(OPTION_QUIT_0, 1, 0);
             loreSprite->SwitchSprite(OPTION_LORE_1, 1, 0);
         }
 
         if (InputManager::GetInstance().KeyPress(A_KEY) or  InputManager::GetInstance().KeyPress(LEFT_ARROW_KEY)) {
+            choosingSound->Play(1);
             selectedOption = CREDITS;
             exitSprite->SwitchSprite(OPTION_QUIT_0, 1, 0);
             creditsSprite->SwitchSprite(OPTION_CREDITS_1, 1, 0);
         }   
 
          if (InputManager::GetInstance().KeyPress(SDLK_RETURN)){
+            selectingSound->Play(1);
             quitRequested = true;
             // Game::GetInstance().GetCurrentState().
         }
@@ -185,12 +197,14 @@ void InitialScreenState::UpdateMenuInput(float dt){
 
     if(currentOption == LORE){
         if (InputManager::GetInstance().KeyPress(D_KEY) or  InputManager::GetInstance().KeyPress(RIGHT_ARROW_KEY)) {
+           choosingSound->Play(1);
             selectedOption = START;
             loreSprite->SwitchSprite(OPTION_LORE_0, 1, 0);
             startSprite->SwitchSprite(OPTION_START_1, 1, 0);
         }
 
         if (InputManager::GetInstance().KeyPress(A_KEY) or  InputManager::GetInstance().KeyPress(LEFT_ARROW_KEY)) {
+            choosingSound->Play(1);
             selectedOption = QUIT;
             loreSprite->SwitchSprite(OPTION_LORE_0, 1, 0);
             exitSprite->SwitchSprite(OPTION_QUIT_1, 1, 0);

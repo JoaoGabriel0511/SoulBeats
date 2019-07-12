@@ -12,7 +12,7 @@
 #define COMBO_BAR_DECREASE_TIME 0.08
 
 #define COMBO_INTERVAL 1.7
-// #define
+// #define COMBO_INTERVAL 200
 #define MESSAGE_TIME 0.43
 #define MESSAGE_FRAME_TIME 0.06
 
