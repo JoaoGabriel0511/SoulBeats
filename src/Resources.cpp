@@ -112,8 +112,10 @@ void Resources::ClearFonts() {
     fontTable.clear();
 }
 
-void Resources::updateScore() {
-    cout << "Score antigo: "<<countScore<<endl;
-   countScore ++;
-   cout << "Score novo: "<<countScore<<endl;
+/*void Resources::updateScore(int value) {
+   countScore = countScore + value;
 }
+
+int Resources::getScore() {
+    return countScore;
+}*/

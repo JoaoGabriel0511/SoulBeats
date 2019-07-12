@@ -4,7 +4,9 @@ LevelData::LevelData() {
     isNewLevel = true;
     switchedDevelopmentMusic = false;
     switchedBegininMusic = false;
-    musicState = INTRO;
+    musicState = BEGINING;
+    deathCount = 0;
+    damageCount = 0;
 }
 
 LevelData::~LevelData() {}
@@ -19,11 +21,15 @@ void LevelData::clear() {
 }
 
 void LevelData::Start() {
+    collectablesCollected = 0;
     for(int i = 0; i < enemyData.size(); i++) {
         enemyData[i]->wasKilled = enemyData[i]->isDead;
     }
     for(int i = 0; i < collectableData.size(); i++) {
         collectableData[i]->wasCollected = collectableData[i]->isCollected;
+        if(collectableData[i]->isCollected) {
+            collectablesCollected++;
+        }
     }
     for (int i = 0; i < heartData.size(); i++) {
         heartData[i]->wasCollected = heartData[i]->isCollected;

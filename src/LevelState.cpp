@@ -166,6 +166,7 @@ void LevelState::LoadAssets() {
     Music *levelMusic;
     cameraFollower = new CameraFollower(*bg);
     levelSprite = new Sprite(*bg, "assets/img/background/Fundo.png");
+    //global_beat->BeginBeat();
     if(LevelData::GetInstance().musicState == LevelData::INTRO) {
         levelMusic = new Music(*bg, INTRO_MUSIC);
         levelMusic->Play(1);
@@ -425,16 +426,14 @@ void LevelState::LoadAssets() {
     TileMapCollider *tileMapTerrBackCollider = new TileMapCollider(*tileTerrBackGO, tileMapTerrBack);
     objectArray.emplace_back(tileTerrBackGO);
 
-    //Adicionando Text 
+    /*//Adicionando Text
 
     Text *textScore;
     GameObject *textScoreGO = new GameObject();
-    textScoreGO->box.x = 300;
-    textScoreGO->box.y = 3000;
     textScoreGO->box.z = 6;
-    textScore = new Text(*textScoreGO,"assets/font/superFont.ttf", 20, Text::TextStyle::SOLID, "Score: ", SDL_Color {0,0,0}, 0);
+    textScore = new Text(*textScoreGO,"assets/font/superFont.ttf", 40, Text::TextStyle::SOLID, "Score:", SDL_Color {255,255,255}, 0);
     objectArray.emplace_back(textScoreGO);
-
+    */
 
     //TileMap Decoracao Terreno Adicionada
 
@@ -466,9 +465,9 @@ void LevelState::LoadAssets() {
     goal = new Goal(*goalGO);
     goalGO->box.x = 16580;
     goalGO->box.y = 550;
-    goalGO->box.x = 300;
-    goalGO->box.y = 3000;
-    goalGO->box.z = 4;
+    //goalGO->box.x = 300;
+    //goalGO->box.y = 3000;
+    goalGO->box.z = 5;
     objectArray.emplace_back(goalGO);
 
     //Goal adicionado

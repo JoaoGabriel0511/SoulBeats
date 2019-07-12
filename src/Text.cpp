@@ -1,5 +1,7 @@
 #include "../include/Text.h"
 
+int textScoreCount = 0;
+
 Text::Text(GameObject& associated, string fontFile, int fontSize, TextStyle style, string text, SDL_Color color, float blinkTime) : Component(associated) {
     this->fontFile = fontFile;
     this->fontSize = fontSize;

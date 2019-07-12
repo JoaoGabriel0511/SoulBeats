@@ -120,6 +120,9 @@ void Character::Update(float dt)
     }
 
     if(lifeBar->HP() <= 0){
+        if(isDead == false) {
+            LevelData::GetInstance().deathCount++;
+        }
         isDead = true;
         Camera::UnFollow();
     }
@@ -326,6 +329,8 @@ void Character::EnemyCollision(GameObject& other) {
     gravity = HURT_GRAVITY;
     gotHit = true;
     lifeBar->LoseHP();
+    LevelData::GetInstance().damageCount++;
+    cout<<"damage "<<LevelData::GetInstance().damageCount<<endl;
     isInvincible = true;
     if (isAttacking)
     {

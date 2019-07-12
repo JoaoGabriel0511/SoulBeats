@@ -30,6 +30,10 @@ class LevelData {
         vector<CollectableData*> collectableData;
         vector<MovingPlatformsData*> movingPlatformsData;
         vector<HeartData*> heartData;
+        int collectablesCollected;
+        int deathCount;
+        int damageCount;
+        int enemyPoints;
         void clear();
         Vect2 *pos;
         LevelData();

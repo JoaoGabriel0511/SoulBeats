@@ -7,7 +7,7 @@ void Beat::Start(){
     heartBackground = new GameObject();
     backgroundSprite = new Sprite(*heartBackground, BEATING_HEART_BG, 1, 1);
     beatWave = new GameObject();
-    //waveSprite = new Sprite(*beatWave, WAVE_SPRITE, WAVE_FRAME_COUNT, BEAT_TRUE_LIMIT / WAVE_FRAME_COUNT);
+    waveSprite = new Sprite(*beatWave, WAVE_SPRITE, WAVE_FRAME_COUNT, BEAT_TRUE_LIMIT / WAVE_FRAME_COUNT);
     backgroundSprite->SetScale({2,2});
     heartBackground->box.z = 6;
     beatWave->box.z = 6;
@@ -15,12 +15,12 @@ void Beat::Start(){
     Game::GetInstance().GetCurrentStatePointer()->AddObject(beatWave);
     beatSprite = new Sprite(associated, BEATING_HEART_SPRITE, FRAME_COUNT, BEAT_TRUE_LIMIT/FRAME_COUNT);
     beatSprite->SetScale({2,2});
-    //waveSprite->SetScale({2,2});
-    onBeat = false;
-    onBeatAnimation = false;
+    waveSprite->SetScale({2,2});
+    onBeat = true;
+    onBeatAnimation = true;
     actionOnBeat = false;
     switched = false;
-    hasBegun = false;
+    hasBegun = true;
 }
 
 void Beat::BeginBeat () {

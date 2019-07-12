@@ -58,7 +58,8 @@ void Collectable::NotifyCollision(GameObject &other)
     if (other.GetComponent("Character") != NULL)
     {
         LevelData::GetInstance().collectableData[index]->wasCollected = true;
-        Resources::updateScore();
+        LevelData::GetInstance().collectablesCollected++;
+        cout<<"colecionaveis coletados "<<LevelData::GetInstance().collectablesCollected<<endl;
         sound->Open(COLLECTABLE_HIT_SOUND);
         sound->Play(1);
         associated.RequestedDelete();

@@ -101,6 +101,7 @@
 #include "Sprite.h"
 #include "Attack.h"
 #include "LifeBar.h"
+//#include "LevelData.h"
 
 class Character : public Component {
   Vect2 velocity;

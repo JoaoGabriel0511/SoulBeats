@@ -81,7 +81,6 @@ void BellEnemy::Update(float dt) {
             blinkingTimer.Update(dt);
             if(blinkingTimer.Get() >= BLINKING_TIME) {
                 tookHit = false;
-                cout<<"aqui"<<endl;
                 bellEnemySprite->isBlinking = false;
             }
         }
@@ -135,6 +134,7 @@ void BellEnemy::NotifyCollision(GameObject& other) {
                 explosion->box.y = associated.box.y - explosion->box.h / 2;
                 Game::GetInstance().GetCurrentState().AddObject(explosion);
                 associated.RequestedDelete();
+                //Resources::updateScore(5);
             } else {
                 bellEnemySprite->isBlinking = true;
                 tookHit = true;
