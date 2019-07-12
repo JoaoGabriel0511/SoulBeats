@@ -41,11 +41,11 @@ void ComboSystem::Update(float dt){
         if(playMessage){
             messageTimer.Update(dt);
             if(messageTimer.Get() > MESSAGE_TIME){
-                comboLevelSprite->SwitchSprite("", 8, MESSAGE_FRAME_TIME);
+                comboLevelSprite->isBlinking = true;
                 messageTimer.Restart();
                 playMessage = false;
             }
-        }   
+        }
 
         comboTimer.Update(dt);
         if(comboTimer.Get() >= COMBO_INTERVAL){
@@ -65,7 +65,8 @@ void ComboSystem::Update(float dt){
                 comboLevel = NONE;
                 comboFlag = false;
                 comboTimer.Restart();
-                comboBarSprite->SwitchSprite("", 0, 0);
+                comboBarSprite->isBlinking = true;
+                //comboBarSprite->SwitchSprite("", 0, 0);
             }
         }
     }
@@ -85,7 +86,7 @@ bool ComboSystem::Is(string type){
 void ComboSystem::UpdateKilledEnemy(){
     comboFlag = true;
     ComboLevel currentCombo = comboLevel;
-
+    comboLevelSprite->isBlinking = false;
     if(currentCombo == NONE){
         cout << "Combo is now " << comboLevel << endl;
         comboLevel = NICE;
@@ -107,4 +108,5 @@ void ComboSystem::UpdateKilledEnemy(){
         // comboLevelSprite->SwitchSprite(BRAVO_SPRITE, 8, MESSAGE_FRAME_TIME);
 
     }
+    comboBarSprite->isBlinking = false;
 }

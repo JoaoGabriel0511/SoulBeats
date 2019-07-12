@@ -62,7 +62,7 @@ shared_ptr<Mix_Chunk> Resources::GetSound(string file) {
     if(soundTable.find(file) == soundTable.end()){
         sound = shared_ptr<Mix_Chunk>(Mix_LoadWAV(file.c_str()), [=](Mix_Chunk *sound){Mix_FreeChunk(sound);});
         if(sound == NULL){
-            cout<<"Falha ao carregar imagem "<<file<<" no hash de imagens"<<endl;
+            cout<<"Falha ao carregar som "<<file<<" no hash de sons"<<endl;
         } else {
             pair<string, shared_ptr<Mix_Chunk>> newsound(file, sound);
             soundTable.insert(newsound);
@@ -91,7 +91,7 @@ shared_ptr<TTF_Font> Resources::GetFont(string file, int fontSize) {
     if(fontTable.find(file) == fontTable.end()) {
         font = shared_ptr<TTF_Font>(TTF_OpenFont(file.c_str(), fontSize), [=](TTF_Font *font){TTF_CloseFont(font);});
         if(font == NULL){
-            cout<<"Falha ao carregar fonte "<<file<<" no hash de imagens"<<endl;
+            cout<<"Falha ao carregar fonte "<<file<<" no hash de fontes"<<endl;
             return NULL;
         } else {
             pair<string, shared_ptr<TTF_Font>> newFont(file + to_string(fontSize), font);
