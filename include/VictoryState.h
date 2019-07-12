@@ -85,6 +85,7 @@ class VictoryState : public State {
     GameObject *collectableScoreGO;
     GameObject *popSoundGO;
     GameObject *rankGO;
+    GameObject *continueTextGO;
     MovingLayer *movingLayer6;
     Sound *popSound;
     Sprite* completeLayerSprite;
@@ -102,6 +103,7 @@ class VictoryState : public State {
     Text* collectableScoreText;
     Text* attackScoreText;
     Text* resultScoreText;
+    Text* continueText;
     Timer heartIconTimer;
     Timer deathIconTimer;
     Timer timeIconTimer;

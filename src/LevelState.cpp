@@ -565,6 +565,8 @@ void LevelState::VictoryCycle(float dt) {
     VictoryState *victoryState;
     ((Music*) bg->GetComponent("Music").get())->Stop(0);
     Camera::UnFollow();
+    Camera::pos.x = 16287;
+    Camera::pos.y = Camera::pos.y;
     goalGO->Update(dt);
     beforeFinishLevelTimer.Update(dt);
     if(beforeFinishLevelTimer.Get() >= BEFORE_FINISH_LEVEL_TIME ) {

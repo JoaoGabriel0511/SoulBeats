@@ -22,7 +22,8 @@ bin/Main.o: src/Main.cpp src/../include/Game.h src/../include/GameData.h \
  src/../include/VictoryState.h src/../include/Text.h \
  src/../include/MovingLayer.h src/../include/JumpingPad.h \
  src/../include/MovingPlatforms.h src/../include/UIText.h \
- src/../include/ComboSystem.h src/../include/InitialScreenState.h
+ src/../include/ComboSystem.h src/../include/InitialScreenState.h \
+ src/../include/LoreState.h
 
 src/../include/Game.h:
 
@@ -131,3 +132,5 @@ src/../include/UIText.h:
 src/../include/ComboSystem.h:
 
 src/../include/InitialScreenState.h:
+
+src/../include/LoreState.h:

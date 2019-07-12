@@ -23,6 +23,7 @@
 #define MENU_CHARACTER_FRAME_TIME 0.08
 #include "State.h"
 #include "LevelData.h"
+#include "LoreState.h"
 #include "MovingLayer.h"
 
 class InitialScreenState : public State {

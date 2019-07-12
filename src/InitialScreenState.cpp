@@ -177,7 +177,7 @@ void InitialScreenState::UpdateMenuInput(float dt){
             creditsSprite->SwitchSprite(OPTION_CREDITS_1, 1, 0);
         }   
 
-         if (InputManager::GetInstance().KeyPress(SDLK_RETURN)){
+        if (InputManager::GetInstance().KeyPress(SDLK_RETURN)){
             quitRequested = true;
             // Game::GetInstance().GetCurrentState().
         }
@@ -194,8 +194,12 @@ void InitialScreenState::UpdateMenuInput(float dt){
             selectedOption = QUIT;
             loreSprite->SwitchSprite(OPTION_LORE_0, 1, 0);
             exitSprite->SwitchSprite(OPTION_QUIT_1, 1, 0);
-        }   
+        }
+        if (InputManager::GetInstance().KeyPress(SDLK_RETURN)){
+            LoreState* loreState;
+            loreState = new LoreState("assets/img/background/SoulBeatsLore.png");
+            Game::GetInstance().Push(loreState);
+        }
     }
-
 
 }
