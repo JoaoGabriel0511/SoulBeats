@@ -34,7 +34,7 @@ void Beat::BeginBeat () {
 void Beat::Update(float dt){
     associated.box.x = 902 - Camera::pos.x;
     associated.box.y = 3 - Camera::pos.y;
-    cout << "[Beat Sprite] is on (" << associated.box.x << " , " << associated.box.y << ")\n";
+    // cout << "[Beat Sprite] is on (" << associated.box.x << " , " << associated.box.y << ")\n";
 
     
     if(actionOnBeat) {
