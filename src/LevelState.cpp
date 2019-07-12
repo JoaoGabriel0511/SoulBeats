@@ -117,7 +117,7 @@ void LevelState::StartData() {
         LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {9800,1810}, EnemyData::ACCORDION, true, true));
         LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {10750,1550}, EnemyData::ACCORDION, true, true));
         LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {11656,2505}, EnemyData::ACCORDION, true, true));
-        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {13645,1875}, EnemyData::ACCORDION, true, true));
+        LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {13400,1875}, EnemyData::ACCORDION, true, true));
         LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {12980,1160}, EnemyData::ACCORDION, true, true));
         LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {13240,2505}, EnemyData::ACCORDION, true, true));
         LevelData::GetInstance().enemyData.emplace_back(new EnemyData(false, {13820,1160}, EnemyData::ACCORDION, true, true));

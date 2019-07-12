@@ -108,7 +108,7 @@ void Character::IdleUpdate(float dt) {
 
 void Character::Update(float dt)
 {
-    // cout << "Character is on (" << associated.box.x << " , " << associated.box.y << ")\n";
+    cout << "Character is on (" << associated.box.x << " , " << associated.box.y << ")\n";
     // cout << "Camera is on (" << Camera::pos.x << " , " << Camera::pos.y << ")\n";
 
     Collider *collider = ((Collider *)associated.GetComponent("Collider").get());
