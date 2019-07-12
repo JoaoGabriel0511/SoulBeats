@@ -108,6 +108,9 @@ void Character::IdleUpdate(float dt) {
 
 void Character::Update(float dt)
 {
+    // cout << "Character is on (" << associated.box.x << " , " << associated.box.y << ")\n";
+    // cout << "Camera is on (" << Camera::pos.x << " , " << Camera::pos.y << ")\n";
+
     Collider *collider = ((Collider *)associated.GetComponent("Collider").get());
     oldPosition = collider->box;
     oldVelocity = velocity;
@@ -922,6 +925,7 @@ void Character::Jump(float dt) {
             walkingSoundTimer.Restart();
             //cout << "Is on top of Jumping Pad? " << isOnTopOfJumpingPad << endl;
             if(global_beat->GetOnBeat() == true){
+                comboSystem->RestartComboTimer();
                 if(isOnTopOfJumpingPad){
                     velocity.y = ULTRA_JUMP_SPEED;
                 }
@@ -980,6 +984,7 @@ void Character::DoAttack(float dt) {
             isRising = false;
             peakDone = true;
             if(global_beat->GetOnBeat() == true){
+                comboSystem->RestartComboTimer();
                 velocity.x = isLeft * ON_BEAT_ATTACKING_SPEED;
                 attackOnBeat = true;
                 sound->Open(ATTACK_SOUND_ON_BEAT);

@@ -7,11 +7,14 @@
 #include "../include/Sprite.h"
 #include "../include/State.h"
 #include "../include/Music.h"
+#include "../include/ComboSystem.h"
 #include <iostream>
 using namespace std;
 
 Game* Game::instance;
 Beat* global_beat;
+ComboSystem* comboSystem;
+
 
 Game& Game::GetInstance() {
     if(instance != NULL) {

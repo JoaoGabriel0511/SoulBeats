@@ -102,6 +102,7 @@ void BellEnemy::NotifyCollision(GameObject& other) {
     Sprite * explosionSprite;
     GameObject * hitSpark;
     Sprite * hitSparkSprite;
+    
     if(other.GetComponent("Attack") != NULL) {
         if(state != IDLE) {
             hitSpark = new GameObject();
@@ -116,6 +117,7 @@ void BellEnemy::NotifyCollision(GameObject& other) {
             hitSpark->box.y = associated.box.y + (associated.box.h/2);
             Game::GetInstance().GetCurrentState().AddObject(hitSpark);
             if(((Character*) character->GetComponent("Character").get())->AttackOnBeat()) {
+                comboSystem->UpdateKilledEnemy();
                 hp=0;
             } else {
                 hp--;

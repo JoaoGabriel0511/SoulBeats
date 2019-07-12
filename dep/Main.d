@@ -21,7 +21,8 @@ bin/Main.o: src/Main.cpp src/../include/Game.h src/../include/GameData.h \
  src/../include/CheckPoint.h src/../include/Spotlights.h \
  src/../include/VictoryState.h src/../include/MovingLayer.h \
  src/../include/JumpingPad.h src/../include/MovingPlatforms.h \
- src/../include/Text.h src/../include/InitialScreenState.h
+ src/../include/Text.h src/../include/ComboSystem.h \
+ src/../include/InitialScreenState.h
 
 src/../include/Game.h:
 
@@ -124,5 +125,7 @@ src/../include/JumpingPad.h:
 src/../include/MovingPlatforms.h:
 
 src/../include/Text.h:
+
+src/../include/ComboSystem.h:
 
 src/../include/InitialScreenState.h:

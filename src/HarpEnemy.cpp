@@ -189,6 +189,7 @@ void HarpEnemy::NotifyCollision(GameObject &other)
         Game::GetInstance().GetCurrentState().AddObject(hitSpark);
         if(((Character*) character->GetComponent("Character").get())->AttackOnBeat()) {
             hp=0;
+            comboSystem->UpdateKilledEnemy();
         } else {
             hp--;
         }
@@ -199,6 +200,10 @@ void HarpEnemy::NotifyCollision(GameObject &other)
             lifeBarSprite->SwitchSprite(TWO_THIRDS_LIFE_BAR, 1, 0);
         }
         if(hp <= 0) {
+            // if(global_beat->GetOnBeat()){
+            //     comboSystem->UpdateKilledEnemy();
+            // }
+
             sound->Open(HARP_ENEMY_DEATH_SOUND);
             sound->Play(1);
             LevelData::GetInstance().enemyData[index]->wasKilled = true;

@@ -9,7 +9,10 @@
 
 using namespace std;
 class Beat;
+class ComboSystem;
+
 extern Beat* global_beat;
+extern ComboSystem* comboSystem;
 extern bool global_hit_flag;
 
 class State;
@@ -24,6 +27,7 @@ class Game {
     float height;
     void CalculateDeltaTime();
     stack<State*> stateStack;
+    
     public:
         Game(string title, int width, int height);
         ~Game();

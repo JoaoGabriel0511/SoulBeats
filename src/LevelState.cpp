@@ -472,6 +472,18 @@ void LevelState::LoadAssets() {
     objectArray.emplace_back(goalGO);
 
     //Goal adicionado
+
+    // Adding ComboSystem 
+    GameObject* comboGo;
+    comboGo = new GameObject();
+    comboGo->box.z = 7;
+    comboGo->box.x = 837 - Camera::pos.x;
+    comboGo->box.y = 1 - Camera::pos.y;
+    comboSystem = new ComboSystem(*comboGo); 
+    // sp->SetScale({10, 10});  
+    objectArray.emplace_back(comboGo);
+    
+
 }
 
 void LevelState::Pause()

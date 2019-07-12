@@ -33,6 +33,7 @@
 #include "JumpingPad.h"
 #include "MovingPlatforms.h"
 #include "Text.h"
+#include "ComboSystem.h"
 
 class LevelState : public State {
     GameObject *bg;
