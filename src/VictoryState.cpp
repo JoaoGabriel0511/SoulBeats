@@ -22,26 +22,34 @@ void VictoryState::CalculatePoints() {
     collectablesPoints = LevelData::GetInstance().collectablesCollected * COLLECTABLES_POINTS;
     deathPenalthy = -1 * LevelData::GetInstance().deathCount * DEATH_PENALTHY;
     damagePenalthy = -1 * LevelData::GetInstance().damageCount * DAMAGE_PENALTHY;
-    if(LevelData::GetInstance().time <= 60) {
-        timePoints = UNDER_ONE_MIN_POINTS;
-    } else if(LevelData::GetInstance().time <= 120) {
+    if(LevelData::GetInstance().time <= 120) {
         timePoints = UNDER_TWO_MIN_POINTS;
     } else if(LevelData::GetInstance().time <= 180) {
         timePoints = UNDER_TREE_MIN_POINTS;
+    } else if(LevelData::GetInstance().time <= 240) {
+        timePoints = UNDER_FOUR_MIN_POINTS;
     } else {
-        timePoints = MORE_THAN_THREE_MIN_POINTS;
+        timePoints = MORE_THAN_FOUR_MIN_POINTS;
     }
     result = collectablesPoints + deathPenalthy + damagePenalthy + timePoints + LevelData::GetInstance().enemyPoints;
     rankGO = new GameObject();
     rankGO->box.z = 7;
     if(result >= MAESTRO_LIMIT) {
         rankSprite = new Sprite(*rankGO, MAESTRO_SPRITE, MAESTRO_FRAME_COUNT, MAESTRO_FRAME_TIME);
+        rankGO->box.x = 550 - Camera::pos.x;
+        rankGO->box.y = 100 - Camera::pos.y;
     } else if(result >= BRAVO_LIMIT) {
         rankSprite = new Sprite(*rankGO, BRAVO_SPRITE, BRAVO_FRAME_COUNT, BRAVO_FRAME_TIME);
+        rankGO->box.x = 600 - Camera::pos.x;
+        rankGO->box.y = 100 - Camera::pos.y;
     } else if(result >= CATCHY_LIMIT) {
         rankSprite = new Sprite(*rankGO, CATCHY_SPRITE, CATCHY_FRAME_COUNT, CATCHY_FRAME_TIME);
+        rankGO->box.x = 600 - Camera::pos.x;
+        rankGO->box.y = 100 - Camera::pos.y;
     } else {
         rankSprite = new Sprite(*rankGO, FIASCO_SPRITE, FIASCO_FRAME_COUNT, FIASCO_FRAME_TIME);
+        rankGO->box.x = 600 - Camera::pos.x;
+        rankGO->box.y = 100 - Camera::pos.y;
     }
     rankSprite->SetScale({3,3});
     rankSprite->isBlinking = true;
@@ -173,8 +181,6 @@ void VictoryState::LoadAssets() {
     attackIconGO->box.y = 430 - Camera::pos.y;
     attackScoreGO->box.x = 150 - Camera::pos.x;
     attackScoreGO->box.y = 450 - Camera::pos.y;
-    rankGO->box.x = 600 - Camera::pos.x;
-    rankGO->box.y = 100 - Camera::pos.y;
     music->Play(1);
     objectArray.emplace_back(bgMusic);
     objectArray.emplace_back(layer1);

@@ -43,6 +43,7 @@ class LevelState : public State {
     GameObject *beat;
     GameObject *goalGO;
     GameObject *characterGO;
+    GameObject* comboGo;
     UIText *collectablesUI;
     UIText *pointsUI;
     UIText *timeUI;

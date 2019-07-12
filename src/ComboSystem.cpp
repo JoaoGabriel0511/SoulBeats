@@ -89,6 +89,27 @@ void ComboSystem::Update(float dt){
 
 void ComboSystem::Render(){}
 
+int ComboSystem::ComboMultiplicator() {
+    int multiplicator;
+    switch (comboLevel)
+    {
+    case BRAVO:
+        multiplicator = 4;
+        break;
+    case GREAT:
+        multiplicator = 3;
+        break;
+    case NICE:
+        multiplicator = 2;
+        break;
+    default:
+        multiplicator = 1;
+        break;
+    }
+
+    return multiplicator;
+}
+
 
 bool ComboSystem::Is(string type){
     return (type == "ComboSystem") ? true : false;

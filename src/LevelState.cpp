@@ -481,7 +481,7 @@ void LevelState::LoadAssets() {
     //Goal adicionado
 
     // Adding ComboSystem 
-    GameObject* comboGo;
+
     comboGo = new GameObject();
     comboGo->box.z = 7;
     comboGo->box.x = 837 - Camera::pos.x;

@@ -127,7 +127,7 @@ void BellEnemy::NotifyCollision(GameObject& other) {
             if(hp <= 0) {
                 sound->Open(BELL_ENEMY_DEATH_SOUND);
                 sound->Play(1);
-                LevelData::GetInstance().enemyPoints += BELL_POINTS;
+                LevelData::GetInstance().enemyPoints += (BELL_POINTS * comboSystem->ComboMultiplicator()) ;
                 LevelData::GetInstance().enemyData[index]->wasKilled = true;
                 explosion = new GameObject();
                 explosionSprite = new Sprite(*explosion, BELL_ENEMY_DEATH_SPRITE, BELL_ENEMY_DEATH_FRAME_COUNT, BELL_ENEMY_DEATH_DURATION/BELL_ENEMY_DEATH_FRAME_COUNT, BELL_ENEMY_DEATH_DURATION);
@@ -157,7 +157,7 @@ void BellEnemy::NotifyCollision(GameObject& other) {
 }
 
 BellEnemy::~BellEnemy() {
-	sound->Stop();
+	//sound->Stop();
     lifeBar->RequestedDelete();
     character = NULL;
 }

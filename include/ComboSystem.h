@@ -41,7 +41,7 @@ class ComboSystem : public Component {
         void Start();
         void Render();
         bool Is(string type);
-        
+        int ComboMultiplicator();
         void UpdateKilledEnemy();
         void RestartComboTimer();
 
