@@ -9,7 +9,7 @@ void ComboSystem::Start(){
     comboLevel = NONE;
 
     comboLevelSprite = new Sprite(associated, 8, MESSAGE_TIME);
-    comboLevelSprite->SetScale({1.5, 1.5});
+    comboLevelSprite->SetScale({2, 2});
 
     comboBarGo = new GameObject();
     comboBarGo->box.z = 7;
@@ -25,23 +25,31 @@ void ComboSystem::Start(){
 void ComboSystem::RestartComboTimer(){
     if(comboFlag){
         comboTimer.Restart();
-        comboBarSprite->SwitchSprite(COMBO_BAR_SPRITE, 21, COMBO_BAR_DECREASE_TIME);
+        if(comboLevel == NICE){
+            comboBarSprite->SwitchSprite(NICE_BAR_SPRITE, 21, COMBO_BAR_DECREASE_TIME);
+        }
+        if(comboLevel == GREAT){
+            comboBarSprite->SwitchSprite(GREAT_BAR_SPRITE, 21, COMBO_BAR_DECREASE_TIME);
+        }
+        if(comboLevel == BRAVO){
+            comboBarSprite->SwitchSprite(BRAVO_BAR_SPRITE, 21, COMBO_BAR_DECREASE_TIME);
+        }    
     }
 }
 
 void ComboSystem::Update(float dt){
-    associated.box.x = 700 - Camera::pos.x;
+    associated.box.x = 600 - Camera::pos.x;
     associated.box.y = 250 - Camera::pos.y;
 
     comboBarGo->box.x = 350 - Camera::pos.x;
     comboBarGo->box.y = 1 - Camera::pos.y;
    
     if(comboFlag){
-
         if(playMessage){
             messageTimer.Update(dt);
             if(messageTimer.Get() > MESSAGE_TIME){
-                comboLevelSprite->SwitchSprite("", 8, MESSAGE_FRAME_TIME);
+                comboLevelSprite->isBlinking = true;
+                // comboLevelSprite->SwitchSprite("", 8, MESSAGE_FRAME_TIME);
                 messageTimer.Restart();
                 playMessage = false;
             }
@@ -53,11 +61,13 @@ void ComboSystem::Update(float dt){
 
             if(currentCombo == BRAVO){
                 comboLevel = GREAT;
+                comboBarSprite->SwitchSprite(GREAT_BAR_SPRITE, 21, COMBO_BAR_DECREASE_TIME);
                 comboTimer.Restart();
             }
 
             if(currentCombo == GREAT){
                 comboLevel = NICE;
+                comboBarSprite->SwitchSprite(NICE_BAR_SPRITE, 21, COMBO_BAR_DECREASE_TIME);
                 comboTimer.Restart();
             }
             
@@ -65,12 +75,14 @@ void ComboSystem::Update(float dt){
                 comboLevel = NONE;
                 comboFlag = false;
                 comboTimer.Restart();
-                comboBarSprite->SwitchSprite("", 0, 0);
+                playMessage = false;
+                comboBarSprite->isBlinking = true;
+                // comboBarSprite->SwitchSprite("", 0, 0);
             }
         }
     }
 
-    cout << "COMBO SPRITE is on (" << associated.box.x << " , " << associated.box.y << ")\n";
+    // cout << "COMBO SPRITE is on (" << associated.box.x << " , " << associated.box.y << ")\n";
 
 }
 
@@ -87,24 +99,29 @@ void ComboSystem::UpdateKilledEnemy(){
     ComboLevel currentCombo = comboLevel;
 
     if(currentCombo == NONE){
-        cout << "Combo is now " << comboLevel << endl;
         comboLevel = NICE;
-        comboBarSprite->SwitchSprite( COMBO_BAR_SPRITE, 21, COMBO_BAR_DECREASE_TIME);
+        comboBarSprite->SwitchSprite(NICE_BAR_SPRITE, 21, COMBO_BAR_DECREASE_TIME);
+        comboBarSprite->isBlinking = false;
         playMessage = true;
+        comboLevelSprite->isBlinking = false;
         comboLevelSprite->SwitchSprite(NICE_SPRITE, 8, MESSAGE_FRAME_TIME);
     }
     if(currentCombo == NICE){
-        cout << "Combo is now " << comboLevel << endl;
         comboLevel = GREAT;
-        comboBarSprite->SwitchSprite( COMBO_BAR_SPRITE, 21, COMBO_BAR_DECREASE_TIME);
-        // comboLevelSprite->SwitchSprite(GREAT_SPRITE, 8, MESSAGE_FRAME_TIME);
+        comboBarSprite->SwitchSprite(GREAT_BAR_SPRITE, 21, COMBO_BAR_DECREASE_TIME);
+        comboBarSprite->isBlinking = false;
+        playMessage = true;
+        comboLevelSprite->isBlinking = false;
+        comboLevelSprite->SwitchSprite(GREAT_SPRITE, 8, MESSAGE_FRAME_TIME);
 
     }
      if(currentCombo == GREAT){
-        cout << "Combo is now " << comboLevel << endl;
         comboLevel = BRAVO;
-        comboBarSprite->SwitchSprite( COMBO_BAR_SPRITE, 21, COMBO_BAR_DECREASE_TIME);
-        // comboLevelSprite->SwitchSprite(BRAVO_SPRITE, 8, MESSAGE_FRAME_TIME);
+        comboBarSprite->SwitchSprite(BRAVO_BAR_SPRITE, 21, COMBO_BAR_DECREASE_TIME);
+        comboBarSprite->isBlinking = false;
+        comboLevelSprite->isBlinking = false;
+        playMessage = true;
+        comboLevelSprite->SwitchSprite(BRAVO_SPRITE, 8, MESSAGE_FRAME_TIME);
 
     }
 }
