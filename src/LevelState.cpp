@@ -426,14 +426,22 @@ void LevelState::LoadAssets() {
     TileMapCollider *tileMapTerrBackCollider = new TileMapCollider(*tileTerrBackGO, tileMapTerrBack);
     objectArray.emplace_back(tileTerrBackGO);
 
-    /*//Adicionando Text
+    //Adicionando Text
 
-    Text *textScore;
-    GameObject *textScoreGO = new GameObject();
-    textScoreGO->box.z = 6;
-    textScore = new Text(*textScoreGO,"assets/font/superFont.ttf", 40, Text::TextStyle::SOLID, "Score:", SDL_Color {255,255,255}, 0);
-    objectArray.emplace_back(textScoreGO);
-    */
+    GameObject *collectablesUIGO = new GameObject();
+    collectablesUIGO->box.z = 7;
+    collectablesUI = new UIText(*collectablesUIGO, {50,200}, "assets/img/background/results/Icon1.png");
+    objectArray.emplace_back(collectablesUIGO);
+
+    GameObject *pointsUIGO = new GameObject();
+    pointsUIGO->box.z = 7;
+    pointsUI = new UIText(*pointsUIGO, {50,250}, "assets/img/background/results/Icon5.png");
+    objectArray.emplace_back(pointsUIGO);
+
+    GameObject *timeUIGO = new GameObject();
+    timeUIGO->box.z = 7;
+    timeUI = new UIText(*timeUIGO, {50,300}, "assets/img/background/results/Icon3.png");
+    objectArray.emplace_back(timeUIGO);
 
     //TileMap Decoracao Terreno Adicionada
 
@@ -573,6 +581,14 @@ void LevelState::LevelCycle(float dt) {
     TileMapCollider *tileMapForeCollider = ((TileMapCollider*) tileTerrForeGO->GetComponent("TileMapCollider").get());
     TileMapCollider *tileMapBackCollider = ((TileMapCollider*) tileTerrBackGO->GetComponent("TileMapCollider").get());
     UpdateCameraFocus(dt);
+    collectablesUI->UpdateText(std::to_string(LevelData::GetInstance().collectablesCollected));
+    pointsUI->UpdateText(std::to_string(LevelData::GetInstance().enemyPoints));
+    timeUI->UpdateText(std::to_string(LevelData::GetInstance().time));
+    timeTimer.Update(dt);
+    if(timeTimer.Get() >= 1) {
+        timeTimer.Restart();
+        LevelData::GetInstance().time++;
+    }
     for (int i = tileMapForeCollider->boxes.size() - 1; i >= 0; i--)
     {
         if(Camera::IsOnCamera(tileMapForeCollider->boxes[i]))

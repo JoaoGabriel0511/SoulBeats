@@ -168,6 +168,8 @@ void AccordionEnemy::NotifyCollision(GameObject &other)
             explosion = new GameObject();
             explosionSprite = new Sprite(*explosion, ACCORDION_ENEMY_DEATH_SPRITE, ACCORDION_ENEMY_DEATH_FRAME_COUNT, ACCORDION_ENEMY_DEATH_DURATION/ACCORDION_ENEMY_DEATH_FRAME_COUNT, ACCORDION_ENEMY_DEATH_DURATION);
             explosionSprite->SetScale({3,3});
+            LevelData::GetInstance().enemyPoints += ACCORDION_POINTS;
+            LevelData::GetInstance().enemyData[index]->wasKilled = true;
             explosion->box.z = 5;
             explosion->box.x = associated.box.x - explosion->box.w / 2;
             explosion->box.y = associated.box.y - explosion->box.h / 2;

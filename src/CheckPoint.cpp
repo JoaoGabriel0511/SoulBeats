@@ -65,6 +65,7 @@ void CheckPoint::NotifyCollision(GameObject& other) {
                 LevelData::GetInstance().switchedDevelopmentMusic = true;
             }
         }*/
+        LevelData::GetInstance().savedEnemyPoints = LevelData::GetInstance().enemyPoints;
         if(LevelData::GetInstance().pos == NULL) {
             LevelData::GetInstance().pos = new Vect2(associated.box.x, associated.box.y);
         } else {

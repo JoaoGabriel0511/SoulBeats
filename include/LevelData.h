@@ -34,6 +34,8 @@ class LevelData {
         int deathCount;
         int damageCount;
         int enemyPoints;
+        int savedEnemyPoints;
+        int time;
         void clear();
         Vect2 *pos;
         LevelData();

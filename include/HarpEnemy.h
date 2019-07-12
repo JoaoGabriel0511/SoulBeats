@@ -31,6 +31,7 @@
 #define HARP_ENEMY_DEATH_SOUND "assets/audio/SFX/InimigoMorrendo3(SOUL).wav"
 #define HIT_SPARK_DURATION 0.5
 #define HIT_SPARK_FRAME_COUNT 5
+#define HARP_POINTS 100
 #define BLINKING_TIME 0.1
 
 class HarpEnemy : public Component

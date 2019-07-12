@@ -23,6 +23,7 @@
 #define FULL_LIFE_BAR "assets/img/enemies/LifeBar/VidaInimigosFull.png"
 #define HALF_LIFE_BAR "assets/img/enemies/LifeBar/VidaInimigos1meio.png"
 #define HIT_SPARK_SPRITE "assets/img/enemies/HitSparks/Hit.png"
+#define BELL_POINTS 50
 #define HIT_SPARK_DURATION 0.5
 #define BLINKING_TIME 0.2
 #define HIT_SPARK_FRAME_COUNT 5

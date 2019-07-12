@@ -13,8 +13,38 @@ void VictoryState::Start() {
     playedYourRankIsSound = false;
     playedResultSound = false;
     switchedMusic = false;
-    LevelData::GetInstance().clear();
+    CalculatePoints();
+    //LevelData::GetInstance().clear();
     State::Start();
+}
+
+void VictoryState::CalculatePoints() {
+    collectablesPoints = LevelData::GetInstance().collectablesCollected * COLLECTABLES_POINTS;
+    deathPenalthy = -1 * LevelData::GetInstance().deathCount * DEATH_PENALTHY;
+    damagePenalthy = -1 * LevelData::GetInstance().damageCount * DAMAGE_PENALTHY;
+    if(LevelData::GetInstance().time <= 60) {
+        timePoints = UNDER_ONE_MIN_POINTS;
+    } else if(LevelData::GetInstance().time <= 120) {
+        timePoints = UNDER_TWO_MIN_POINTS;
+    } else if(LevelData::GetInstance().time <= 180) {
+        timePoints = UNDER_TREE_MIN_POINTS;
+    } else {
+        timePoints = MORE_THAN_THREE_MIN_POINTS;
+    }
+    result = collectablesPoints + deathPenalthy + damagePenalthy + timePoints + LevelData::GetInstance().enemyPoints;
+    rankGO = new GameObject();
+    rankGO->box.z = 7;
+    if(result >= MAESTRO_LIMIT) {
+        rankSprite = new Sprite(*rankGO, MAESTRO_SPRITE, MAESTRO_FRAME_COUNT, MAESTRO_FRAME_TIME);
+    } else if(result >= BRAVO_LIMIT) {
+        rankSprite = new Sprite(*rankGO, BRAVO_SPRITE, BRAVO_FRAME_COUNT, BRAVO_FRAME_TIME);
+    } else if(result >= CATCHY_LIMIT) {
+        rankSprite = new Sprite(*rankGO, CATCHY_SPRITE, CATCHY_FRAME_COUNT, CATCHY_FRAME_TIME);
+    } else {
+        rankSprite = new Sprite(*rankGO, FIASCO_SPRITE, FIASCO_FRAME_COUNT, FIASCO_FRAME_TIME);
+    }
+    rankSprite->SetScale({3,3});
+    rankSprite->isBlinking = true;
 }
 
 void VictoryState::LoadAssets() {
@@ -28,22 +58,38 @@ void VictoryState::LoadAssets() {
     bgMusic = new GameObject();
     completeLayer = new GameObject();
     resultLayer = new GameObject();
+    resultScore = new GameObject();
     yourRankIsLayer = new GameObject();
     heartIconGO = new GameObject();
+    damageScoreGO = new GameObject();
     deathIconGO = new GameObject();
+    deathScoreGO = new GameObject();
     timeIconGO = new GameObject();
+    timeScoreGO = new GameObject();
     attackIconGO = new GameObject();
+    attackScoreGO = new GameObject();
     collectableIconGO = new GameObject();
+    collectableScoreGO = new GameObject();
     popSoundGO = new GameObject();
     // Camera::pos.x = 0;
     // Camera::pos.y = 0;
     Camera::UnFollow();
     popSound = new Sound(*popSoundGO, POP_ICON_SOUND);
     heartIconSprite = new Sprite(*heartIconGO, HEART_ICON_SPRITE);
+    damageScoreText = new Text(*damageScoreGO, "assets/font/editundo.ttf", 40, Text::SOLID, std::to_string(LevelData::GetInstance().damageCount) + " X -" + std::to_string(DAMAGE_PENALTHY) + " -> " + std::to_string(damagePenalthy), SDL_Color {255,255,255}, 0);
+    damageScoreText->isBlink = true;
     deathIconSprite = new Sprite(*deathIconGO, DEATH_ICON_SPRITE);
+    deathScoreText = new Text(*deathScoreGO, "assets/font/editundo.ttf", 40, Text::SOLID, std::to_string(LevelData::GetInstance().deathCount) + " X -" + std::to_string(DEATH_PENALTHY) + " -> " + std::to_string(deathPenalthy), SDL_Color {255,255,255}, 0);
+    deathScoreText->isBlink = true;
     timeIconSprite = new Sprite(*timeIconGO, TIME_ICON_SPRITE);
+    timeScoreText = new Text(*timeScoreGO, "assets/font/editundo.ttf", 40, Text::SOLID, std::to_string(LevelData::GetInstance().time) + " -> " + std::to_string(timePoints), SDL_Color {255,255,255}, 0);
+    timeScoreText->isBlink = true;
     attackIconSprite = new Sprite(*attackIconGO, ATTACK_ICON_SPRITE);
+    attackScoreText = new Text(*attackScoreGO, "assets/font/editundo.ttf", 40, Text::SOLID, std::to_string(LevelData::GetInstance().enemyPoints), SDL_Color {255,255,255}, 0);
+    attackScoreText->isBlink = true;
     collectableIconSprite = new Sprite(*collectableIconGO, COLLECTABLE_ICON_SPRITE);
+    collectableScoreText = new Text(*collectableScoreGO, "assets/font/editundo.ttf", 40, Text::SOLID, std::to_string(LevelData::GetInstance().collectablesCollected) + " X " + std::to_string(COLLECTABLES_POINTS) + " -> " + std::to_string(collectablesPoints), SDL_Color {255,255,255}, 0);
+    collectableScoreText->isBlink = true;
     heartIconSprite->SetScale({2,2});
     deathIconSprite->SetScale({2,2});
     timeIconSprite->SetScale({2,2});
@@ -63,6 +109,8 @@ void VictoryState::LoadAssets() {
     completeLayerSprite = new Sprite(*completeLayer, COMPLETE_SPRITE);
     completeLayerSprite->isBlinking = true;
     resultSprite = new Sprite(*resultLayer, RESULT_SPRITE);
+    resultScoreText = new Text(*resultScore, "assets/font/editundo.ttf", 60, Text::SOLID, std::to_string(result), SDL_Color {255,255,255}, 0);
+    resultScoreText->isBlink = true;
     resultSprite->isBlinking = true;
     yourRankIsLayerSprite = new Sprite(*yourRankIsLayer, YOUR_RANK_IS_SPRITE);
     yourRankIsLayerSprite->isBlinking = true;
@@ -99,20 +147,34 @@ void VictoryState::LoadAssets() {
     resultLayer->box.h = GameInfo::GetInstance().HEIGHT;
     resultLayer->box.x = 0 - Camera::pos.x;
     resultLayer->box.y = 0 - Camera::pos.y;
+    resultScore->box.x = 300 - Camera::pos.x;
+    resultScore->box.y = 525 - Camera::pos.y;
     yourRankIsLayer->box.w = GameInfo::GetInstance().WIDTH;
     yourRankIsLayer->box.h = GameInfo::GetInstance().HEIGHT;
     yourRankIsLayer->box.x = 0 - Camera::pos.x;
     yourRankIsLayer->box.y = 0 - Camera::pos.y;
     collectableIconGO->box.x = 60 - Camera::pos.x;
     collectableIconGO->box.y = 150 - Camera::pos.y;
+    collectableScoreGO->box.x = 150 - Camera::pos.x;
+    collectableScoreGO->box.y = 170 - Camera::pos.y;
     heartIconGO->box.x = 60 - Camera::pos.x;
     heartIconGO->box.y = 220 - Camera::pos.y;
+    damageScoreGO->box.x = 150 - Camera::pos.x;
+    damageScoreGO->box.y = 240 - Camera::pos.y;
     timeIconGO->box.x = 60 - Camera::pos.x;
     timeIconGO->box.y = 290 - Camera::pos.y;
+    timeScoreGO->box.x = 150 - Camera::pos.x;
+    timeScoreGO->box.y = 310 - Camera::pos.y;
     deathIconGO->box.x = 60 - Camera::pos.x;
     deathIconGO->box.y = 360 - Camera::pos.y;
+    deathScoreGO->box.x = 150 - Camera::pos.x;
+    deathScoreGO->box.y = 380 - Camera::pos.y;
     attackIconGO->box.x = 60 - Camera::pos.x;
     attackIconGO->box.y = 430 - Camera::pos.y;
+    attackScoreGO->box.x = 150 - Camera::pos.x;
+    attackScoreGO->box.y = 450 - Camera::pos.y;
+    rankGO->box.x = 600 - Camera::pos.x;
+    rankGO->box.y = 100 - Camera::pos.y;
     music->Play(1);
     objectArray.emplace_back(bgMusic);
     objectArray.emplace_back(layer1);
@@ -130,6 +192,13 @@ void VictoryState::LoadAssets() {
     objectArray.emplace_back(attackIconGO);
     objectArray.emplace_back(collectableIconGO);
     objectArray.emplace_back(popSoundGO);
+    objectArray.emplace_back(damageScoreGO);
+    objectArray.emplace_back(deathScoreGO);
+    objectArray.emplace_back(timeScoreGO);
+    objectArray.emplace_back(attackScoreGO);
+    objectArray.emplace_back(collectableScoreGO);
+    objectArray.emplace_back(resultScore);
+    objectArray.emplace_back(rankGO);
     // Background Adicionado
 }
 
@@ -150,6 +219,7 @@ void VictoryState::Update(float dt) {
         resultTimer.Update(dt);
         if(heartIconTimer.Get() >= HEART_ICON_TIME){
             heartIconSprite->isBlinking = false;
+            damageScoreText->isBlink = false;
             if(!playedHeartIconSound){
                 popSound->Play(1);
                 playedHeartIconSound = true;
@@ -157,6 +227,7 @@ void VictoryState::Update(float dt) {
         }
         if(deathIconTimer.Get() >= DEATH_ICON_TIME){
             deathIconSprite->isBlinking = false;
+            deathScoreText->isBlink = false;
             if(!playedDeathIconSound){
                 popSound->Play(1);
                 playedDeathIconSound = true;
@@ -164,6 +235,7 @@ void VictoryState::Update(float dt) {
         }
         if(timeIconTimer.Get() >= TIME_ICON_TIME){
             timeIconSprite->isBlinking = false;
+            timeScoreText->isBlink = false;
             if(!playedTimeIconSound){
                 popSound->Play(1);
                 playedTimeIconSound = true;
@@ -171,6 +243,7 @@ void VictoryState::Update(float dt) {
         }
         if(attackIconTimer.Get() >= ATTACK_ICON_TIME){
             attackIconSprite->isBlinking = false;
+            attackScoreText->isBlink = false;
             if(!playedAttackIconSound){
                 popSound->Play(1);
                 playedAttackIconSound = true;
@@ -178,6 +251,7 @@ void VictoryState::Update(float dt) {
         }
         if(collectableIconTimer.Get() >= COLLECTABLE_ICON_TIME){
             collectableIconSprite->isBlinking = false;
+            collectableScoreText->isBlink = false;
             if(!playedCollectableIconSound){
                 popSound->Play(1);
                 playedCollectableIconSound = true;
@@ -185,6 +259,7 @@ void VictoryState::Update(float dt) {
         }
         if(yourRankIsTimer.Get() >= YOUR_RANK_IS_TIME) {
             yourRankIsLayerSprite->isBlinking = false;
+            rankSprite->isBlinking = false;
             if(!playedYourRankIsSound) {
                 popSound->Play(1);
                 playedYourRankIsSound = true;
@@ -192,6 +267,7 @@ void VictoryState::Update(float dt) {
         }
         if(resultTimer.Get() >= RESULT_TIME) {
             resultSprite->isBlinking = false;
+            resultScoreText->isBlink = false;
             if(!playedResultSound) {
                 popSound->Play(1);
                 playedResultSound = true;

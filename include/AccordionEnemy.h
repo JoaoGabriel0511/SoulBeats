@@ -37,6 +37,7 @@
 #define HIT_SPARK_FRAME_COUNT 5
 #define ACCORDION_ENEMY_DEATH_SOUND "assets/audio/SFX/InimigoMorrendo3(SOUL).wav"
 #define BLINKING_TIME 0.1
+#define ACCORDION_POINTS 150
 
 class AccordionEnemy : public Component
 {

@@ -12,6 +12,10 @@
 #define W_KEY SDLK_w
 #define D_KEY SDLK_d
 #define S_KEY SDLK_s
+#define ENTER_KEY SDLK_RETURN
+
+
+
 #include "SDL2/SDL.h"
 #include <iostream>
 #include "Debugger.h"

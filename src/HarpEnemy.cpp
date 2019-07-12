@@ -208,6 +208,8 @@ void HarpEnemy::NotifyCollision(GameObject &other)
             explosion->box.z = 5;
             explosion->box.x = associated.box.x - explosion->box.w / 2;
             explosion->box.y = associated.box.y - explosion->box.h / 2;
+            LevelData::GetInstance().enemyPoints += HARP_POINTS;
+            LevelData::GetInstance().enemyData[index]->wasKilled = true;
             Game::GetInstance().GetCurrentState().AddObject(explosion);
             associated.RequestedDelete();
             //Resources::updateScore(15);

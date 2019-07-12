@@ -32,6 +32,7 @@ void Text::Update(float dt) {
             blinkTimer.Restart();
         }
     }
+    RemakeTexture();
 }
 
 void Text::Render() {
@@ -89,8 +90,11 @@ void Text::RemakeTexture() {
         }
         associated.box.h = surface->h;
         associated.box.w = surface->w;
+
         texture = SDL_CreateTextureFromSurface(Game::GetInstance().GetRenderer(), surface);
+
         SDL_FreeSurface(surface);
+
     }
 }
 

@@ -7,6 +7,9 @@ LevelData::LevelData() {
     musicState = BEGINING;
     deathCount = 0;
     damageCount = 0;
+    enemyPoints = 0;
+    savedEnemyPoints = 0;
+    time = 0;
 }
 
 LevelData::~LevelData() {}
@@ -34,6 +37,7 @@ void LevelData::Start() {
     for (int i = 0; i < heartData.size(); i++) {
         heartData[i]->wasCollected = heartData[i]->isCollected;
     }
+    enemyPoints = savedEnemyPoints;
 }
 
 void LevelData::Reset() {

@@ -33,6 +33,7 @@
 #include "JumpingPad.h"
 #include "MovingPlatforms.h"
 #include "Text.h"
+#include "UIText.h"
 
 class LevelState : public State {
     GameObject *bg;
@@ -41,6 +42,9 @@ class LevelState : public State {
     GameObject *beat;
     GameObject *goalGO;
     GameObject *characterGO;
+    UIText *collectablesUI;
+    UIText *pointsUI;
+    UIText *timeUI;
     Timer beginingMusicTimer;
     Timer developmentMusicTimer;
     Timer mainMusicTimer;
@@ -52,6 +56,7 @@ class LevelState : public State {
     void LevelCycle(float dt);
     void UpdateCameraFocus(float dt);
     void VictoryCycle(float dt);
+    Timer timeTimer;
     public:
         LevelState();
         void Pause();

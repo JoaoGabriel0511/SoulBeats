@@ -15,13 +15,13 @@
 #define ATTACK_ICON_SPRITE "assets/img/background/results/Icon5.png"
 #define HEART_ICON_SPRITE "assets/img/background/results/Icon2.png"
 #define POP_ICON_SOUND "assets/audio/SFX/PegandoItem1.wav"
-#define COLLECTABLE_ICON_TIME 1
-#define DEATH_ICON_TIME 4
-#define TIME_ICON_TIME 3
-#define ATTACK_ICON_TIME 5
-#define HEART_ICON_TIME 2
-#define RESULT_TIME 6
-#define YOUR_RANK_IS_TIME 7
+#define COLLECTABLE_ICON_TIME 1 * 0.5
+#define DEATH_ICON_TIME 4 * 0.5
+#define TIME_ICON_TIME 3 * 0.5
+#define ATTACK_ICON_TIME 5 * 0.5
+#define HEART_ICON_TIME 2 * 0.5
+#define RESULT_TIME 6 * 0.5
+#define YOUR_RANK_IS_TIME 7 * 0.5
 #define LAYER1_BEGINING_POS_X -800
 #define LAYER2_BEGINING_POS_X -1000
 #define LAYER3_BEGINING_POS_X -1200
@@ -32,9 +32,32 @@
 #define LAYER_VELOCITY_Y 0
 #define LAYER_VELOCITY_X 3
 #define SWITCH_MUSIC_TIME 20
+#define COLLECTABLES_POINTS 500
+#define DEATH_PENALTHY 1000
+#define DAMAGE_PENALTHY 100
+#define UNDER_ONE_MIN_POINTS 1500
+#define UNDER_TWO_MIN_POINTS 1000
+#define UNDER_TREE_MIN_POINTS 500
+#define MORE_THAN_THREE_MIN_POINTS 0
+#define MAESTRO_SPRITE "assets/img/Rankings/maestro (1).png"
+#define MAESTRO_FRAME_COUNT 5
+#define MAESTRO_FRAME_TIME 0.0877
+#define FIASCO_SPRITE "assets/img/Rankings/fiasco (1).png"
+#define FIASCO_FRAME_COUNT 1
+#define FIASCO_FRAME_TIME 0.0877
+#define CATCHY_SPRITE "assets/img/Rankings/Catchy (1).png"
+#define CATCHY_FRAME_COUNT 6
+#define CATCHY_FRAME_TIME 0.0877
+#define BRAVO_SPRITE "assets/img/Rankings/BRAVO (1).png"
+#define BRAVO_FRAME_COUNT 10
+#define BRAVO_FRAME_TIME 0.0877
+#define CATCHY_LIMIT 2000
+#define BRAVO_LIMIT 4000
+#define MAESTRO_LIMIT 6000
 #define VICTORY_BG_MUSIC "assets/audio/FINAL2.1(Soul.Mus).wav"
 #define VICTORY_BG_MUSIC_2 "assets/audio/TelaDeResultados.wav"
 #include "State.h"
+#include "Text.h"
 #include "LevelData.h"
 #include "MovingLayer.h"
 
@@ -49,12 +72,19 @@ class VictoryState : public State {
     GameObject *completeLayer;
     GameObject *yourRankIsLayer;
     GameObject *resultLayer;
+    GameObject *resultScore;
     GameObject *heartIconGO;
+    GameObject *damageScoreGO;
     GameObject *deathIconGO;
+    GameObject *deathScoreGO;
     GameObject *timeIconGO;
+    GameObject *timeScoreGO;
     GameObject *attackIconGO;
+    GameObject *attackScoreGO;
     GameObject *collectableIconGO;
+    GameObject *collectableScoreGO;
     GameObject *popSoundGO;
+    GameObject *rankGO;
     MovingLayer *movingLayer6;
     Sound *popSound;
     Sprite* completeLayerSprite;
@@ -65,6 +95,13 @@ class VictoryState : public State {
     Sprite* attackIconSprite;
     Sprite* resultSprite;
     Sprite* collectableIconSprite;
+    Sprite* rankSprite;
+    Text* damageScoreText;
+    Text* deathScoreText;
+    Text* timeScoreText;
+    Text* collectableScoreText;
+    Text* attackScoreText;
+    Text* resultScoreText;
     Timer heartIconTimer;
     Timer deathIconTimer;
     Timer timeIconTimer;
@@ -83,6 +120,12 @@ class VictoryState : public State {
     bool playedAttackIconSound;
     bool switchedMusic;
     bool playedYourRankIsSound;
+    int collectablesPoints;
+    int deathPenalthy;
+    int damagePenalthy;
+    int timePoints;
+    int result;
+    void CalculatePoints();
     public:
         VictoryState();
         void Pause();
