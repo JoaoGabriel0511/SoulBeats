@@ -20,7 +20,16 @@ LevelData& LevelData::GetInstance() {
 }
 
 void LevelData::clear() {
-    // pos = NULL;
+    isNewLevel = true;
+    switchedDevelopmentMusic = false;
+    switchedBegininMusic = false;
+    musicState = BEGINING;
+    deathCount = 0;
+    damageCount = 0;
+    enemyPoints = 0;
+    savedEnemyPoints = 0;
+    time = 0;
+    pos = NULL;
 }
 
 void LevelData::Start() {

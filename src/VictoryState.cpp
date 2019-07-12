@@ -13,6 +13,7 @@ void VictoryState::Start() {
     playedYourRankIsSound = false;
     playedResultSound = false;
     switchedMusic = false;
+    putedContinueText = false;
     CalculatePoints();
     //LevelData::GetInstance().clear();
     State::Start();
@@ -223,6 +224,7 @@ void VictoryState::Update(float dt) {
         collectableIconTimer.Update(dt);
         yourRankIsTimer.Update(dt);
         resultTimer.Update(dt);
+        continueTextTimer.Update(dt);
         if(heartIconTimer.Get() >= HEART_ICON_TIME){
             heartIconSprite->isBlinking = false;
             damageScoreText->isBlink = false;
@@ -286,6 +288,25 @@ void VictoryState::Update(float dt) {
             music->Open(VICTORY_BG_MUSIC_2);
             music->Play(-1);
             switchedMusic = true;
+        }
+    }
+    if(continueTextTimer.Get() >= CONTINUE_TEXT_TIME) {
+        if(!putedContinueText) {
+            GameObject *continueTextGO = new GameObject();
+            Text* continueText = new Text(*continueTextGO, "assets/font/editundo.ttf", 40, Text::SOLID, "Press Enter to continue", SDL_Color {0,0,0}, 0);
+            continueTextGO->box.x = 500 - Camera::pos.x;
+            continueTextGO->box.y = 500 - Camera::pos.y;
+            continueTextGO->box.z = 1;
+            putedContinueText = true;
+            objectArray.emplace_back(continueTextGO);
+        }
+        putedContinueText = true;
+        if(InputManager::GetInstance().KeyPress(SDLK_RETURN)){
+            popRequested = true;
+            music->Stop(0);
+            LevelData::GetInstance().clear();
+            Camera::pos.x = 0;
+            Camera::pos.y = 0;
         }
     }
 }

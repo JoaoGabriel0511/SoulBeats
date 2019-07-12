@@ -88,7 +88,7 @@ void InitialScreenState::LoadAssets() {
     objectArray.emplace_back(backgroundGo);
     objectArray.emplace_back(floorGo);
     objectArray.emplace_back(heartGo);
-    objectArray.emplace_back(characterGo); 
+    objectArray.emplace_back(characterGo);
     objectArray.emplace_back(highlightGo);
     objectArray.emplace_back(startOptionGo);
     objectArray.emplace_back(creditsOptionGo);
