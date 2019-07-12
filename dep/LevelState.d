@@ -1,12 +1,13 @@
-bin/Main.o: src/Main.cpp src/../include/Game.h src/../include/GameData.h \
- src/../include/GameInfo.h src/../include/State.h src/../include/Sprite.h \
+bin/LevelState.o: src/LevelState.cpp src/../include/LevelState.h \
+ src/../include/State.h src/../include/Sprite.h \
  src/../include/Component.h src/../include/GameObject.h \
  src/../include/Rect.h src/../include/Vect2.h \
  src/../include/InputManager.h src/../include/Debugger.h \
- src/../include/Camera.h src/../include/Resources.h src/../include/Game.h \
- src/../include/Timer.h src/../include/Music.h src/../include/Sound.h \
- src/../include/Collision.h src/../include/Collider.h \
- src/../include/CameraFollower.h src/../include/LevelState.h \
+ src/../include/Camera.h src/../include/GameInfo.h \
+ src/../include/Resources.h src/../include/Game.h \
+ src/../include/GameData.h src/../include/Timer.h src/../include/Music.h \
+ src/../include/Sound.h src/../include/Collision.h \
+ src/../include/Collider.h src/../include/CameraFollower.h \
  src/../include/Launcher.h src/../include/Character.h \
  src/../include/Attack.h src/../include/LifeBar.h src/../include/Beat.h \
  src/../include/Heart.h src/../include/LevelData.h \
@@ -22,13 +23,9 @@ bin/Main.o: src/Main.cpp src/../include/Game.h src/../include/GameData.h \
  src/../include/VictoryState.h src/../include/Text.h \
  src/../include/MovingLayer.h src/../include/JumpingPad.h \
  src/../include/MovingPlatforms.h src/../include/UIText.h \
- src/../include/ComboSystem.h src/../include/InitialScreenState.h
+ src/../include/ComboSystem.h
 
-src/../include/Game.h:
-
-src/../include/GameData.h:
-
-src/../include/GameInfo.h:
+src/../include/LevelState.h:
 
 src/../include/State.h:
 
@@ -48,9 +45,13 @@ src/../include/Debugger.h:
 
 src/../include/Camera.h:
 
+src/../include/GameInfo.h:
+
 src/../include/Resources.h:
 
 src/../include/Game.h:
+
+src/../include/GameData.h:
 
 src/../include/Timer.h:
 
@@ -63,8 +64,6 @@ src/../include/Collision.h:
 src/../include/Collider.h:
 
 src/../include/CameraFollower.h:
-
-src/../include/LevelState.h:
 
 src/../include/Launcher.h:
 
@@ -129,5 +128,3 @@ src/../include/MovingPlatforms.h:
 src/../include/UIText.h:
 
 src/../include/ComboSystem.h:
-
-src/../include/InitialScreenState.h:

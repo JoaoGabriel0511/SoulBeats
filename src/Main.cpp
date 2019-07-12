@@ -11,7 +11,7 @@ int main() {
     InitialScreenState* menu;
     menu = new InitialScreenState();
 
-    Game::GetInstance().Push(menu);
+    Game::GetInstance().Push(levelState);
     Game::GetInstance().Run();
     return 0;
 }

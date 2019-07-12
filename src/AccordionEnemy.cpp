@@ -149,6 +149,7 @@ void AccordionEnemy::NotifyCollision(GameObject &other)
         Game::GetInstance().GetCurrentState().AddObject(hitSpark);
         if(((Character*) character->GetComponent("Character").get())->AttackOnBeat()) {
             hp=0;
+            comboSystem->UpdateKilledEnemy();
         } else {
             hp--;
         }

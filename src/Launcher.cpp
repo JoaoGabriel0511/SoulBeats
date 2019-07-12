@@ -1,4 +1,7 @@
 #include "../include/Launcher.h"
+#include "Game.h"
+#include "../include/LevelState.h"
+
 
 Launcher::Launcher(GameObject& associated, LauncherType type, GameObject* character) : Component(associated) {
     this->type = type;
@@ -65,6 +68,7 @@ void Launcher::Start() {
 void Launcher::NotifyCollision(GameObject& other) {
     float launchDuration;
     if(other.GetComponent("Attack") != NULL) {
+        comboSystem->RestartComboTimer();
         switch (type) {
         case UP:
             isCharacterLeft = ((Character*) character->GetComponent("Character").get())->IsCharacterLeftSide();

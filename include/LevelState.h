@@ -34,6 +34,7 @@
 #include "MovingPlatforms.h"
 #include "Text.h"
 #include "UIText.h"
+#include "ComboSystem.h"
 
 class LevelState : public State {
     GameObject *bg;
