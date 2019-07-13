@@ -109,7 +109,7 @@ void InitialScreenState::Update(float dt) {
             floorSprite->SwitchSprite(INITIAL_SCREEN_FLOOR_2_SPRITE, 1, 0);
             highlightSprite->SwitchSprite(MENU_HIGHLIGHT_SPRITE_2, 1, 0);
             floorOnInitialState = false;
-        } 
+        }
         else {
             floorSprite->SwitchSprite(INITIAL_SCREEN_FLOOR_1_SPRITE, 1, 0);
             highlightSprite->SwitchSprite(MENU_HIGHLIGHT_SPRITE_1, 1, 0);

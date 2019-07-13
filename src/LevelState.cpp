@@ -145,6 +145,7 @@ void LevelState::StartData() {
 void LevelState::Start() {
     State::Start();
     levelCompleted = false;
+    hasFinished = false;
     beforeFinishLevelTimer.Restart();
 }
 
@@ -473,8 +474,8 @@ void LevelState::LoadAssets() {
     goal = new Goal(*goalGO);
     goalGO->box.x = 16580;
     goalGO->box.y = 550;
-    //goalGO->box.x = 300;
-    //goalGO->box.y = 3000;
+    goalGO->box.x = 300;
+    goalGO->box.y = 3000;
     goalGO->box.z = 5;
     objectArray.emplace_back(goalGO);
 
@@ -567,13 +568,18 @@ void LevelState::VictoryCycle(float dt) {
     Camera::UnFollow();
     //Camera::pos.x = 16287;
     //Camera::pos.y = Camera::pos.y;
-    goalGO->Update(dt);
-    beforeFinishLevelTimer.Update(dt);
-    if(beforeFinishLevelTimer.Get() >= BEFORE_FINISH_LEVEL_TIME ) {
+    if(hasFinished) {
         popRequested = true;
-        victoryState = new VictoryState();
-        //bg->RequestedDelete();
-        Game::GetInstance().Push(victoryState);
+    } else {
+        goalGO->Update(dt);
+        beforeFinishLevelTimer.Update(dt);
+        if(beforeFinishLevelTimer.Get() >= BEFORE_FINISH_LEVEL_TIME ) {
+            //popRequested = true;
+            victoryState = new VictoryState();
+            hasFinished = true;
+            //bg->RequestedDelete();
+            Game::GetInstance().Push(victoryState);
+        }
     }
 }
 

@@ -33,7 +33,7 @@ void ComboSystem::RestartComboTimer(){
         }
         if(comboLevel == BRAVO){
             comboBarSprite->SwitchSprite(BRAVO_BAR_SPRITE, 21, COMBO_BAR_DECREASE_TIME);
-        }    
+        }
     }
 }
 
@@ -136,7 +136,7 @@ void ComboSystem::UpdateKilledEnemy(){
         comboLevelSprite->SwitchSprite(GREAT_SPRITE, 8, MESSAGE_FRAME_TIME);
 
     }
-     if(currentCombo == GREAT){
+    if(currentCombo == GREAT || currentCombo == BRAVO){
         comboLevel = BRAVO;
         comboBarSprite->SwitchSprite(BRAVO_BAR_SPRITE, 21, COMBO_BAR_DECREASE_TIME);
         comboBarSprite->isBlinking = false;
@@ -144,6 +144,5 @@ void ComboSystem::UpdateKilledEnemy(){
         playMessage = true;
         comboLevelSprite->SwitchSprite(BRAVO_SPRITE, 8, MESSAGE_FRAME_TIME);
     }
-    
     comboBarSprite->isBlinking = false;
 }

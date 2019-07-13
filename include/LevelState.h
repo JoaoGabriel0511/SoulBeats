@@ -59,6 +59,7 @@ class LevelState : public State {
     void UpdateCameraFocus(float dt);
     void VictoryCycle(float dt);
     Timer timeTimer;
+    bool hasFinished;
     public:
         LevelState();
         void Pause();
