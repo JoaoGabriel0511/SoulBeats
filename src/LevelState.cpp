@@ -475,8 +475,8 @@ void LevelState::LoadAssets() {
     goalGO->box.x = 16580;
     goalGO->box.y = 550;
     goalGO->box.x = 300;
-    goalGO->box.y = 3000;
-    goalGO->box.z = 5;
+    //goalGO->box.y = 3000;
+    //goalGO->box.z = 5;
     objectArray.emplace_back(goalGO);
 
     //Goal adicionado
