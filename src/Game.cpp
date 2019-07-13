@@ -143,7 +143,7 @@ void Game::Run() {
         if(debugger.lookLoopGame) {
             cout<<"LOOP "<< i << " DO JOGO FINALIZADO"<<endl;
         }
-        SDL_Delay(1);
+        SDL_Delay(3);
     }
     while(!stateStack.empty()) {
         stateStack.pop();
@@ -157,7 +157,7 @@ void Game::Run() {
     Resources::ClearSounds();
     cout << "Removendo Fontes"<<endl;
     Resources::ClearFonts(); 
-
+\
     TTF_Quit();
 }
 
