@@ -9,6 +9,7 @@ LevelData::LevelData() {
     damageCount = 0;
     enemyPoints = 0;
     savedEnemyPoints = 0;
+    collectablesCollected = 0;
     time = 0;
 }
 
@@ -29,11 +30,14 @@ void LevelData::clear() {
     enemyPoints = 0;
     savedEnemyPoints = 0;
     time = 0;
+    collectablesCollected = 0;
     pos = NULL;
+    enemyData.clear();
+    collectableData.clear();
+    heartData.clear();
 }
 
 void LevelData::Start() {
-    collectablesCollected = 0;
     for(int i = 0; i < enemyData.size(); i++) {
         enemyData[i]->wasKilled = enemyData[i]->isDead;
     }
