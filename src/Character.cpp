@@ -174,8 +174,6 @@ void Character::Update(float dt)
         velocity.y += gravity;
     }
     associated.box += (velocity + movingPlatformVelocity) * dt;
-    //cout<<"associated.box.x"<<associated.box.x<<endl;
-    //cout<<"associated.box.y"<<associated.box.y<<endl;
     if(jumpingEfect) {
         if(isLeftSide) {
             jumpingEfectGO->box.x = associated.box.x + associated.box.w;
@@ -209,53 +207,6 @@ bool Character::Is(string type)
     }
     return result;
 }
-
-/*void Character::JumpingPadCollision(GameObject &other){
-        if (!isDead) {
-        Collider *collider = ((Collider *)associated.GetComponent("Collider").get());
-        if (velocity.y > 0 || isAttacking || gotHit)
-        {
-            // cout << collider->box.y - 40+ collider->box.h << " < " << other.box.y <<" ?" << endl;
-            // cout << "Second clause: " << (collider->box.x + collider->box.w > other.box.x + 30) << endl;
-            // cout << "Third Clause: " << (collider->box.x < other.box.x + other.box.w - 10) << endl;
-
-            if ((collider->box.y + collider->box.h - 40 <= other.box.y) && (collider->box.x + collider->box.w > other.box.x + 30) && (collider->box.x < other.box.x + other.box.w - 10))
-            {
-                LandOnground();
-                associated.box.y = other.box.y - associated.box.h - 20;
-            }
-
-            else{
-                cout << "JUMPING PAD COLLISION ENTERED ELSE\n";
-            }
-        }
-        if (velocity.y <= 0)
-        {
-            if ((collider->box.y >= other.box.y) && (collider->box.x + collider->box.w > other.box.x + 24) && (collider->box.x < other.box.x + other.box.w - 24))
-            {
-                velocity.y = 0;
-                associated.box.y = other.box.y + other.box.h - 20;
-            }
-        }
-        if ((velocity.x >= 0) && (collider->box.x < other.box.x))
-        {
-            if ((collider->box.y + collider->box.h - 50 > other.box.y) && (collider->box.y + 50 < other.box.y + other.box.h))
-            {
-                velocity.x = 0;
-                associated.box.x = other.box.x - associated.box.w - 35;
-            }
-        }
-        if ((velocity.x <= 0) && (collider->box.x > other.box.x) && (collider->box.y + 40 < other.box.y + other.box.h))
-        {
-            if ((collider->box.y + collider->box.h - 40 > other.box.y))
-            {
-                velocity.x = 0;
-                associated.box.x = other.box.x + other.box.w - 75;
-            }
-        }
-    }
-
-}*/
 
 void Character::NotifyCollision(GameObject &other)
 {
