@@ -304,7 +304,6 @@ void VictoryState::Update(float dt) {
         if(InputManager::GetInstance().KeyPress(SDLK_RETURN)){
             popRequested = true;
             music->Stop(0);
-            LevelData::GetInstance().clear();
             Camera::pos.x = 0;
             Camera::pos.y = 0;
         }

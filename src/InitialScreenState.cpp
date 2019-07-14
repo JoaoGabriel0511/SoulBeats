@@ -124,7 +124,9 @@ void InitialScreenState::Update(float dt) {
 void InitialScreenState::Pause() {}
 
 void InitialScreenState::Resume() {
-    menuMusic->Play(-1);
+    if(!LevelData::GetInstance().isNewLevel) {
+        menuMusic->Play(-1);
+    }
 }
 
 void InitialScreenState::StartData() {}
@@ -152,8 +154,10 @@ void InitialScreenState::UpdateMenuInput(float dt){
 
         if (InputManager::GetInstance().KeyPress(SDLK_RETURN)){
             selectingSound->Play(1);
+            LevelData::GetInstance().clear();
             LevelState* levelState;
             levelState = new LevelState();
+            menuMusic->Stop(0);
             Game::GetInstance().Push(levelState);
 
         }
@@ -205,7 +209,7 @@ void InitialScreenState::UpdateMenuInput(float dt){
 
     if(currentOption == LORE){
         if (InputManager::GetInstance().KeyPress(D_KEY) or  InputManager::GetInstance().KeyPress(RIGHT_ARROW_KEY)) {
-           choosingSound->Play(1);
+            choosingSound->Play(1);
             selectedOption = START;
             loreSprite->SwitchSprite(OPTION_LORE_0, 1, 0);
             startSprite->SwitchSprite(OPTION_START_1, 1, 0);
