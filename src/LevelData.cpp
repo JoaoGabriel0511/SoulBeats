@@ -38,6 +38,7 @@ void LevelData::clear() {
 }
 
 void LevelData::Start() {
+    collectablesCollected = 0;
     for(int i = 0; i < enemyData.size(); i++) {
         enemyData[i]->wasKilled = enemyData[i]->isDead;
     }
